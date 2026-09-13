@@ -1,0 +1,248 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="COMMENT FAIRE ?... En langage C ">
+<META NAME="DESCRIPTION" CONTENT="COMMENT FAIRE ? En langage C pour PIC, 8051....">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,LCD,pic16f877,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C ? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> AFFICHEUR LCD EN MODE 4 BITS</b></p>
+    <p align="left"><img src="images/lcd_4.gif" width="519" height="358" usemap="#Map" border="0"><map name="Map"><area shape="rect" coords="515,355,516,356" href="#"><area shape="rect" coords="0,0,518,357" href="images/lcd_4.gif" target="_blank" alt="CLIQUER POUR MIEUX VOIR LE SCHEMA" title="CLIQUER POUR MIEUX VOIR LE SCHEMA"></map></p>
+    <table width="78%" border="0" height="435">
+      <tr> 
+        <td height="776"> 
+          <p align="left">L'avantage essentiel du mode 4 bits est de ne n&eacute;cessiter 
+            que 7 lignes de port au lieu de 11 en mode 8 bits. <i> </i>Le programme 
+            utilise les 4 bits de poids fort du port B et les lignes RC2-4 du 
+            port C. Il est facile de modifier le programme afin d'utiliser d'autres 
+            lignes de port pour la commande de l'afficheur (E, RS et R/W). En 
+            revanche, si vous souhaitez utiliser les bits de poids faible d'un 
+            port, il vous faudra modifier les <font color="#FF0000">d&eacute;clarations</font> 
+            et les fonctions <font color="#0000FF">init_lcd</font> et<font color="#0000FF"> 
+            lcd_write</font>. Il est possible de gagner encore une ligne, en forcant 
+            la ligne de commande R/W de l'afficheur &agrave; 1. Bien entendu, 
+            le programme doit &ecirc;tre modifi&eacute; puisque la lecture du 
+            bit <i>Busy </i>est alors impossible et des temporisations d'une longueur 
+            appropri&eacute;e doivent &ecirc;tre ajout&eacute;es<i>.</i></p>
+          <p align="left">Ce programme est facililement adaptable au 8051 et &agrave; 
+            ses d&eacute;riv&eacute;s.</p>
+          <p align="left">Pour utiliser ces fonctions, incorporez &agrave; votre 
+            programme ces quelques lignes ou compilez le fichier <i>.obj</i> obtenu 
+            et ajouter &agrave; votre programme: #include &quot;lcd_8.h&quot;. 
+            Votre fonction &quot;<i>main</i>&quot; doit appeler la fonction &quot;init_lcd()&quot; 
+            avant d'&eacute;crire dans l'afficheur LCD.</p>
+          <p align="left">Les temporisations (delay.c) sont incluses dans les 
+            programmes &agrave; <a href="fichiers/LCD_4.zip"><b>t&eacute;l&eacute;charger</b></a>. 
+            XTAL_FREQ (dans delay.c) ajuste la fr&eacute;quence du quartz.</p>
+           
+          <p><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image3','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image3" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left"><b>Programme</b></p>
+          <p align="left"><font size="2" color="#009900">/*<br>
+            *<b> Routines LCD en mode donnees 4 bits 2x16 caract&egrave;res</b><br>
+            * <br>
+            * Claude Dreschel &lt;Claudedel@wanadoo.fr&gt;<br>
+            * controleur LCD Hitachi <b>HD44780</b><br>
+            *<br>
+            */</font><font size="2"><br>
+            #include &lt;pic1687x.h&gt; <br>
+            #include &quot;delay.h&quot;</font></p>
+          <p><font size="2" color="#FF0000">static bit LCD_RS @ ((unsigned)&amp;PORTC*8+2); 
+            <font color="#009900">// Register Select</font><br>
+            static bit LCD_RW @ ((unsigned)&amp;PORTC*8+3); <font color="#009900">// 
+            Read/Write LCD</font><br>
+            static bit LCD_EN @ ((unsigned)&amp;PORTC*8+4); <font color="#009900">// 
+            LCD Enable</font><br>
+            static bit FLAG_BUSY @ ((unsigned)&amp;PORTB*8+7);</font></p>
+          <p><font size="2" color="#FF0000">#define PORT_DATA PORTB<br>
+            #define TRIS_DATA TRISB<br>
+            #define NOP asm(&quot;nop&quot;)<br>
+            #define LCD_STROBE LCD_EN = 1;NOP;NOP;LCD_EN = 0<br>
+            #define PORTB_IN 0xFF<br>
+            #define PORTB_OUT 0x0F<br>
+            #define INIT_PORTC TRISC=0b11000111 <font color="#009900">//PortC 
+            Config </font></font></p>
+          <p><font size="2" color="#009900">/* initialise l'afficheur LCD en mode 
+            4 bits */</font></p>
+          <p><font size="2" color="#0000CC">void init_lcd(void)</font><font size="2"><br>
+            { <br>
+            INIT_TRISC;<br>
+            TRIS_DATA = PORTB_OUT;<br>
+            LCD_RS = 0;<font color="#009900"> // registre de controle</font><br>
+            LCD_EN = 0;<br>
+            LCD_RW = 0;<font color="#009900"> // ecriture</font><br>
+            DelayMs(25);<font color="#009900"> // Attente power on</font><br>
+            PORT_DATA = (PORT_DATA &amp; 0x0F) | (0x30);<br>
+            LCD_STROBE;<br>
+            DelayMs(5);<br>
+            LCD_STROBE;<br>
+            Delay100Us();<br>
+            LCD_STROBE;<br>
+            DelayMs(5);<br>
+            PORT_DATA = (PORT_DATA &amp; 0x0F) | (0x20);<br>
+            LCD_STROBE;<br>
+            DelayMs(1);<br>
+            lcd_write_instr(0x28); <font color="#009900">// Mode 4 bit, 2/16, 
+            font 5x7</font><br>
+            lcd_write_instr(0x08); <font color="#009900">// affichage off</font><br>
+            lcd_write_instr(0x01); <font color="#009900">// clear et home</font><br>
+            lcd_write_instr(0x0C); <font color="#009900">// Affichage on, curseur 
+            clign off </font><br>
+            lcd_write_instr(0x06); <font color="#009900">// pas de decalage</font><br>
+            }</font></p>
+          <p></p>
+          <p><font size="2" color="#009900">// Test le bit BF jusqu'a ce que le 
+            LCD soit ok</font><font size="2"><br>
+            <font color="#0000FF">void lcd_busy(void)</font><br>
+            {<br>
+            static bit LCD_BF;<br>
+            TRIS_DATA = PORTB_IN;<br>
+            LCD_RS = 0; // selectionne registre<br>
+            LCD_RW = 1; // en lecture<br>
+            do<br>
+            { <br>
+            LCD_EN=1; <br>
+            NOP;<br>
+            LCD_BF=FLAG_BUSY;<br>
+            LCD_EN=0;<br>
+            NOP;<br>
+            LCD_STROBE;<font color="#009900"> // lecture deuxieme demi-octet</font><br>
+            }while(LCD_BF); <font color="#009900">// tant que BF=1</font><br>
+            LCD_RW=0;<br>
+            TRIS_DATA=PORTB_OUT;<font color="#009900"> // data en sortie</font><br>
+            } <br>
+            <br>
+            <font color="#009900">// Ecriture d'un octet dans le LCD en mode 4 
+            bits</font></font></p>
+          <p><font size="2" color="#0000FF">void lcd_write(unsigned char c)</font><font size="2"><br>
+            {<br>
+            PORT_DATA = (PORT_DATA &amp; 0x0F) | (c);<br>
+            LCD_STROBE;<br>
+            PORT_DATA = (PORT_DATA &amp; 0x0F) | (c &lt;&lt; 4);<br>
+            LCD_STROBE;</font></p>
+          <p><font size="2">}</font></p>
+          <p><font size="2" color="#009900">// Ecrit une instruction dans LCD</font><font size="2"><br>
+            <font color="#0000FF">void lcd_write_instr(unsigned char c)</font><br>
+            {<br>
+            lcd_busy();<br>
+            LCD_RS = 0; <font color="#009900">// selectionne registre</font><br>
+            lcd_write(c);<br>
+            } </font></p>
+          <p><font size="2" color="#00CC00">// Ecriture d'un caractere</font></p>
+          <p><font size="2" color="#0000FF">void lcd_putch(unsigned char c)</font><font size="2"><br>
+            {<br>
+            lcd_busy(); <br>
+            LCD_RS = 1; <br>
+            lcd_write(c);<br>
+            }</font></p>
+          <p><font size="2"><br>
+            <font color="#00CC00">// Ecriture d'une chaine de caracteres </font></font></p>
+          <p><font size="2" color="#0000FF">void lcd_puts(const unsigned char 
+            * s)</font><font size="2"><br>
+            {<br>
+            while(*s)<br>
+            lcd_putch(*s++);<br>
+            }</font></p>
+          <p><font size="2"><br>
+            <font color="#009900">// Positionne le curseur ligne, position<br>
+            // la premiere ligne est la ligne 0</font></font></p>
+          <p><font size="2"> <font color="#0000FF">void lcd_pos(unsigned char 
+            ligne,unsigned char pos)</font><br>
+            {<br>
+            lcd_write_instr(((ligne * 0x40)+pos)+0x80);<br>
+            }<br>
+            </font></p>
+          <p><font size="2" color="#009900">// Efface l'ecran et curseur home 
+            </font><font size="2"><br>
+            <font color="#0000FF">void lcd_clear(void)</font><br>
+            {<br>
+            lcd_write_instr(0x1);<br>
+            }<br>
+            </font></p>
+          <p><font size="2" color="#009900">// Curseur Home </font><font size="2"><br>
+            <font color="#0000FF">void lcd_home(void)</font><br>
+            {<br>
+            lcd_write_instr(0x02);<br>
+            }</font></p>
+          <p><font size="2" color="#009900">// Fait clignoter le caractere affiche</font><font size="2"><br>
+            <font color="#0000FF">void lcd_clign_on(void)</font><br>
+            { <br>
+            lcd_write_instr(0x0D);<br>
+            }</font></p>
+          <p><font size="2" color="#339900">// Arrete le clignotement</font><font size="2"><br>
+            <font color="#0000FF">void lcd_clign_off(void)</font><br>
+            {<br>
+            lcd_write_instr(0x0C);<br>
+            }</font></p>
+          <p><font size="2" color="#009900">// decalage a gauche</font><font size="2"><br>
+            <font color="#0000FF">void lcd_decal_gauche(void)</font><br>
+            {<br>
+            lcd_write_instr(0x4);<br>
+            }</font></p>
+          <p><font size="2" color="#009900">// decalage a droite</font><font size="2"><br>
+            <font color="#0000FF">void lcd_decal_droite(void)</font><br>
+            {<br>
+            lcd_write_instr(0x6);<br>
+            }<br>
+            </font></p>
+        </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_lcd_4","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_lcd_4" width="1" height="1" border="0">
+</noscript>
+<!-- End Balise -->
+</html>

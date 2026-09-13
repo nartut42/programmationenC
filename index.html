@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+
+    <title>Site sur les microcontrôleurs programmés en C | </title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-banner {
+            width: 100%;
+            line-height: 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .top-banner img {
+            width: 100%;
+            height: auto;
+            max-height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        main {
+            flex: 1;
+            padding: 4rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            display: inline-block;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .card-image-container {
+            width: 100%;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .card-image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .feature-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card h3 a {
+            color: var(--text-main);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .feature-card h3 a:hover {
+            color: var(--accent);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="news/index.html">News</a>
+            <a href="commentfaire/index.html">Comment faire ?</a>
+            <a href="composants/index.html">Composants</a>
+            <a href="liens/index.html">Liens</a>
+            <a href="mailto:nartut42@gmail.com">Contact</a>
+        </nav>
+    </header>
+
+    <div class="top-banner">
+        <img src="images/banniere_haut.png" alt="Programmation en langage C — maîtrisez le C pour l'électronique embarquée">
+    </div>
+
+    <main>
+        <div class="hero">
+            <p class="subtitle">Réalisation de montages sur les microcontrôleurs 8051, PIC, reconnaissance vocale, GameBoy et bien plus encore.</p>
+        </div>
+
+        <h2 class="section-title">Montages & Projets Principaux</h2>
+
+        <div class="features-grid">
+            <!-- 1 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/composf.gif" alt="Programmateur de 8051 et EPROM">
+                    </div>
+                    <h3><a href="proguniv4/index.html">Programmateur de 8051 et EPROM</a></h3>
+                    <p>Support pour 87C51FA et circuits associés.</p>
+                </div>
+                <a href="proguniv4/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 2 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/futaba.jpg" alt="Servos par RS232">
+                    </div>
+                    <h3><a href="dcl639/index.html">Servos par RS232 (FT639 / PIC12C671)</a></h3>
+                    <p>Commander 5 servomoteurs via liaison série.</p>
+                </div>
+                <a href="dcl639/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 3 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/core-micro-mod2.jpg" alt="Variateur PWM">
+                    </div>
+                    <h3><a href="variateur_pwm/index.html">Variateur PWM (PIC16F876)</a></h3>
+                    <p>Variateur de vitesse pour moteur CC commandé en PWM.</p>
+                </div>
+                <a href="variateur_pwm/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 4 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/GBRGPS.gif" alt="Répéteur GPS sans fil">
+                    </div>
+                    <h3><a href="gbrgps/index.html">Répéteur GPS sans fil</a></h3>
+                    <p>Réalisation à l'aide d'une GameBoy et de PIC16F873 / PIC16F84.</p>
+                </div>
+                <a href="gbrgps/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 5 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/test_bat1.gif" alt="Multimètre numérique V-A-A/h">
+                    </div>
+                    <h3><a href="sail-supervisor/index.html">Multimètre numérique V-A-A/h</a></h3>
+                    <p>Surveillance de batteries et pourcentage de charge (PIC16F873).</p>
+                </div>
+                <a href="sail-supervisor/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 6 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/Gameboy.jpg" alt="GameBoy en C">
+                    </div>
+                    <h3><a href="GameBoy/index.html">GameBoy en C</a></h3>
+                    <p>La GameBoy utilisée comme périphérique programmé en langage C.</p>
+                </div>
+                <a href="GameBoy/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 7 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/rcxbrick.jpg" alt="Lego Mindstorm RCX">
+                    </div>
+                    <h3><a href="rcx/index.html">Lego Mindstorm RCX</a></h3>
+                    <p>Initiation à la robotique avec le module RCX programmé en C.</p>
+                </div>
+                <a href="rcx/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 8 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/anim2_C_Dreschel.gif" alt="Petits montages">
+                    </div>
+                    <h3><a href="montages/index.html">Petits montages</a></h3>
+                    <p>Idéal pour une première construction en électronique.</p>
+                </div>
+                <a href="montages/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+
+            <!-- 9 -->
+            <div class="feature-card">
+                <div>
+                    <div class="card-image-container">
+                        <img src="images_index/Kit.jpg" alt="Reconnaissance vocale">
+                    </div>
+                    <h3><a href="sensory/index.html">Reconnaissance vocale</a></h3>
+                    <p>Kit de reconnaissance vocale (Voice Extreme Toolkit & C).</p>
+                </div>
+                <a href="sensory/index.html" class="card-link">Accéder au projet &rarr;</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Site sur les microcontrôleurs programmés en C | <a href="liens/index.html">Mes liens</a></p>
+    </footer>
+
+</body>
+</html>

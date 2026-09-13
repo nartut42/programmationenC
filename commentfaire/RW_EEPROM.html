@@ -1,0 +1,247 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="COMMENT FAIRE EN LANGAGE C POUR PIC, 8051... ">
+<META NAME="DESCRIPTION" CONTENT="Comment faire en langage C pour PIC, 8051 ?.">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> LIRE ET ECRIRE DANS L'EEPROM DES PICs.</b></p>
+    <p align="left"><map name="Map"><area shape="rect" coords="172,117,172,118" href="#"></map></p>
+    <table width="78%" border="0" height="435">
+      <tr> 
+        <td height="776"> 
+          <p align="left">La m&eacute;moire EEPROM de certains PIC (16F84,16F87x 
+            ...) est une m&eacute;moire non volatile qui permet entre autre de 
+            sauvegarder des donn&eacute;es devant &ecirc;tre absolument conserv&eacute;es 
+            m&ecirc;me apr&egrave;s une coupure d'alimentation. La gestion de 
+            l'espace m&eacute;moire est un peu plus d&eacute;licate que l'espace 
+            RAM puisque vous devez penser &agrave; quelle adresse m&eacute;moire 
+            EEPROM vous allez stocker vos donn&eacute;es. Ce qui veut dire que 
+            vous devrez, pour chaque octet, sp&eacute;cifier une adresse de d&eacute;but 
+            qui peut &ecirc;tre n'importe o&ugrave; dans la m&eacute;moire.</p>
+          <p align="left">Lors d'une &eacute;criture, vous &quot;d&eacute;couperez&quot; 
+            vos donn&eacute;es en octets (8 bits), chaque octet &eacute;tant enregistr&eacute; 
+            dans un emplacement m&eacute;moire. Lors de la lecture, il faut effectuer 
+            l'op&eacute;ration inverse c'est &agrave; dire lire les octets et 
+            reconstituer les donn&eacute;es. Bref, une gestion stricte de la m&eacute;moire 
+            EEPROM pour &eacute;viter d'&eacute;craser d'autres donn&eacute;es. 
+          </p>
+          <p align="left">Le registre <b>EECON1</b> (pic16F87x) </p>
+          <table width="82%" border="1">
+            <tr> 
+              <td width="13%"> 
+                <div align="center">EEPGD</div>
+              </td>
+              <td bgcolor="#666666" width="10%">&nbsp;</td>
+              <td bgcolor="#666666" width="7%">&nbsp;</td>
+              <td bgcolor="#666666" width="9%">&nbsp;</td>
+              <td width="15%"> 
+                <div align="center">WRERR</div>
+              </td>
+              <td width="14%"> 
+                <div align="center">WREN</div>
+              </td>
+              <td width="13%"> 
+                <div align="center">WR</div>
+              </td>
+              <td width="19%"> 
+                <div align="center">RD</div>
+              </td>
+            </tr>
+          </table>
+          <p>Pour &eacute;crire une donn&eacute;e, il convient de l'&eacute;crire 
+            dans <b>EEDATA</b> &agrave; l'adresse stock&eacute;e dans le registre 
+            <b>EEADR</b>, mettre le bit EEPGD=0, valider l'&eacute;criture WREN=1, 
+            d&eacute;sactiver les interruptions (GIE=0),&eacute;crire dans le 
+            registre <b>EECON2</b> dans l'ordre les valeurs 55h et AAh, enfin 
+            de positionner le bit WR=1. Soit en assembleur:</p>
+          <p><font size="2"><b>BSF STATUS, RP1<br>
+            BCF STATUS, RP0 ; bank2<br>
+            MOVLW DATA_ADDR ; adresse EEPROM<br>
+            MOVWF EEADR<br>
+            MOVLW DONNEE ; Donnee a sauvegarder<br>
+            MOVWF EEDATA<br>
+            BSF STATUS, RP0 ; bank3<br>
+            BCF EECON1, EEPGD ; memoire de donnees<br>
+            BSF EECON1, WREN</b></font></p>
+          <p><b><font size="2">BCF INTCON, GIE<br>
+            MOVLW 55h<br>
+            MOVWF EECON2<br>
+            MOVLW AAh<br>
+            MOVWF EECON2<br>
+            BSF EECON1, WR<br>
+            BSF INTCON, GIE ; si besoin</font></b></p>
+          <p>Pour la lecture c'est un peu plus simple apr&egrave;s avoir pr&eacute;cis&eacute; 
+            l'adresse et valid&eacute; le bit RD, la donn&eacute;e est pr&eacute;sente 
+            dans le registre <b>EEDATA</b>:</p>
+          <p><b><font size="2">BSF STATUS, RP1<br>
+            BCF STATUS, RP0 ; bank2<br>
+            MOVLW DATA_ADDR ; adresse EEPROM<br>
+            MOVWF EEADR<br>
+            BSF STATUS, RP0 ; bank3<br>
+            BCF EECON1, EEPGD; memoire de donnees<br>
+            BSF EECON1, RD ; mode lecture<br>
+            BCF STATUS, RP0 ; bank2<br>
+            MOVF EEDATA, W ; lecture de la donnee</font></b></p>
+          <p align="left">En langage C, le principe reste le m&ecirc;me. Dans 
+            l'exemple suivant nous &eacute;crirons puis lirons un mot de deux 
+            octets (integer) dans l'EEPROM. Le programme teste si les deux octets 
+            de la m&eacute;moire est vierge (FFFF) &agrave; l'adresse 0. Suivant 
+            le r&eacute;sultat du test, on lit ou &eacute;crit la donn&eacute;e 
+            de deux octets en commencant &agrave; l'adresse 0 de la m&eacute;moire. 
+            Vous retrouverez la m&ecirc;me s&eacute;quence (obligatoire) qu'en 
+            assembleur EEPROM_WRITE et EEPROM_READ. Les fonctions d'&eacute;crire 
+            et de lecture sont ecriture_eeprom(adr,valeur) et lecture_eeprom(adr). 
+            Il est possible de regrouper les deux fonctions d'&eacute;criture 
+            et de lecture qui ont &eacute;t&eacute; s&eacute;par&eacute;es pour 
+            la compr&eacute;hension de l'exemple.</p>
+          <p align="left"><a href="fichiers/rw_eeprom.zip"><b>T&eacute;l&eacute;charger</b></a> 
+            le programme en C </p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image3','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image3" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left"><font color="#0000FF" size="2">/*********************************************************************<br>
+            * Claudedel@wanadoo.fr<br>
+            <br>
+            * http://perso.wanadoo.fr/claude.dreschel/<br>
+            ********************************************************************/</font><font size="2"><br>
+            <font color="#FF0000">#include &lt;pic1687x.h&gt;</font></font></p>
+          <p><font size="2" color="#FF0000">#define INIT_PORTA TRISA = 0x3F;</font><font size="2"><font color="#0000FF"> 
+            //PortA = entrees</font></font></p>
+          <p><font size="2" color="#0000FF"><b>//Les deux '#define' suivant sont 
+            a supprimer s'ils existent d&eacute;ja dans votre &lt;picxxx.h&gt; 
+            </b></font></p>
+          <p><font size="2" color="#0000FF">//<picxxx.h> S&eacute;quence a executer 
+            obligatoirement dans cet ordre</font></p>
+          <p><font size="2" color="#FF0000">#define EEPROM_WRITE(addr, value) 
+            while(WR)continue;EEADR=(addr);EEDATA=(value);EEPGD=0;GIE=0;WREN=1;\<br>
+            EECON2=0x55;EECON2=0xAA;WR=1;WREN=0<br>
+            #define EEPROM_READ(addr) ((EEADR=(addr)),(EEPGD=0),(RD=1),EEDATA)</font></p>
+          <p><font size="2" color="#0000FF">//**************************************************************************</font><font size="2"><br>
+            void ecriture_eeprom(unsigned char adr,unsigned int valeur);<br>
+            unsigned int lecture_eeprom(unsigned char adr);<br>
+            void init_pic(void);<br>
+            void eeprom_write(unsigned char addr, unsigned char value);<br>
+            unsigned char eeprom_read(unsigned char addr);<br>
+            <font color="#0000FF">//*************************************************************************</font><br>
+            void main(void)<br>
+            {<br>
+            int alarme_tension;<br>
+            init_pic();<br>
+            <br>
+            if (lecture_eeprom(0) != 0xFFFF) <font color="#0000FF">// EEPROM vierge 
+            ?</font><br>
+            {<br>
+            <br>
+            alarme_tension = lecture_eeprom(0); <font color="#0000FF">// valeur 
+            valide</font><br>
+            <br>
+            }else<br>
+            {<br>
+            alarme_tension = 120; <br>
+            ecriture_eeprom (0,alarme_tension);</font></p>
+          <p><font size="2"> } <br>
+            <br>
+            while(!0); <font color="#0000FF">// fin du programme</font><br>
+            } </font></p>
+          <p><font size="2">//*****************************************************************<br>
+            void eeprom_write(unsigned char addr, unsigned char value)<br>
+            {<br>
+            EEPROM_WRITE (addr, value);<br>
+            GIE=1;<font color="#0000FF"> // si besoin </font><br>
+            } <br>
+            unsigned char eeprom_read(unsigned char addr)<br>
+            {<br>
+            return (EEPROM_READ(addr)); <br>
+            } <br>
+            //**************************************************************<br>
+            void ecriture_eeprom(unsigned char adr,unsigned int valeur)<br>
+            {<br>
+            eeprom_write(adr,(unsigned char)valeur);<br>
+            valeur &gt;&gt; = 8;<font color="#0000FF"> // decalage de 8 bits a 
+            droite</font><br>
+            eeprom_write(adr+1,(unsigned char)valeur);<br>
+            }<br>
+            <br>
+            unsigned int lecture_eeprom(unsigned char adr)<br>
+            {<br>
+            unsigned int temp;<br>
+            temp=(unsigned char)eeprom_read(adr+1);<br>
+            temp &lt;&lt; = 8;<font color="#0000FF"> // decalage du poids fort 
+            de 8 bits a gauche</font><br>
+            temp|=(unsigned char)eeprom_read(adr);<br>
+            return(temp);<br>
+            }<br>
+            <br>
+            //**************************************************************<br>
+            void init_pic(void)<br>
+            { <br>
+            INIT_PORTA; <br>
+            GIE=1;<font color="#0000FF"> // si besoin</font><br>
+            <br>
+            }</font></p>
+          <p align="left"><font size="2"> </font></p>
+        </td>
+      </tr>
+      <tr>
+        <td height="776">&nbsp;</td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_eeprom","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_eeprom" width="1" height="1" border="0">
+</noscript>
+<!-- End Balise -->
+</html>

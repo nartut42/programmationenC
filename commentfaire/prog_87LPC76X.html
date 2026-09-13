@@ -1,0 +1,107 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="AVEC QUOI PROGRAMMER LES 87LCP76x ? ">
+<META NAME="DESCRIPTION" CONTENT="COMMENT FAIRE ? En langage C pour PIC, 8051....">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,LCD,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Avec quoi programmer les 87LCP76x?</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p><b>PROGRAMMATEUR DE 87LCP76x:</b></p>
+    <p align="left"><img src="images/87LCP76X.gif" width="512" height="410"></p>
+    <p align="left">Prototype du programmateur.</p>
+    <table width="650" border="0" height="50">
+      <tr> 
+        <td width="644"> 
+          <p align="left"><b>LE PROGRAMMATEUR:</b></p>
+          <p align="left">Les microcontr&ocirc;leurs Philips <b>P87LPC76x</b> 
+            sont des composants faible consommation, &eacute;conomiques &eacute;quip&eacute;s 
+            de 20 pattes et de 4ko ou 2ko de m&eacute;moire de programme en version 
+            OTP (programmable une seule fois). Il poss&egrave;dent &eacute;galement 
+            128 octets de RAM, 2 timers 16 bits, 2 comparateurs anlogiques, 1 
+            UART, 1 port IIC, 15 &agrave; 18 lignes I/O, fr&eacute;quence d'horloge 
+            jusqu'&agrave; 20MHz... bref, un &quot;petit&quot; &micro;C tr&egrave;s 
+            complet.</p>
+          <p align="left">Ce programmateur de microcontroleurs de la s&eacute;rie 
+            87LPC76x a &eacute;t&eacute; cr&eacute;&eacute; par Lionel Theunissen 
+            (lionelth@big.net.au). Connect&eacute; au port parall&egrave;le de 
+            votre PC, il a l'avantage d'&ecirc;tre &eacute;conomique et facilement 
+            r&eacute;alisable. Cependant, contrairement &agrave; ce que montre 
+            la photo du prototype, je vous recommande si vous destinez ce montage 
+            exclusivement &agrave; la programmation des &micro;C, de supprimer 
+            les connecteurs SIMM de votre r&eacute;alisation car ils n'ont alors 
+            que peu d'int&eacute;r&ecirc;ts surtout si vous devez les acheter. 
+            Si vous voulez comprendre &agrave; quoi peuvent servir ces connecteurs 
+            visitez le site : <a href="http://www.simmstick.com/entries-.htm">http://www.simmstick.com/entries-.htm</a></p>
+          <p align="left">Vous trouverez tout ce qu'il vous faut en t&eacute;l&eacute;chargeant 
+            la documentation (2.5Mo): <a href="fichiers/ssau2005.zip"><b>ssau2005.zip</b></a> 
+          </p>
+          <p align="left">&nbsp;</p>
+          <p align="left"><b>LE SOFT:</b></p>
+          <p align="left"><img src="images/prog_87LPC76x.gif" width="737" height="532"></p>
+          <p align="left">Le programme (Philprog.exe) &eacute;crit en langage 
+            C fonctionne sous Windows et permet la plupart des op&eacute;rations 
+            de lecture, d'&eacute;criture et de v&eacute;rification des <b>87LPC764</b> 
+            et <b>87LPC762</b>.</p>
+          <p align="left">&nbsp;</p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image2','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image2" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left">&nbsp;</p>
+          </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_prog_87LCP76x","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_prog_87LCP76x" width="1" height="1" border="0">
+<!-- End Balise --></noscript>
+</html>

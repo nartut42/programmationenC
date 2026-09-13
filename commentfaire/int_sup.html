@@ -1,0 +1,154 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="COMMENT FAIRE EN LANGAGE C POUR PIC, 8051... ">
+<META NAME="DESCRIPTION" CONTENT="Comment faire en langage C pour PIC, 8051 ?.">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> CREER UNE ENTREE EXTERNE D'INTERRUPTION SUPPLEMENTAIRE</b></p>
+    <p align="left"><map name="Map"><area shape="rect" coords="172,117,172,118" href="#"></map></p>
+    <table width="78%" border="0" height="435">
+      <tr> 
+        <td height="776"> 
+          <p align="left">Vous avez d&eacute;j&agrave; utiliser l'entr&eacute;e 
+            RB0 d'un PIC et vous avez besoin d'une autre entr&eacute;e d'interruption 
+            suppl&eacute;mentaire command&eacute;e par un front montant ou descendant. 
+          </p>
+          <p align="left">Si le timer0 est disponible, l'astuce consiste &agrave; 
+            utiliser l'entr&eacute;e <b>T0CKI</b> du pic sur laquelle vous appliquer 
+            le front montant ou descendant de la tension. Par exemple dans le 
+            montage &quot;Bat supervisor&quot;, l'entr&eacute;e RB0 est connect&eacute;e 
+            &agrave; l'un des boutons poussoir et l'entr&eacute;e RA4 (<b>T0CKI</b>) 
+            au front descendant d'un composant qui surveille la tension d'alimentation. 
+            Le front descendant incr&eacute;mente le compteur qui passe de <b>FF 
+            &agrave; 00</b> et g&eacute;n&egrave;re une interruption qui sauvegarde 
+            des variables importantes. </p>
+          <p align="left">L'entr&eacute;e RA4 (<b>T0CKI</b>) est configur&eacute;e 
+            en entr&eacute;e. Ce sera l'entr&eacute;e d'horloge du timer0 en configurant 
+            <b>T0CS=1</b> pour un front descendant <b>T0SE=1. </b>On valide l'interruption 
+            Timer0 par <b>T0IE=1 </b>et enfin on initialise le timer avec la valeur 
+            <b>FF</b> et <b>T0IF=0. </b>Tout est pr&ecirc;t, il ne reste plus 
+            qu'&agrave; autoriser les interruptions <b>GIE=1</b>; </p>
+          <p align="left">Quand le front descendant (ou montant) survient, la 
+            valeur du timer passe de <b>FF &agrave; 00</b>. <b>TOIF </b>est positionn&eacute; 
+            &agrave;<b> 1</b> et g&eacute;n&egrave;re une interruption qui positionne 
+            un flag<b> Int_ext</b> et r&eacute;initialise le compteur pour le 
+            prochain front. Il suffit donc de scruter l'&eacute;tat de <b>Int_ext 
+            </b>ou plus simplement de <b>T0IF </b>(sans interruption) et vous 
+            venez de cr&eacute;er une deuxi&egrave;me entr&eacute;e d&eacute;clench&eacute;e 
+            par un front montant ou descendant.</p>
+          <p align="left"><a href="fichiers/int_sup.zip"><b>T&eacute;l&eacute;charger</b></a> 
+            le programme en C </p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image3','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image3" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left"><font color="#0000FF">/*********************************************************************<br>
+            * Claudedel@wanadoo.fr<br>
+            <br>
+            * http://perso.wanadoo.fr/claude.dreschel/<br>
+            ********************************************************************/</font><br>
+            <br>
+            <font color="#CC0000">#include &lt;pic.h&gt;</font></p>
+          <p><font color="#FF0000">#define INIT_PORTA TRISA = 0x3F;</font> <font color="#0000CC">//T0CKI 
+            = entrees</font></p>
+          <p><font color="#CC0000">static bit Int_ext;</font> </p>
+          <p><font color="#CC0000">void interrupt traite_int(void);</font></p>
+          <p><font color="#CC0000">void init_pic(void);</font><br>
+            <font color="#0000CC">//*************************************************************</font><br>
+            void main(void)<br>
+            {<br>
+            init_pic();<br>
+            T0IF=0;<br>
+            GIE=1; <font color="#0000CC">// valide inter<font color="#0000FF">ruption</font></font><font color="#0000FF">s</font><br>
+            do<br>
+            { <br>
+            if(Int_ext) Int_ext=0;</p>
+          <p> }while(!0); <br>
+            } </p>
+          <p><font color="#0000CC">//*************************************************************</font><br>
+            void interrupt traite_int(void)<br>
+            {<br>
+            <br>
+            if(T0IF)<br>
+            {<br>
+            Int_ext=1; <br>
+            TMR0=0xFF;<br>
+            T0IF=0;<br>
+            } <br>
+            }<br>
+            <font color="#0000CC">//*************************************************************</font><br>
+            void init_pic(void)<br>
+            { <br>
+            INIT_PORTA; <br>
+            T0CS=1; <font color="#0000CC">// Entree d'horloge sur T0CKI (RA4)</font><br>
+            T0SE=1;<font color="#0000CC"> // front descendant</font><br>
+            T0IE=1; <font color="#0000CC">// valide interruption Timer0 </font><br>
+            TMR0=0xFF; <font color="#0000CC">// initialise le compteur &agrave; 
+            FFh</font><br>
+            }</p>
+          <p align="left"><font size="2"> </font></p>
+          </td>
+      </tr>
+      <tr>
+        <td height="42">&nbsp;</td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_int_sup","")</script>
+<noscript>
+<img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_int_sup" width="1" height="1" border="0">
+</noscript>
+<!-- End Balise -->
+</html>

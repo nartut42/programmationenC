@@ -1,0 +1,268 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="COMMENT FAIRE EN LANGAGE C POUR PIC, 8051... ">
+<META NAME="DESCRIPTION" CONTENT="Comment faire en langage C pour PIC, 8051 ?.">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> AFFICHEUR LCD EN MODE 8 BITS</b></p>
+    <p align="left"><img width="619" height="363" usemap="#Map" border="0" src="images/lcd_8.gif"><map name="Map"><area shape="rect" coords="172,117,172,118" href="#"><area shape="rect" coords="0,0,619,362" href="images/lcd_8.gif" target="_blank" alt="CLIQUER POUR MIEUX VOIR LE SCHEMA" title="CLIQUER POUR MIEUX VOIR LE SCHEMA"></map></p>
+    <table width="78%" border="0" height="435">
+      <tr> 
+        <td height="776"> 
+          <p align="left">Bien qu'utilisant 11 lignes de port, ce mode de fonctionnement 
+            est le plus facile et le plus couramment utilisé. Les 8 lignes du 
+            port B sont connect&eacute;es au bus data de l'afficheur. Les trois 
+            lignes RC2-4 servent &agrave; la commande. Pour utiliser ces fonctions, 
+            incorporez &agrave; votre programme ces quelques lignes ou compilez 
+            le fichier <i>.obj</i> obtenu et ajouter &agrave; votre programme: 
+            #include &quot;lcd_8.h&quot;. Votre fonction &quot;<i>main</i>&quot; 
+            doit appeler la fonction &quot;init_lcd()&quot; avant d'&eacute;crire 
+            dans l'afficheur LCD.</p>
+          <p align="left"><a href="fichiers/LCD_8.zip"><b>T&eacute;l&eacute;charger</b></a> 
+            le programme</p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image3','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image3" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left"><font size="2" color="#33CC00">/*</font><font size="2" color="#99CCFF"><font color="#009900"><br>
+            * <b>Routines LCD en mode donnees 8 bits 2x16 caract&egrave;res</b><br>
+            * <br>
+            * Claude Dreschel &lt;Claudedel@wanadoo.fr&gt;<br>
+            *<br>
+            * Test avec l' afficheur LTN211 Philips (compatible controleur LCD 
+            Hitachi <b>HD44780</b>).<br>
+            * Les 14 pins de l'afficheur sont connectees ainsi:<br>
+            * <br>
+            * PORTB bits 0-7 : LCD pins 7-14 (Data)<br>
+            * PORTC bit 2 : LCD_RS pin 4 (LCD Register Select)<br>
+            * PORTC bit 3 : LCD_RW pin 5 (LCD Read Write)<br>
+            * PORTC bit 4 : LCD_EN pin 6 (LCD Enable)<br>
+            * Masse : LCD pin 1<br>
+            * +5V : LCD pin 2<br>
+            * Var_pot : LCD pin 3 <br>
+            */</font></font></p>
+          <p>#include &lt;pic1687x.h&gt;<br>
+            #include &quot;delay.h&quot; </p>
+          <p><font color="#FF0000">static bit LCD_RS @ ((unsigned)&amp;PORTC*8+0);<font color="#00CC00"> 
+            // Register Select</font><br>
+            static bit LCD_RW @ ((unsigned)&amp;PORTC*8+1); <font color="#00CC00">// 
+            Read/Write LCD</font><br>
+            static bit LCD_EN @ ((unsigned)&amp;PORTC*8+2); <font color="#00CC00">// 
+            LCD Enable</font><br>
+            static bit flag_busy @ ((unsigned)&amp;PORTB*8+7);<br>
+            </font></p>
+          <p><font color="#FF0000">#define PORT_DATA PORTB<br>
+            #define NOP asm(&quot;nop&quot;)<br>
+            #define LCD_STROBE LCD_EN = 1;NOP;NOP;LCD_EN=0<br>
+            #define PORTB_IN 0xFF<br>
+            #define PORTB_OUT 0x0<br>
+            #define INIT_PORTC TRISC=0b11000111 //PortC <br>
+            </font><br>
+            <font color="#009900"><br>
+            /* initialise l'afficheur LCD en mode 8 bits */</font></p>
+          <p><font color="#0000FF">void<br>
+            init_lcd(void)</font><br>
+            {<br>
+            TRISB=PORTB_OUT;<br>
+            INIT_PORTC;<br>
+            LCD_RW=0;<br>
+            LCD_RS=0;<br>
+            LCD_EN=0;<br>
+            DelayMs(25);<br>
+            lcd_write(0x30);<br>
+            Delay100Us();<br>
+            lcd_write(0x30); <br>
+            DelayMs(5);*/<br>
+            lcd_write_instr(0x38); <font color="#009900">// Mode 8 bit, 2/16, 
+            font 5x7</font><br>
+            lcd_write_instr(0x08); <font color="#009900">// affichage off</font><br>
+            lcd_write_instr(0x01); <font color="#009900">// clear et home</font><br>
+            lcd_write_instr(0x0C); <font color="#009900">// Affichage on, curseur 
+            clign off </font><br>
+            lcd_write_instr(0x06); <font color="#009900">// pas de decalage</font><br>
+            }</p>
+          <p><font color="#009900">/*<br>
+            * Test le bit BF jusqu'a ce que le LCD soit ok<br>
+            */</font></p>
+          <p>void<br>
+            lcd_busy(void)<br>
+            {<br>
+            static bit LCD_BF;<br>
+            <br>
+            TRISB = PORTB_IN;<font color="#009900"> // Data en entree</font><br>
+            LCD_RS = 0; <font color="#009900">// selectionne registre</font><br>
+            LCD_RW = 1;<font color="#009900"> // en lecture</font><br>
+            do<br>
+            { <br>
+            NOP; <br>
+            LCD_EN=1;<br>
+            NOP;<br>
+            LCD_BF = flag_busy;<br>
+            LCD_EN=0;<br>
+            } while(LCD_BF);<font color="#009900"> // Boucle tant que BF=1</font><br>
+            LCD_RW=0;<br>
+            TRISB=PORTB_OUT; <font color="#009900">// data en sortie<br>
+            </font><br>
+            } <br>
+            <br>
+            <font color="#009900">// Ecriture d'un octet dans le LCD en mode 8 
+            bits</font></p>
+          <p>void<br>
+            lcd_write(unsigned char c)<br>
+            {<br>
+            PORT_DATA = c ;<br>
+            NOP;<br>
+            LCD_STROBE;<br>
+            <br>
+            }<br>
+            <font color="#009900">/*<br>
+            * Ecrit une instruction dans LCD<br>
+            */</font><br>
+            void<br>
+            lcd_write_instr(unsigned char c)<br>
+            {<br>
+            lcd_busy();<br>
+            LCD_RS = 0; <font color="#009900">// acces registre</font><br>
+            lcd_write(c); <br>
+            } <br>
+            <font color="#009900">/* Ecriture d'un caractere sur l'afficheur LCD 
+            */</font></p>
+          <p>void<br>
+            lcd_putch(unsigned char c)<br>
+            {<br>
+            lcd_busy();<br>
+            LCD_RS = 1; <br>
+            lcd_write(c);<br>
+            <br>
+            }<br>
+            <font color="#009900">// Ecriture d'une chaine de caracteres </font></p>
+          <p>void<br>
+            lcd_puts(const unsigned char * s)<br>
+            {<br>
+            while(*s)<br>
+            lcd_putch(*s++);</p>
+          <p>}</p>
+          <p><font color="#009900">/*<br>
+            * Positionne le curseur ligne, position<br>
+            * la premiere ligne est la ligne 0<br>
+            */</font></p>
+          <p>void<br>
+            lcd_pos(unsigned char ligne,unsigned char pos)<br>
+            {<br>
+            lcd_write_instr(((ligne * 0x40)+pos)+0x80);<br>
+            <br>
+            }<br>
+            <font color="#009900">/*<br>
+            * Efface l'ecran et curseur home <br>
+            */</font></p>
+          <p>void<br>
+            lcd_clear(void)<br>
+            {<br>
+            lcd_write_instr(0x1);<br>
+            }<br>
+            <font color="#009900">/* <br>
+            * Curseur Home <br>
+            */</font><br>
+            void<br>
+            lcd_home(void)<br>
+            {<br>
+            lcd_write_instr(0x02);<br>
+            }<br>
+            <font color="#009900">/*<br>
+            * Fait clignoter le caractere affiche<br>
+            */</font><br>
+            void<br>
+            lcd_clign_on(void)<br>
+            { <br>
+            lcd_write_instr(0x0D);<br>
+            }<br>
+            <font color="#009900">/*<br>
+            * Arrete le clignotement<br>
+            */</font><br>
+            void<br>
+            lcd_clign_off(void)<br>
+            {<br>
+            lcd_write_instr(0x0C);<br>
+            }<br>
+            <font color="#009900">/*<br>
+            * decalage a gauche<br>
+            */</font><br>
+            void<br>
+            lcd_decal_gauche(void)<br>
+            {<br>
+            lcd_write_instr(0x4);<br>
+            }<br>
+            <font color="#009900">/*<br>
+            * decalage a droite<br>
+            */</font><br>
+            void<br>
+            lcd_decal_droite(void)<br>
+            {<br>
+            lcd_write_instr(0x6);<br>
+            }<br>
+            <br>
+          </p>
+          <p align="left"><font size="2"><br>
+            <br>
+            </font></p>
+          </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_lcd_8","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_lcd_8" width="1" height="1" border="0">
+</noscript>
+<!-- End Balise -->
+</html>

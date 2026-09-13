@@ -1,0 +1,268 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="LIAISON SERIE ASYNCHRONE DES PIC16F87x ">
+<META NAME="DESCRIPTION" CONTENT="COMMENT FAIRE ? En langage C pour PIC, 8051....">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,LCD,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C ? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> SIMULER UNE LIAISON SERIE ASYNCHRONE SANS UART.</b></p>
+    <p align="left"><map name="Map"><area shape="rect" coords="515,355,516,356" href="#"></map></p>
+    <table width="651" border="0">
+      <tr> 
+        <td width="645"> 
+          <p align="left">Tous les PIC ne disposent pas d'un <b>UART</b> (Universal 
+            Asynchronous Receiver Transmitter). Pourtant, il est possible d'utiliser 
+            ces PIC (16F84, 12C671...) dans des applications n&eacute;cessitant 
+            <b>occasionnellement</b> une liaison s&eacute;rie asynchrone. Il faut 
+            alors simuler par soft cette fonction. Ne vous attendez pas &agrave; 
+            faire du full-duplex &agrave; 115Kb/s. En revanche, &agrave; des d&eacute;bits 
+            compris entre 1200 et 9600 Bds en half-duplex cela est tout &agrave; 
+            fait r&eacute;alisable.</p>
+          <p align="left">Le PIC16F84 utilise la ligne RB3 en sortie (Txd) et 
+            la ligne RB0 en entr&eacute;e (Rxd) ce qui permet &eacute;ventuellement 
+            de configurer en ligne d'interruption externe pour d&eacute;tecter 
+            un 'START' lors de l'arriv&eacute;e d'un caract&egrave;re. Le MAX232 
+            connu de tous adapte les signaux du PIC &agrave; la norme RS232.</p>
+          <p align="left"><img src="images/RS_PIC.gif" width="801" height="773"></p>
+          <p align="left">Le programme qui suit n'a rien de tr&egrave;s original, 
+            je me suis inspir&eacute; des programmes les plus couramment diffus&eacute;s 
+            sur le web, pourtant la fonction getch() simule ce que fait le hard. 
+            En effet, le programme effectue trois scrutations pendant la dur&eacute;e 
+            d'un bit, ce qui permet de lever le doute en cas d'erreur de r&eacute;ception. 
+          </p>
+          <p align="center"><img src="images/scrutation.gif" width="512" height="384"></p>
+          <p align="left">Bien entendu vous devrez traiter un caract&egrave;re 
+            re&ccedil;u pendant la dur&eacute;e du bit start soit au minimum 400 
+            &micro;s &agrave; 2400 Bds, 600 &micro;s avec 1,5 bit stop. On peut 
+            en faire des choses en 600 &micro;s. Trop court ? La solution est 
+            alors de commander une ligne RTS de la RS232 et ainsi bloquer le flux 
+            de donn&eacute;es pendant le traitement.</p>
+          <p align="left">Pour changer le d&eacute;bit modifier BRATE, TX_TEMPO 
+            et RX_TEMPO.</p>
+          <p align="left">Le programme d'exemple &eacute;met une cha&icirc;ne 
+            de caract&egrave;res et retransmet les caract&egrave;res re&ccedil;us. 
+            Il est imp&eacute;ratif de compiler le programme en &quot;<b>Full 
+            Optimization</b>&quot; car les boucles d'attente doivent s'&eacute;xecuter 
+            en 3 cycles d'horloge.</p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image2','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image2" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left">(Charger ce programme<b> <a href="fichiers/rs_pic.zip">rs_pic.zip</a></b>)</p>
+          <p align="left"><font color="#0000FF">/**********************************************************************<br>
+            * RS_PIC<br>
+            * Simulation d'un UART 2400,N,8,1<br>
+            * Auteur: Claude Dreschel<br>
+            * Claude Dreschel &lt;Claudedel@wanadoo.fr&gt;<br>
+            **********************************************************************/</font><br>
+            <font color="#FF0000">#include &lt;pic1684.h&gt;</font></p>
+          <p><br>
+            <font color="#FF0000">#define XTAL 4000000</font> <font color="#0000FF">// 
+            4.000 MHz</font><br>
+            <font color="#FF0000">#define PORTBIT(adr, bit) ((unsigned)(&amp;adr)*8+(bit))<br>
+            #define ON 1<br>
+            #define OFF 0 </font><br>
+            <font color="#0000FF">/* Baud rate */</font><br>
+            <font color="#FF0000">#define BRATE 2400</font><font color="#0000FF"> 
+            //2400 bauds</font><br>
+            <font color="#0000FF">/* Parametres */</font></p>
+          <p><font color="#FF0000">#define DLY 3</font><font color="#0000FF"> 
+            // 3 cycles de boucle attente</font><br>
+            <font color="#FF0000">#define RX_TEMPO 25</font><font color="#0000FF"> 
+            // Fixe le temps de scrutation d'un bit(9600=&gt;15)</font><br>
+            <font color="#FF0000">#define TX_TEMPO 24</font> <font color="#0000FF">// 
+            Fixe la duree d'un bit (9600=&gt;14)</font><br>
+            <font color="#FF0000">#define DELAY(tempo) (((XTAL/4/BRATE)-(tempo))/DLY)</font><br>
+            <font color="#0000FF">/* Variables */</font><br>
+            <font color="#000000">static bit RxData @ PORTBIT(PORTB,0);</font> 
+            <font color="#0000FF">// Rxd &gt; RB0</font><font color="#000000"><br>
+            static bit TxData @ PORTBIT(PORTB,3); <font color="#0000FF">// Txd 
+            &gt; RB3</font><br>
+            static bit receive,transmit;</font></p>
+          <p><font color="#0000FF">/************************************************************/ 
+            </font><br>
+            unsigned char getch(void);<br>
+            void putch(unsigned char valeur);<br>
+            void put_string(const unsigned char * s);<br>
+            void init_pic(void);<br>
+            <font color="#0000FF">/************************************************************<br>
+            Programme principal<br>
+            - initialisation du pic <br>
+            - en boucle, lecture d'un caractere et &eacute;mission sur Txd.<br>
+            ************************************************************/</font><br>
+            <br>
+            void main(void)<br>
+            {<br>
+            unsigned char car;</p>
+          <p> init_pic();<br>
+            <br>
+            put_string(&quot;TEST DE LA LIAISON SERIE DE MON PIC&quot;);<br>
+            <br>
+            do<br>
+            { <br>
+            car=getch();<br>
+            putch(car);<br>
+            <br>
+            }while(!0); // le programme continue<br>
+            } </p>
+          <p><font color="#0000FF">/*******************************************************************<br>
+            * fonction getch(): lecture d'un caractere sur<br>
+            * la liaison serie. A 2400 bits/S<br>
+            * la scrutation se fait a trois reprises<br>
+            * ! ! !<br>
+            * |-----------| toutes les 100 &micro;S pd la <br>
+            * presence d'un bit et ce toutes les 400&micro;S. <br>
+            * (dly) 2400,N,8,1 <br>
+            ********************************************************************/ 
+            </font><br>
+            unsigned char getch(void)<br>
+            {<br>
+            unsigned char nb_bit, dly,caractere;<br>
+            static bit Rx1,Rx2;</p>
+          <p> caractere=0;<br>
+            while(!RxData); <font color="#0000FF">//Attente bit stop </font><br>
+            for(;;) {<br>
+            while(RxData)<br>
+            continue;<font color="#0000FF"> // Attente bit start </font><br>
+            dly = DELAY(RX_TEMPO)/2;<br>
+            do;<br>
+            while(--dly); <font color="#0000FF">// temporisation 1/2 start</font><br>
+            if(RxData)<br>
+            continue;<font color="#0000FF"> // Bruit</font><br>
+            receive=ON;<br>
+            nb_bit = 8;<br>
+            caractere = 0;<br>
+            dly = DELAY(RX_TEMPO)/4; <font color="#0000FF">//100&micro;S</font><br>
+            do;<br>
+            while(--dly);<br>
+            if(RxData)<br>
+            continue;<font color="#0000FF"> // Bruit </font><br>
+            do {<br>
+            <br>
+            dly = DELAY(RX_TEMPO)/2; <font color="#0000FF">//200&micro;S</font><br>
+            do;<br>
+            while(--dly);<br>
+            Rx1=RxData;<br>
+            dly = DELAY(RX_TEMPO)/4; <font color="#0000FF">//100&micro;S</font><br>
+            do;<br>
+            while(--dly);<br>
+            Rx2=RxData;<br>
+            dly = DELAY(RX_TEMPO)/4; <font color="#0000FF">//100&micro;S</font><br>
+            do;<br>
+            while(--dly);<br>
+            Rx1 ^= Rx2; <br>
+            if(Rx1) Rx2=RxData; <br>
+            caractere = (caractere &gt;&gt; 1) | (Rx2 &lt;&lt; 7);<br>
+          </p>
+          <p> } while(--nb_bit);<br>
+            receive=OFF;<br>
+            return (caractere);<br>
+            }<br>
+            }<br>
+            <font color="#0000FF">/*******************************************************************<br>
+            fonction putch(): ecriture d'un caractere sur<br>
+            la liaison serie. <br>
+            *******************************************************************/</font><br>
+            void putch(unsigned char valeur)<br>
+            {<br>
+            unsigned char nb_bit, dly;</p>
+          <p><br>
+            transmit = ON;<br>
+            nb_bit = 9; // 1 start+8 bits <br>
+            TxData=0; // bit start <br>
+            <br>
+            do<br>
+            {<br>
+            dly = DELAY(TX_TEMPO);<font color="#0000FF"> // duree d'un bit</font><br>
+            do;<br>
+            while(--dly);<br>
+            if(valeur &amp; 1)<br>
+            TxData = 1;<br>
+            else<br>
+            TxData = 0;<br>
+            valeur = (valeur &gt;&gt; 1);<br>
+            } while(--nb_bit);<br>
+            TxData = 1;<br>
+            dly = DELAY(TX_TEMPO); <font color="#0000FF">// duree d'un bit</font><br>
+            do;<br>
+            while(--dly);<br>
+            receive=OFF;<br>
+            }<br>
+            <font color="#0000FF">/*******************************************************************<br>
+            * fonction put_string(): ecriture d'une chaine de caracteres<br>
+            * sur la liaison serie.<br>
+            ********************************************************************/</font><br>
+            void put_string(const unsigned char * s)<br>
+            {<br>
+            while(*s)<br>
+            putch(*s++);<br>
+            }</p>
+          <p><font color="#0000FF">/**********************************************************<br>
+            init_pic(): initialise le PIC<br>
+            ***********************************************************/</font></p>
+          <p>void init_pic(void)<br>
+            {<br>
+            TRISB = 0x1; // bit 0 input<br>
+            <br>
+            }</p>
+          <p></p>
+          <p align="left">&nbsp;</p>
+          </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_rspic","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_rspic" width="1" height="1" border="0">
+</noscript><!-- End Balise -->
+</html>

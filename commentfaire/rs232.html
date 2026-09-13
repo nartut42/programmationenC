@@ -1,0 +1,175 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="LIAISON SERIE ASYNCHRONE DES PIC16F87x ">
+<META NAME="DESCRIPTION" CONTENT="COMMENT FAIRE ? En langage C pour PIC, 8051....">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,LCD,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C ? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> LIAISON SERIE ASYNCHRONE DES PIC16F87x.</b></p>
+    <p align="left"><map name="Map"><area shape="rect" coords="515,355,516,356" href="#"></map></p>
+    <table width="651" border="0">
+      <tr> 
+        <td width="645"> 
+          <p align="left">Le PIC16F87X dispose d'une liaison s&eacute;rie param&eacute;trable 
+            en mode synchrone ou asynchrone (<b>USART</b>). Pour communiquer avec 
+            la liaison RS232 d'un PC, il convient de s&eacute;lectionner le mode 
+            asynchrone, la vitesse, le nombre de bits de donn&eacute;e (8 ou 9). 
+            Le 9eme bit &eacute;tant le bit de parit&eacute;.</p>
+          <p align="left">Trois registres permettent de configurer l'USART: <b>TXSTA,</b> 
+            <b>RCSTA </b>et<b> SPBRG. </b> Dans l'exemple qui suit nous configurerons 
+            l'USART en mode asynchrone &agrave; 9600 bauds, 8 bits de donn&eacute;es 
+            (sans parit&eacute;).</p>
+          <p align="left">Donc les bits de <b>TXSTA</b> seront positionn&eacute;s 
+            ainsi: <b>TX9 </b>=0, <b>TXEN</b>=1 (&eacute;mission valide), <b>SYNC</b>=0 
+            ( mode asynchrone), <b>BRGH </b>= 1 (high speed donc formule Baud 
+            rate= Fosc/(16(<b>X</b>+1), <b>X </b>&eacute;tant la valeur &agrave; 
+            calculer et &agrave; charger dans le registre<b> SPBRG</b>). Pourquoi 
+            avoir pris une fr&eacute;quence de quartz de 11.0592MHz ? Et bien parce 
+            que le calcul tombe juste et donc le pourcentage d'erreur est proche 
+            de z&eacute;ro. Bien entendu une autre valeur convient &eacute;galement 
+            (voir tableau du datasheet).</p>
+          <p align="left">Les bits de <b>RCSTA</b> auront pour valeur: <b>SPEN</b> 
+            = 1 (port s&eacute;rie valid&eacute;), <b>CREN</b> =1 (valide r&eacute;ception 
+            en continu).</p>
+          <p align="left">Avant d'&eacute;mettre un octet en &eacute;crivant dans 
+            <b>TXREG</b>, contr&ocirc;ler l'&eacute;tat du bit <b>TXIF</b> qui 
+            doit &ecirc;tre &agrave; 1 (registre <b>PIR1</b>).Quand le bit <b>RCIF</b> 
+            est &agrave; 1, un octet a &eacute;t&eacute; est re&ccedil;u dans 
+            le registre <b>RCREG</b>.</p>
+          <p align="left">L'exemple suivant attend un CR (Touche Entr&eacute;e) 
+            avant d'envoyer une cha&icirc;ne de caract&egrave;res suivie d'un 
+            point.</p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image2','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image2" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left">(Charger ce programme<b> <a href="fichiers/rs_87X.zip">rs_87X.zip</a></b>)</p>
+          <p align="left"><font color="#0000FF">// Exemple d'&eacute;mission d'une 
+            chaine de caract&egrave;res et de r&eacute;ception de caract&egrave;res<br>
+            // 9600,N,8,1<br>
+            // Claude Dreschel 2001</font></p>
+          <p><font color="#FF0000">#include &lt;pic1687x.h&gt;</font></p>
+          <p><font color="#0000FF">/* Frequence du quartz */</font><br>
+            <font color="#FF0000">#define XTAL 11059200 </font><br>
+            <font color="#0000FF">/* Baud rate */</font><br>
+            <font color="#FF0000">#define BRATE 9600<br>
+            #define VALEURBRG (XTAL/16/BRATE)-1<br>
+            #define CR 0x0D</font><br>
+            <font color="#0000FF">//*******************************************************************</font><br>
+            void init_pic(void);<br>
+            char getch(void);<br>
+            void putch(char c);<br>
+            void put_string(const unsigned char * s);<br>
+            <font color="#0000FF">//*******************************************************************</font><br>
+            void main(void)<br>
+            {</p>
+          <p> init_pic();<br>
+            while(getch()!=CR); // attente du caractere retour charriot<br>
+            put_string(&quot;OK RECU UN CR&quot;);<br>
+            putch('.');</p>
+          <p> while(!0);<br>
+            }<br>
+            <font color="#0000FF">//********************************************************************<br>
+            /* fonction init_pic()<br>
+            *********************************************************************/ 
+            </font><br>
+            void init_pic(void)<br>
+            {<br>
+            <br>
+            SYNC=0; //mode asynchrone<br>
+            SPEN=1; //port s&eacute;rie valide<br>
+            RX9=0; // 8 bits en r&eacute;ception<br>
+            TX9=0; // 8 bits en emission<br>
+            CREN=1; //valide reception continue<br>
+            TXEN=1; // valide emission <br>
+            BRGH=1; //Bits/s=Fosc/(16(X+1)<br>
+            SPBRG=VALEURBRG; //9600 bits/s (X=71)<br>
+            } <br>
+            <font color="#0000FF">//*******************************************************************<br>
+            /* fonction getch(): lecture d'un caractere sur<br>
+            la liaison serie. <br>
+            ********************************************************************/ 
+            </font><br>
+            char getch(void)<br>
+            {<br>
+            while(!RCIF);<br>
+            return (RCREG);<br>
+            }<br>
+            <font color="#0000FF">//*******************************************************************<br>
+            /* fonction putch(): ecriture dun caractere sur <br>
+            la liaison serie.<br>
+            ********************************************************************/</font><br>
+            void putch(char c)<br>
+            {<br>
+            while(!TXIF);<br>
+            TXREG=c;<br>
+            }<br>
+            <font color="#0000FF">//*******************************************************************<br>
+            /* fonction put_string(): ecriture d'une chaine de caracteres<br>
+            sur la liaison serie.<br>
+            ********************************************************************/</font><br>
+            void put_string(const unsigned char * s)<br>
+            {<br>
+            while(*s)<br>
+            putch(*s++);<br>
+            }</p>
+        </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_rs232","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_rs232" width="1" height="1" border="0">
+</noscript>
+<!-- End Balise -->
+</html>

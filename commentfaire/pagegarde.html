@@ -1,0 +1,123 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="Comment faire en langage C ? PIC, 8051... ">
+<META NAME="DESCRIPTION" CONTENT="Rubrique consacrée au questions que vous vous posez en langage C pour PIC, 8051.">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,LCD,pic12c671,MPLAB ICD,MPLAB IDE,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,voilier,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C pour PIC, 8051... par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/epingle1.gif')">
+<blockquote> 
+  <blockquote> 
+    <table width="394" border="0">
+      <tr>
+        <td width="239"><img src="images/circuit_anim.gif" width="240"
+        height="210" x-sas-useimagewidth x-sas-useimageheight></td>
+        <td width="145"><img src="images/commentfaire.gif" width="108" height="100" align="top"></td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <table width="616" border="0">
+      <tr>
+        <td>
+          <p><font size="2"><b>CETTE RUBRIQUE EST CONSACREE AUX (QUELQUES) QUESTIONS 
+            QUE PEUVENT SE POSER LES ELECTRONICIENS ADEPTES DU LANGAGE C, ALORS 
+            NE VOUS CASSER PLUS LA TETE !</b></font></p>
+          <p><b><font size="2">COMMENT FAIRE ...</font></b></p>
+    </td>
+      </tr>
+    </table>
+    <p><font size="2"><b><a href="lcd_4.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image9','','images/epingle1.gif',1)" target="_self"><img name="Image9" border="0" src="images/epingle0.gif" width="21" height="21"></a><a href="lcd_4.html" target="_self"><font size="3">...pour 
+      commander un afficheur LCD en mode 4 bits?</font></a></b></font></p>
+    <p><b><font size="2"><b><a href="lcd_8.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image41','','images/epingle1.gif',1)" target="_self"><img name="Image41" border="0" src="images/epingle0.gif" width="21" height="20" usemap="#Image4MapMap"></a></b></font><font size="3"><a href="lcd_8.html" target="_self">...pour 
+      commander un afficheur LCD en mode 8 bits?</a></font></b></p>
+    <p><b><font size="2"><b><a href="rs232.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image42','','images/epingle1.gif',1)" target="_self"><img name="Image42" border="0" src="images/epingle0.gif" width="21" height="20" usemap="#Image4MapMap"></a></b></font><font size="3"><a href="rs232.html" target="_self">...pour 
+      &eacute;mettre et recevoir des caract&egrave;res sur la liaison s&eacute;rie 
+      asynchrone des PIC16F87X ? </a></font></b></p>
+    <p><b><font size="2"><b><a href="rs_pic.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image43','','images/epingle1.gif',1)" target="_self"><img name="Image43" border="0" src="images/epingle0.gif" width="21" height="20" usemap="#Image4MapMap"></a></b></font><a href="rs_pic.html" target="_self">...pour 
+      simuler une liaison s&eacute;rie avec un pic sans UART ?</a></b></p>
+    <p><b><font size="2"><b><a href="CAN.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image44','','images/epingle1.gif',1)" target="_self"><img name="Image44" border="0" src="images/epingle0.gif" width="21" height="20" usemap="#Image4MapMap"></a></b></font><a href="CAN.html" target="_self">...pour 
+      utiliser le convertisseur analogique num&eacute;rique (CAN) ?</a></b></p>
+    <p><b><font size="2"><b><a href="RW_EEPROM.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image45','','images/epingle1.gif',1)" target="_self"><img name="Image45" border="0" src="images/epingle0.gif" width="21" height="20" usemap="#Image4MapMap"></a></b></font><a href="RW_EEPROM.html" target="_self">... 
+      pour lire et &eacute;crire des donn&eacute;es dans la m&eacute;moire EEPROM 
+      des PIC ?</a></b></p>
+    <p><a href="int_sup.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image10','','images/epingle1.gif',1)"><img name="Image10" border="0" src="images/epingle0.gif" width="21" height="21"></a><b><a href="int_sup.html" target="_self">... 
+      pour cr&eacute;er une entr&eacute;e d'interruption externe suppl&eacute;mentaire 
+      ?</a></b> </p>
+    <p><b><font color="#0000CC"><a href="int_sup.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image101','','images/epingle1.gif',1)"><img name="Image101" border="0" src="images/epingle0.gif" width="21" height="21"></a><a href="prog_pic.html" target="_self">... 
+      pour programmer vos PIC ?</a></font></b></p>
+    <p><b><font color="#0000CC"><a href="int_sup.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image1011','','images/epingle1.gif',1)"><img name="Image1011" border="0" src="images/epingle0.gif" width="21" height="21"></a></font><a href="MPLABICD.html" target="_self">...pour 
+      r&eacute;aliser un clone d'émulateur programmateur de PIC16F8XX (MPLAB ICD) 
+      ?</a></b></p>
+    <p><b><font color="#0000CC"><a href="int_sup.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image10111','','images/epingle1.gif',1)"><img name="Image10111" border="0" src="images/epingle0.gif" width="21" height="21"></a></font><a href="prog_87LPC76X.html" target="_self">... 
+      pour r&eacute;aliser un programmateur de 87LCP76x ?</a></b></p>
+    <p><b><font color="#0000CC"><a href="int_sup.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image101111','','images/epingle1.gif',1)"><img name="Image101111" border="0" src="images/epingle0.gif" width="21" height="21"></a></font><a href="willemprog.html" target="_self">... 
+      programmer la plupart des m&eacute;moires existantes (EPROM,EEPROM, FLASH, 
+      I2C, &micro;C...) ?</a></b></p>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+            <blockquote> 
+                  <blockquote>
+                    <p>&nbsp;</p>
+                  </blockquote>
+                </blockquote>
+               </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+<noframes>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/pagegarde.html"></a> <br> 
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/lcd_4.htm"></a> <br> 
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/lcd_8.htm"></a> <br> 
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/rs232.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/rs_pic.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/liens.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/can.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/rw_eeprom.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/int_sup.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/prog_pic.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/MPLABICD.htm"></a> <br>
+<a href="http://perso.wanadoo.fr/claude.dreschel/commentfaire/prog_87LPC76x.htm"></a> <br>
+</noframes>
+<img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_pagegarde" width="1" height="1" >
+<End Balise -->
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_pagegarde","")</script>
+<noscript>
+</noscript>
+</html>

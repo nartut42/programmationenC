@@ -1,0 +1,288 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="Les micro-contrôleurs 8051, PIC... par Claude Dreschel">
+<META NAME="DESCRIPTION" CONTENT="Réalisation de montages sur les micro-contrôleurs 8051, PIC,reconnaissance vocale, GameBoy ... en langage C. Un programmateur de µC 8051 et EPROM, PIC12C671 compatible FT639 et d'autres montages a venir. Description de composants électroniques, Lego Mindstorms RCX en langage C, comment faire ?, commande de servos, voltmètre ampèremètre Ampères heure, Reads51,Dreschel,PIC,pic12c671,8051,phytec,i2C,LCD,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,gameboy,gbdk,langage C,reconnaissance vocale,voice extreme toolkit,sensory,robot,p16pro,polyswitch,raychem,picall,battery,batterie,PWM,compilateur,astuces,picc,maxim,max667,max232,pic16F873,volt,ampère,AH,Ampere Heure,condensateur,résistance,resistance,diode,diodes,transistor,transistors,moteur,brochage,connectique,datasheet,microcontroleur,micro,phytec,microprocesseur,registre,eprom,pic,led,logique,relais,filtre,doc,technologie,aop,alternatif,continu,robotique,kits,kit,del,divers,selectronic,velleman,radiospares,radio,son,video,tv,depannage,eprat,farnell,gotronic,GPS,répéteur,PWM,repeter,VHF,BSX1620,LTN211,MPLAB IDE,MPLAB ICD ">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,DS1085,SBX1620-52,DS80C320,BSX1620,DALLAS,pic12c671,8051,i2C,LCD,MAX2606,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,gameboy,gbdk,langage C,reconnaissance vocale,voice extreme toolkit,sensory,robot,p16pro,polyswitch,raychem,picall,battery,batterie,compilateur,astuces,picc,maxim,max667,max232,lego mindstorms,mindstorm,pic16F873,volt,ampère,AH,Ampere Heure,condensateur,résistance,resistance,diode,diodes,transistor,transistors,moteur,brochage,connectique,datasheet,microcontroleur,micro,microprocesseur,registre,eprom,pic,led,logique,relais,filtre,doc,technologie,aop,alternatif,continu,robotique,kits,kit,del,divers,selectronic,velleman,radiospares,radio,son,video,tv,depannage,eprat,farnell,gotronic,ibc,lextronic,orcad,microsim,Reads51,Rigel,velleman,televiseur,televiseurs,hf,frequence,capes,proteus,GPS,répéteur,repeter,VHF,LTN211,MPLAB IDE,MPLAB ICD,AUREL">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="1 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<META HTTP-EQUIV="imagetoolbar" CONTENT="no"> 
+<TITLE>Site sur les microcontrôleurs programmés en C</TITLE>
+<link rel="SHORTCUT ICON" href="http://perso.wanadoo.fr/claude.dreschel/images_index/chip.ico";>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body bgcolor="#FFFFFF" background="images_index/border7.gif" onLoad="MM_preloadImages('images_index/ajouter_r2_c1_f2.gif')" 
+>
+<table width="752" border="0" align="center">
+  <tr bordercolor="#333399" align="left" valign="top"> 
+    <td height="1992"> 
+      <div align="center">
+        <p><img src="images_index/titre1.gif" width="650" height="80"></p>
+        <p><font
+        size="2"><a href="#" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image28','','images_index/ajouter_r2_c1_f2.gif',1)"onClick="javascript:window.external.AddFavorite('http://www.microcontroleur.fr.st/', ' Les microcontroleurs  et le C sur microcontroleur.fr.st');"><img name="Image28" border="0" src="images_index/ajouter_r2_c1.gif" width="177" height="22" alt="Ajouter ce site aux Favoris" align="bottom"></a></font> 
+        </p>
+      </div>
+      <blockquote> 
+        <blockquote> 
+          <div align="center"></div>
+          <table width="75%" border="0">
+            <tr> 
+              <td><img src="images_index/circuit_anim.gif" width="240" height="210" align="right" border="0" vspace="0" lowsrc="images_index/anim%20Frame%200.html"></td>
+              <td><img src="images_index/symbole1.gif" width="380" height="148"></td>
+            </tr>
+          </table>
+          <p align="center"><font size="2"><b><font size="1"> <font size="2">Retrouvez 
+            ce site sur<a href="http://microcontroleur.fr.st/" target="_blank"> 
+            http://www.microcontroleur.fr.st</a></font></font></b></font></p>
+          <p><font size="2"><strong><font size="4" color="#333399"> <b><font size="5">&micro;C 
+            &amp; C</font></b></font><font size="3"> Les microcontr&ocirc;leurs 
+            programm&eacute;s en langage C - Vous pouvez d&eacute;sormais vous 
+            exprimer et poser vos questions sur le &quot;<a href="http://membres.lycos.fr/microcontroleurs/upload/index.php" target="_blank">Forum 
+            &micro;C &amp; C</a>&quot;. Pour visiter le site, cliquez sur les 
+            sujets suivants:</font></strong></font></p>
+          <table
+                        border="0" cellpadding="3"
+                        cellspacing="10" width="695" height="1463" align="right">
+            <tr> 
+              <th bordercolor="#000000" width="186" height="8"> 
+                <div align="center"><img src="images_index/carre-1.gif" width="104" height="44"></div>
+              </th>
+              <th width="179" height="8">&nbsp;</th>
+              <td width="266" height="8"> 
+                <div align="center"><font color="#0000FF"><img src="images_index/carre-2.gif" width="104" height="44"></font></div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="174"> 
+                <div align="center"> 
+                  <p><font
+                                color="#0000FF"><strong><a href="proguniv4/index.html" target="_self"><b>Programmateur 
+                    de 8051 et EPROM</b></a></strong></font><b><a href="proguniv4/index.html"> 
+                    -87C51FA</a></b></p>
+                  <p><img
+                                src="images_index/composf.gif"
+                                alt="Programmateur de 8051 et EPROM."
+                                width="171" height="97" align="absmiddle"> </p>
+                </div>
+              </td>
+              <td width="179" height="174"> 
+                <div align="center"> 
+                  <p><font color="#0000FF"><a href="dcl639/index.html" target="_self"><b>Commander 
+                    5 servos par RS232 - compatible FT639</b></a></font><a href="dcl639/index.html">-<b>PIC12C671</b> 
+                    </a></p>
+                  <p> <img
+                                src="images_index/futaba.jpg"
+                                alt="PIC12C671 compatible FT639 pour piloter 5 servos."
+                                width="96" height="102" align="absmiddle"> </p>
+                </div>
+              </td>
+              <td width="266" height="174"> 
+                <div align="center"> 
+                  <p><a href="variateur_pwm/index.html" target="_self"><b>Variateur 
+                    de vitesse pour moteur CC command&eacute; en PWM - PIC16F876</b></a></p>
+                  <p><img src="images_index/core-micro-mod2.jpg" width="132" height="94"></p>
+                  </div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="23"> 
+                <div align="center"><font color="#0000FF"></font></div>
+              </td>
+              <td width="179" height="23"> 
+                <div align="center"><b> </b></div>
+              </td>
+              <td width="266" height="23"> 
+                <div align="center"><font color="#0033CC"><b></b></font></div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="210"> 
+                <div align="center"> 
+                  <p><font color="#0000FF"><b><a href="gbrgps/index.html" target="_self">R&eacute;p&eacute;teur 
+                    GPS sans fil &agrave; l'aide d'une GameBoy et de PIC16F873 
+                    - PIC16F84</a></b></font></p>
+                  <p><font color="#0000FF"><img src="images_index/GBRGPS.gif" width="186" height="131" alt="REPETEUR GPS GBRGPS"></font></p>
+                </div>
+              </td>
+              <td width="179" height="210"> 
+                <div align="center"> 
+                  <p><b><font color="#0000FF"><a href="sail-supervisor/index.html" target="_self">Multim&egrave;tre 
+                    num&eacute;rique V-A-A/h - % Charge (PIC16F873) </a></font></b></p>
+                  <p><img src="images_index/test_bat1.gif" width="151" height="131" alt="PIC16F873 Surveillance de batteries" align="absmiddle"></p>
+                </div>
+              </td>
+              <td width="266" height="210"> 
+                <div align="center"> 
+                  <p><font color="#0000FF"><b><a href="commentfaire/index.html" target="_self">Comment 
+                    faire ?..</a></b></font></p>
+                  <p><img src="images_index/commentfaire.gif" width="108" height="100" alt="NOUVEAUTE: REALISER MPLAB ICD" align="absmiddle"> 
+                  </p>
+                </div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="24"> 
+                <div align="center"></div>
+              </td>
+              <td width="179" height="24">&nbsp;</td>
+              <td width="266" height="24"> 
+                <blockquote>&nbsp; </blockquote>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="165"> 
+                <div align="center"> 
+                  <p><font color="#0000FF"><b><a href="GameBoy/index.html" target="_self">GameBoy, 
+                    p&eacute;riph&eacute;rique programm&eacute; en C </a></b></font></p>
+                  <p><img src="images_index/Gameboy.jpg" width="104" height="170" align="absmiddle" alt="Exemple GBDSO ELEKTOR"></p>
+                </div>
+              </td>
+              <td width="179" height="165"> 
+                <div align="center"> 
+                  <p><font color="#333333"><b><font color="#0000FF"><a href="rcx/index.html" target="_self">Lego 
+                    Mindstorm RCX programm&eacute; en C</a></font></b></font><a href="rcx/index.html" target="_self"><font color="#0000FF"><b> 
+                    </b></font></a></p>
+                  <p><img src="images_index/rcxbrick.jpg" width="152" height="132" alt="Module RCX - initiation &agrave; la robotique" align="absmiddle"></p>
+                </div>
+              </td>
+              <td width="266" height="165"> 
+                <div align="center"> 
+                  <p><font color="#0033CC"><b><font color="#0000FF"><a href="montages/index.html" target="_self">Petits 
+                    montages</a></font></b></font></p>
+                  <p><font color="#0033CC"><b><font color="#0000FF"><a href="montages/index.html" target="_self">(premi&egrave;re 
+                    construction)</a></font></b></font></p>
+                  <p><img src="images_index/anim2_C_Dreschel.gif" width="210" height="131" alt="Votre premier montage" align="absmiddle"></p>
+                </div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="2"> 
+                <div align="center"><b></b></div>
+              </td>
+              <td width="179" height="2"> 
+                <p align="center"><font color="#0033CC"><b></b></font></p>
+              </td>
+              <td width="266" height="2"> 
+                <div align="center"><font color="#0000FF"></font></div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="171"> 
+                <blockquote> 
+                  <div align="center">
+                    <blockquote>
+                      <div align="center"><b><font color="#0000FF"><a href="news/index.html" target="_self">Informations 
+                        News</a></font></b></div>
+                    </blockquote>
+                    <div align="center"> 
+                      <p><img src="news/images/information.gif" width="50" height="50" align="texttop" alt="NOUVEAU rfPIC12C509AG/AF"></p>
+                    </div>
+                </div>
+                </blockquote>
+                <div align="center"></div>
+              </td>
+              <td width="179" height="171"> 
+                <p align="center"><font color="#0033CC"><b><font color="#0000FF"><a href="sensory/index.html" target="_self">Kit 
+                  de reconnaissance vocale</a></font></b></font></p>
+                <p><img src="images_index/Kit.jpg" width="177" height="135" alt="Voice Extreme Toolkit et langage C" align="absmiddle"></p>
+              </td>
+              <td width="266" height="171"> 
+                <div align="center"> 
+                  <p><b><font color="#0000FF"><b><a href="composants/index.html" target="_self">Composants</a></b></font></b></p>
+                  <p><img src="images_index/composant.gif" width="188" height="127" alt="Pr&eacute;sentation de composants" align="absmiddle"></p>
+                </div>
+              </td>
+            </tr>
+            <tr> 
+              <td width="186" height="179"> 
+                <div align="center"><a href="mailto:Claudedel@microcontroleur.fr.st"> 
+                  </a> 
+                  <blockquote> 
+                    <div align="center">
+                      <p align="center">&nbsp;</p>
+                      <p><font color="#0000FF"><a href="http://membres.lycos.fr/microcontroleurs/upload/index.php" target="_blank"><b>Forum 
+                        &micro;C &amp; C</b></a></font></p>
+                      <p><img src="images_index/forum.gif" width="200" height="110" align="absmiddle" usemap="#Map" border="0"><map name="Map"><area shape="rect" coords="1,1,201,111" href="http://membres.lycos.fr/microcontroleurs/upload/index.php" target="_blank"></map></p>
+                    </div>
+                  </blockquote>
+                </div>
+              </td>
+              <td width="179" height="179"> 
+                <div align="center"></div>
+              </td>
+              <td width="266" height="179"> 
+                <div align="center"> <font color="#0000FF"><b><a href="liens/index.html">Mes 
+                  liens</a></b></font> 
+                  <p><img src="images_index/liens.gif" width="300" height="80" border="0" usemap="#Map2"><map name="Map2"><area shape="rect" coords="2,0,300,80" href="liens/index.html" target="_self"></map></p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td width="186" height="153">&nbsp;</td>
+              <td width="179" height="153">
+                <div align="center">
+                  <p>&nbsp; </p>
+                  <p> <a
+        href="mailto:claudedel@microcontroleur.fr.st"><font size="2"></font></a></p>
+                </div>
+              </td>
+              <td width="266" height="153">&nbsp;</td>
+            </tr>
+          </table>
+          <p><a href="mailto:Claudedel@microcontroleur.fr.st"> </a></p>
+        </blockquote>
+      </blockquote>
+    </td>
+  </tr>
+  <tr bordercolor="#000099">
+    <td height="5">&nbsp;</td>
+  </tr>
+</table>
+<blockquote> 
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <p><a href="mailto:Claudedel@microcontroleur.fr.st"> </a><a
+        href="mailto:claudedel@microcontroleur.fr.st"><font size="2"> </font></a>
+          <noframes>
+          </p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p> <a href="http://perso.wanadoo.fr/claude.dreschel/gameboy/index.html"></a> 
+  <a href="http://perso.wanadoo.fr/claude.dreschel/composants/index.html"></a> 
+  <a href="http://perso.wanadoo.fr/claude.dreschel/montages/index.html"></a> <a href="http://perso.wanadoo.fr/claude.dreschel/gprgps/index.html"></a> 
+  <a href="http://perso.wanadoo.fr/claude.dreschel/news/index.html"></a> </noframes> </p>
+<!-- Start Balise (Generator v1.3) --> 
+<script language="JavaScript1.1" src="../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","index","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=index" width="1" height="1" border="0"> 
+</noscript><!--- End Balise ---> 
+</body>
+</html>

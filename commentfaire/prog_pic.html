@@ -1,0 +1,121 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="AVEC QUOI PROGRAMMER LES PIC ? ">
+<META NAME="DESCRIPTION" CONTENT="COMMENT FAIRE ? En langage C pour PIC, 8051....">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,LCD,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Avec quoi programmer les PIC?</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p><b>CE QU'IL FAUT POUR PROGRAMMER LES MICRO-CONTROLEURS PIC:</b></p>
+    <p align="left"><img src="images/p16%5b1%5d.jpg" width="431" height="323"><map name="Map"><area shape="rect" coords="515,355,516,356" href="#"></map><b>P16PRO</b></p>
+    <table width="650" border="0" height="50">
+      <tr> 
+        <td width="644"> 
+          <p align="left"><b>LE PROGRAMMATEUR:</b></p>
+          <p align="left">Il existe un grand nombre de programmateurs de PIC, 
+            tous vos distributeurs habituels de composants peuvent vous en vendre 
+            un. Le construire permet de faire une &eacute;conomie substantielle 
+            et surtout d'&ecirc;tre en mesure de le d&eacute;panner en cas de 
+            besoin. Celui que je vous propose pr&eacute;sente l'avantage d'&ecirc;tre 
+            peu co&ucirc;teux pour la partie hard mais &eacute;galement pour le 
+            soft. L'&eacute;lectronique ne n&eacute;cessite que quelques transistors 
+            et r&eacute;gulateurs de tension que vous trouverez dans vos fonds 
+            de tirroir. Il peut &ecirc;tre r&eacute;alis&eacute; sur circuit imprim&eacute; 
+            ou, du fait de sa simplicit&eacute;, sur une plaque d'essais pastill&eacute;e. 
+            Ce programmateur est le <b>P16PRO </b>de<b> Bojan Dobaj (<a href="http://www.picallw.com/" target="_blank">http://www.picallw.com</a>/)</b>, 
+            la version pour PIC de 8 &agrave; 40 broches est la plus universelle 
+            &agrave; condition de lui adjoindre un support &agrave; force d'insertion 
+            nulle (ZIF) permettant l'insertion des bo&icirc;tiers DIP de 8 &agrave; 
+            40 broches. La r&eacute;alisation ne pose pas de probl&egrave;me particulier. 
+            Attention cependant au brochage des r&eacute;gulateurs de tension. 
+            Le programmateur peut &ecirc;tre &eacute;galement achet&eacute; mont&eacute; 
+            ou en kit &agrave; l'adresse web ci-dessus. </p>
+          <p align="left">T&eacute;l&eacute;charger le sch&eacute;ma au format 
+            Acrobar Reader: <b><a href="fichiers/P16pro40_hard.pdf">p16pro40.pdf</a></b></p>
+          <p align="left">&nbsp;</p>
+          <p align="left">Une autre version de programmateur (le <b>PICALL</b>) 
+            permet de programmer une plus grande vari&eacute;t&eacute; de PIC 
+            ainsi que des micro-contr&ocirc;leurs ATMEL, SCENICS SX et des EEPROM 
+            s&eacute;ries.</p>
+          <p align="left">&nbsp;</p>
+          <p align="left"><b>LE SOFT:</b></p>
+          <p align="left"><b>Version DOS (fonctionne &eacute;galement sous Windows 
+            3.x 9.x):</b></p>
+          <p align="left">P16PRO est une version DOS du logiciel qui ne pilote 
+            que le programmateur <b>P16PRO</b>. L'utilisation est simple, le fonctionnement 
+            est garanti m&ecirc;me sur des PC anciens. Pas de configuration compliqu&eacute;e 
+            &agrave; mettre en oeuvre.</p>
+          <p align="left"><img src="images/p16pro.gif" width="646" height="370"></p>
+          <p align="left"><b>La version sous Windows (Windows 3.1x, 9x, NT, 2000, 
+            XP):</b></p>
+          <p align="left">Le logiciel sous Windows qui pilote le programmateur 
+            s'appelle <b>PICALLW</b>. Il commande &agrave; la fois les programmateurs 
+            <b>P16PRO et PICALL</b></p>
+          <p align="left"><img src="images/picallw.gif" width="639" height="491"></p>
+          <p align="left">La prise en main est rapide, l'environnement est coh&eacute;rent. 
+            Le logiciel est configurable pour le <b>P16PRO</b>, pour le <b>PICALL</b> 
+            et pour d'<b>autres versions de programmateurs</b>. Je vous le recommande 
+            &eacute;galement pour son modeste prix. (Voir le site picallw.com)</p>
+          <p align="left">&nbsp;</p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image2','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image2" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left">&nbsp;</p>
+          </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_prog_pic","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_prog_pic" width="1" height="1" border="0">
+</noscript><!-- End Balise -->
+</html>

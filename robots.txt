@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /stock/
+Sitemap: http://programmationenc.free.fr/sitemap.xml

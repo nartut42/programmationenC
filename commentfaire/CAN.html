@@ -1,0 +1,216 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="COMMENT FAIRE EN LANGAGE C POUR PIC, 8051... ">
+<META NAME="DESCRIPTION" CONTENT="Comment faire en langage C pour PIC, 8051 ?.">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,pic16f873,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire en langage C? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> CONVERTISSEUR ANALOGIQUE NUMERIQUE DES PIC16F87x.</b></p>
+    <p align="left"><map name="Map"><area shape="rect" coords="172,117,172,118" href="#"></map></p>
+    <table width="78%" border="0" height="435">
+      <tr> 
+        <td height="776"> 
+          <p align="left">La famille des PIC16F87x poss&egrave;de un convertisseur 
+            analogique num&eacute;rique (CAN) sur 10 bits et 5 &agrave; 8 canaux 
+            d'entr&eacute;e analogique -RA0-RA1-RA2-RA3- RA5 et RE5 &agrave; RA7 
+            (seulement PIC 40 pins). Sur 10 bits, le nombre de pas de mesure est 
+            de 1024 soit avec une r&eacute;f&eacute;rence VREF+ de 5V, un &eacute;cart 
+            entre pas de 4,88 mV. Les registres utilis&eacute;s sont:</p>
+          <p align="left"><b>ADRESH</b> : poids fort du r&eacute;sultat de la 
+            conversion</p>
+          <p align="left"><b>ADRESL</b>: poids faible du r&eacute;sultat de la 
+            conversion</p>
+          <p align="left"><b>ADCON0</b>: Registre de contr&ocirc;le 0</p>
+          <p align="left"><b>ADCON1</b>: registre de contr&ocirc;le 1</p>
+          <p align="left">Le r&eacute;sultat de la mesure peut &ecirc;tre justifi&eacute; 
+            &agrave; droite ou &agrave; gauche en configurant le bit <b>ADFM</b> 
+            (ADCON1) &agrave; 1 ou 0. Dans l'exemple ADFM = 1, ce qui implique 
+            que le registre ADRESL &agrave; 8 bits significatifs et ADRESH 2 bits 
+            significatifs (bit 0 et 1) =&gt; justifi&eacute; &agrave; droite.</p>
+          <p align="left">Le registre <b>ADCON0:</b></p>
+          <table width="75%" border="1">
+            <tr>
+              <td width="12%">ADCS1</td>
+              <td width="10%">ADCS0</td>
+              <td width="9%">CHS2</td>
+              <td width="10%">CHS1</td>
+              <td width="12%">CHS0</td>
+              <td width="14%">GO/DONE</td>
+              <td width="12%">&nbsp;</td>
+              <td width="21%">ADON</td>
+            </tr>
+          </table>
+          <p align="left"><b>ADCS0-1</b> : Choix de la fr&eacute;quence d'horloge 
+            du CAN (fosc/2, fosc/8, fosc/32) avec un quartz &agrave; 12 MHz choisir 
+            fosc/32 (1-0)</p>
+          <p align="left"><b>CHS2-0</b>: Choix du canal de conversion (00 = canal 
+            0, 11 = canal 7)</p>
+          <p align="left"><b>GO/DONE</b>: (<b>ADGO</b> du programme) 1= lance 
+            la conversion</p>
+          <p align="left"><b>ADON</b>: 1= valide le fonctionnement du CAN</p>
+          <p align="left">Le registre <b>ADCON1</b>:</p>
+          <table width="75%" border="1">
+            <tr>
+              <td>ADFM</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>PCFG1</td>
+              <td>PCFG1</td>
+              <td>PCFG1</td>
+              <td>PCFG0</td>
+            </tr>
+          </table>
+          <p align="left"><b>ADFM</b>: Justification &agrave; droite ou &agrave; 
+            gauche du r&eacute;sultat <b>1</b>= droite <b>0</b>=gauche</p>
+          <p align="left"><b>PCFG3-0</b>: Configuration des ports du CAN, permet 
+            d'adapter les ports du CAN au sch&eacute;ma r&eacute;alis&eacute;. 
+            Par exemple (PIC16F876) pour ne configurer que des entr&eacute;es 
+            analogiques RA0-3 et RA5(<b>0010</b>) ou une r&eacute;f&eacute;rence 
+            positive (VREF+) sur l'entr&eacute;e RA3 et le reste en entr&eacute;e 
+            analogique (<b>0011</b>).</p>
+          <p align="left">Dans l'exemple qui suit, les deux premi&egrave;res mesures 
+            se font sur les canaux 0 et 1 avec une r&eacute;f&eacute;rence &agrave; 
+            +5V (l'alimentation du PIC), la troisi&egrave;me se fait sur le canal 
+            2 avec une r&eacute;f&eacute;rence &agrave; +2,5V. Bien entendu si 
+            dans les deux premiers cas l'entr&eacute;e analogique ne doit pas 
+            &ecirc;tre sup&eacute;rieure &agrave; 5V, dans le troisi&egrave;me, 
+            l'entr&eacute;e analogique ne doit pas &ecirc;tre sup&eacute;rieure 
+            &agrave; 2,5V. Dans la pratique, on proc&egrave;de &agrave; une premi&egrave;re 
+            mesure avec VREF+ = 5V, puis si le r&eacute;sultat est inf&eacute;rieur 
+            &agrave; 2,5V (4,88mV * r&eacute;sultat), ont peut alors fixer VREF+ 
+            = 2,5V et ainsi obtenir un pas de (2,5V/1024= 2,44 mV).</p>
+          <p align="left">Le programme configure ainsi le CAN : Entr&eacute;e 
+            0 = RA0, entr&eacute;e 1 = RA1, entr&eacute;e 2 = RA2, VREF+ (2,5V) 
+            = RA3.</p>
+          <p align="left">Le bit GO/DONE (<b>ADGO</b>) = 1 lance la conversion. 
+            C'est le bit <b>ADIF (PIR1) </b>qui est test&eacute; pour v&eacute;rifier 
+            la fin de la conversion avant de lire le r&eacute;sultat, ce bit est 
+            positionn&eacute; &agrave; 0 avant une conversion. Sous interruption, 
+            c'est &eacute;galement ce bit qui est utilis&eacute; et qu'il faudra 
+            tester. La tempo de 5mS est obligatoire lors d'un changement de canal 
+            sinon la mesure est fausse.</p>
+          <p align="left"><a href="fichiers/CAN.zip"><b>T&eacute;l&eacute;charger</b></a> 
+            le programme en C </p>
+          <p align="left">En assembleur le principe reste le m&ecirc;me !</p>
+          <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image3','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image3" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left"><font color="#0000FF">/*********************************************************************<br>
+            * Claudedel@wanadoo.fr<br>
+            * http://www.geocities.com/claudedel/<br>
+            * http://perso.wanadoo.fr/claude.dreschel/<br>
+            ********************************************************************/</font><br>
+            <font color="#FF0000">#include &lt;pic1687x.h&gt;<br>
+            #include &quot;delay.h&quot; </font></p>
+          <p align="left"><font color="#FF0000"><br>
+            #define REF_5V 128<br>
+            #define REF_2_5V 129<br>
+            #define INIT_PORTA TRISA = 0x3F;</font> <font color="#0000FF">//PortA 
+            = entrees</font></p>
+          <p align="left"><font color="#FF0000">void init_pic(void);<br>
+            unsigned int mesure(unsigned char ADC_channel);</font></p>
+          <p align="left"><font color="#0000FF">//******************************************************************</font><br>
+            void main(void)<br>
+            {</p>
+          <p>unsigned int valeur0,valeur1,valeur2;</p>
+          <p>init_pic();<br>
+            valeur0 = mesure(0); <font color="#0000FF">//mesure du canal 0</font> 
+            - <font color="#0000FF"><b>0&lt; x &lt;5v</b></font><br>
+            valeur1 = mesure(1); <font color="#0000FF">//mesure du canal 1</font> 
+            - <font color="#0000FF"><b>0&lt; x &lt;5v</b></font> <br>
+            ADCON1=REF_2_5V;<font color="#0000FF"> // ref = 2,5v </font><br>
+            valeur2 = mesure(2); <font color="#0000FF">// mesure du canal 2 - 
+            0&lt; x <b>&lt; 2,5V</b></font><br>
+            while(!0); <font color="#0000FF">// fin</font></p>
+          <p>}</p>
+          <p>//**************************************************************<br>
+            void init_pic(void)<br>
+            { <br>
+            INIT_PORTA; <br>
+            ADCON1=REF_5V;<font color="#0000FF"> //ADFM=1 VREF=+5V</font><br>
+            ADIE=0; <font color="#0000FF">// pas d'interruption</font><br>
+            ADCS1=1; <font color="#0000FF">//fosc/32</font><br>
+            ADON=1;<font color="#0000FF"> // CAN on</font><br>
+            }<br>
+            //**************************************************************<br>
+            unsigned int mesure(unsigned char ADC_channel)<br>
+            {<br>
+            unsigned int valeur;<br>
+            ADCON0 = (ADC_channel &lt;&lt; 3)+ 129; <font color="#0000FF">// charge 
+            le canal de mesure</font><br>
+            DelayMs(5); <font color="#0000FF">// tempo 5 ms obligatoire si changement 
+            de canal de mesure</font><br>
+            valeur=0;<br>
+            ADIF=0;<font color="#0000FF"> //initialise le flag</font><br>
+            ADGO=1; <font color="#0000FF">// lance la mesure</font><br>
+            while(!ADIF); <font color="#0000FF">// et attend la fin</font><br>
+            valeur = ADRESL; <font color="#0000FF">// lit le poids faible</font><br>
+            valeur +=(ADRESH &lt;&lt; 8); <font color="#0000FF">// puis le poids 
+            fort</font> <br>
+            return(valeur);<br>
+            }<br>
+            //****************************************************************</p>
+          <p></p>
+          <p align="left"><font size="2"><br>
+            </font></p>
+          </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_can","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_can" width="1" height="1" border="0">
+</noscript><!-- End Balise -->
+</html>

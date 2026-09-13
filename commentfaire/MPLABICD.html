@@ -1,0 +1,252 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="COMMENT FAIRE ? MPLAB ICD ">
+<META NAME="DESCRIPTION" CONTENT="COMMENT FAIRE ? En langage C pour PIC, 8051....">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,MPLAB ICD,MPLAB IDE,LCD,pic16f877,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall,batterie,battery,volt,voile,batterie">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Comment faire pour réaliser un émulateur PIC16F87X ? par Claude Dreschel</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote> 
+  <blockquote> 
+    <p>&nbsp;</p>
+    <p align="left"><b> REALISER UN CLONE DE L'EMULATEUR MPLAB ICD DE MICROCHIP</b></p>
+    <p align="left"><img src="images/mplabicd.gif" width="589" height="461"><map name="Map"><area shape="rect" coords="515,355,516,356" href="#"></map></p>
+    <table width="78%" border="0" height="435">
+      <tr> 
+        <td height="100"> 
+          <p align="left"><b>MPLAB ICD</b> est un kit d'&eacute;valuation d&eacute;velopp&eacute; 
+            par la soci&eacute;t&eacute; <b>MICROCHIP </b>bien connue pour ses 
+            microcontr&ocirc;leurs PIC. Ce kit utilise les ressources de d&eacute;bogage 
+            des PIC de la famille <b>PIC16F87X (ICSP - In-Circuit Serial Programming 
+            et In-Circuit Debugging)</b>. Il comprend un module de d&eacute;bogage 
+            connect&eacute; au PC par la liaison RS232 (c&acirc;bles fournis), 
+            le circuit de t&ecirc;te (Header) &eacute;quip&eacute; d'un 16F877, 
+            une carte de d&eacute;monstration, le logiciel pour PC <b>MPLAB IDE 
+            </b>et toute la documentation n&eacute;cessaire. C'est un excellent 
+            outil mais son prix est tout de m&ecirc;me &eacute;lev&eacute;, de 
+            l'ordre de 276 &euro; en France.</p>
+          <p align="left">Heureusement, il est possible de r&eacute;aliser un 
+            clone gr&acirc;ce &agrave; l'initiative de <b>MICROCHIP</b> qui met 
+            &agrave; la disposition des utilisateurs le logiciel en t&eacute;l&eacute;chargement.<b>MPALB 
+            IDE</b> (<a href="http://www.microchip.com/" target="_blank"><b>http://www.microchip.com</b></a>). 
+            Une bonne raison donc pour d&eacute;buter avec les &micro;C PIC16F87X.</p>
+          <p align="left"><b>MPLAB ICD,</b> qui est une fonction offerte par <b>MPLAB 
+            IDE</b>, permet avec un module externe connect&eacute; au port s&eacute;rie 
+            d'un PC et en implantant un PIC16F87X sur votre montage de programmer 
+            ce &micro;C, d'ex&eacute;cuter son programme en mode pas &agrave; 
+            pas ou de l'ex&eacute;cuter jusqu'aux points d'arr&ecirc;t que vous 
+            aurez plac&eacute; tout en visionnant l'&eacute;tat des registres 
+            et le d&eacute;roulement du fichier source. </p>
+          <p align="left"><b>Comment faire pour le faire?</b></p>
+          <p align="left"><b>LE MONTAGE </b></p>
+          <p align="left"><img src="images/mplabicd2.gif" width="582" height="364"></p>
+          <p align="left">Le module principal de<b> MPLAB ICD </b>est connect&eacute; 
+            au PC par sa liaison RS232 et au &micro;C implant&eacute; sur votre 
+            montage (Header) par un cordon 6 conducteurs. Le kit de <b>Microchip</b> 
+            comprend &eacute;galement la carte de d&eacute;monstration qui sera 
+            remplac&eacute;e par votre application si vous r&eacute;alisez vous 
+            m&ecirc;me le MPLAB ICD. Le fichier <a href="fichiers/icd_MPLAB.pdf" target="_blank"><b>MPLAB_ICD.pdf</b></a> 
+            (180Ko) comprend le sch&eacute;ma et le dessin du circuit imprim&eacute; 
+            du module principal (je remercie <b>Patrick Touzet</b> pour la r&eacute;alisation 
+            du typon - vous trouverez &eacute;galement sur son site une plaque 
+            d'essais - MPLABICD D&eacute;moBoard - <a href="http://membres.lycos.fr/silicium31/Electronique/PIC/free_icd.htm" target="_blank">http://membres.lycos.fr/silicium31/Electronique/PIC/free_icd.htm</a>,). 
+            Pour r&eacute;aliser le Header pour un &micro;C de 40 pins (16F877) 
+            ou 28 pins (16F876) t&eacute;l&eacute;charger <a href="fichiers/MPLABICD_Header.pdf" target="_blank"> 
+            <b>MPLABICD_Header.pdf</b></a>. Si votre montage est mont&eacute; 
+            sur une plaque d'essais vous pouvez vous passer du Header et connecter 
+            directement les 6 fils (ou 5 sans le +5V) du connecteur J3 au montage 
+            (je ne branche pas <b>RB3</b> voir remarque plus loin). Le coeur du 
+            montage est un <b>PIC17F876. </b>Il g&egrave;re tout, le dialogue 
+            avec le PC &agrave; travers l'interface MAX232, la programmation et 
+            le d&eacute;bugage du PIC16F87X, g&eacute;n&egrave;re la tension de 
+            programmation par RC2 (partie du sch&eacute;ma autour de U3, L1, Q5,Q3 
+            ...) et mesure les tensions du module.</p>
+          <p align="left">Apr&egrave;s avoir r&eacute;alis&eacute; les circuits 
+            imprim&eacute;s (c&ocirc;t&eacute; encre contre le CImp), programmer 
+            le <b>PIC16F876</b> du module avec le programme <a href="fichiers/MPL876.zip"><b>MPL876.HEX</b></a> 
+            (voir LE LOGICIEL). Pour cela, il faut poss&eacute;der un programmateur 
+            de PIC bien sur. </p>
+          <p align="left">Avant de monter le PIC,v&eacute;rifier la continuit&eacute; 
+            des pistes et les &eacute;ventuels court-circuits. Souder les 8 straps, 
+            les composant passifs, les r&eacute;gulateurs de tension U3 et U4,les 
+            transistors, les circuits int&eacute;gr&eacute;s et les connecteurs. 
+            Le strap JP1 permet d'alimenter le module avec le +5V du montage (via 
+            Header). Si vous ne l'alimentez que de cette mani&egrave;re, vous 
+            pouvez vous passez du r&eacute;gulateur U4, CR6, C11, C13 et connecteur 
+            J5. Mais compte-tenu du surco&ucirc;t mod&eacute;r&eacute; pourquoi 
+            s'en passer !</p>
+          <p align="left">Les prises RJ12 (6P/6C) sont c&acirc;bl&eacute;es crois&eacute;es 
+            ou plut&ocirc;t &agrave; plat, c'est &agrave; dire que si le c&acirc;ble 
+            est pos&eacute; &agrave; plat, les prises RJ12 aux extr&eacute;mit&eacute;s<u> 
+            sont dans le m&ecirc;me sens</u>. Il est possible de sertir le c&acirc;ble 
+            sans avoir recours &agrave; l'outil &agrave; sertir (surtout pour 
+            deux prises). Ce c&acirc;ble ne doit pas exc&eacute;der 20 cm, mais 
+            c'est largement suffisant. </p>
+          <p align="left">Si le c&acirc;ble RS232 est un mod&egrave;le du commerce, 
+            v&eacute;rifier bien qu'il est correctement c&acirc;bl&eacute; (avec 
+            RTS, CTS, Rxd, Txd, masse et DTR). La plupart des dysfonctionnements 
+            proviennent d'une erreur de c&acirc;blage de ce c&acirc;ble. Alors 
+            n'h&eacute;sitez pas &agrave; prendre le fer &agrave; souder et &agrave; 
+            le modifier si besoin suivant le mod&egrave;le ci dessous &agrave; 
+            partir de la prise sur le PC:</p>
+          <p align="center"><img src="images/RS232.gif" width="368" height="507"></p>
+          <p align="left">Le c&acirc;ble que j'utilise (commerce modifi&eacute;) 
+            a les pts 1 et 6 connect&eacute;s dans les prises et reli&eacute;s 
+            entre eux au point 4 de la prise oppos&eacute;e.</p>
+          <p align="left">Vous vous apercevrez donc que 3 lignes de port du PIC 
+            16F87X de votre Header et donc &eacute;galement de votre montage<b> 
+            sont d&eacute;di&eacute;es</b> au <b>MPLAB ICD</b>. Il s'agit de <b>RB3, 
+            RB6 et RB7, </b>comme me le faisait remarqu&eacute; Patrick Touzet, 
+            la ligne<b> RB3 </b>n'est pas n&eacute;cessaire au module<b> MPLAB_ICD 
+            </b>(Low Voltage Programming non utilis&eacute;) Vous pouvez donc 
+            utiliser cette ligne pour votre application. Attention, la tension 
+            de programmation <b>Vpp</b> est connect&eacute;e &agrave; la ligne 
+            1 (MCLR/VPP) du PIC et <b>RB6 </b>et <b>RB7</b> ne sont pas disponibles 
+            car utilis&eacute;es par le mode ICSP. Probl&eacute;matique ? Pas 
+            vraiment, il est toujours possible d'utiliser ces lignes de port pour 
+            commander une LED ou lire un bouton poussoir, ce qui ne pose g&eacute;n&eacute;ralement 
+            pas de probl&egrave;me. Une fois le montage et le programme d&eacute;bug&eacute;, 
+            vous pourrez remplacer le PIC16F87X par un PIC16CXX.</p>
+          <p align="left">Une fois toutes les v&eacute;rifications d'usage effectu&eacute;es, 
+            mettez le montage sous tension ( environ 9V CC), la LED doit clignoter. 
+            Si ce n'est pas le cas, votre LED est soit soud&eacute;e &agrave; 
+            l'envers soit hors service. Essayez la en s&eacute;rie avec une r&eacute;sistance 
+            de 330 Ohm sous 5V sur votre plaque d'essais, elle doit bien entendu 
+            s'allumer, la tension &agrave; ses bornes doit &ecirc;tre de l'ordre 
+            de 1,9V (voir remarque paragraphe suivant). Si elle ne clignote toujours 
+            pas une fois branch&eacute;e sur le module, alors vous pouvez incriminer 
+            le PIC16F876. Il est soit d&eacute;truit (court-circuit, mat&eacute;riel 
+            de r&eacute;cup&eacute;ration...), soit mal programm&eacute;, ou encore 
+            n'oscille pas. Prenons les probl&egrave;me &agrave; l'envers, si vous 
+            disposez d'un oscillo ou d'un fr&eacute;quencem&egrave;tre &eacute;quip&eacute; 
+            d'une sonde et que vous &ecirc;tes certain du bon &eacute;tat du PIC, 
+            vous devez observer sur OSC1 un signal &agrave; 3.6864 MHz. Si vous 
+            ne l'observez pas, v&eacute;rifiez la valeurs des capacit&eacute;s 
+            et en d&eacute;sespoir de cause changez de quartz. Essayez ensuite 
+            de reprogrammer le PIC. Voici la configuration de votre programmateur 
+            apr&egrave;s lui avoir charg&eacute; le fichier programme MPL876.HEX:</p>
+          <p align="center"><img src="images/fuse.gif" width="428" height="225"></p>
+          <p align="left">Sans s&eacute;lectionner le watchdog, le programme ne 
+            tournera pas. XT est le type d'oscillateur utilis&eacute;. La protection 
+            Code protect 0 n'est pas une obligatoire.</p>
+          <p align="left"><b>LE LOGICIEL</b></p>
+          <p align="left">T&eacute;l&eacute;charger <b>MPLAB IDE</b> sur le site. 
+            <b>MPLAB IDE</b> int&egrave;gre un assembleur PIC (pratiquement toute 
+            la gamme), un simulateur de PIC et l'interface de d&eacute;bogage 
+            qui nous int&eacute;resse. </p>
+          <p align="left"><img src="images/mplab.gif" width="541" height="372"> 
+          </p>
+          <p align="left">Il permet &eacute;galement de compiler un programme 
+            source en langage C (compilateur C non int&eacute;gr&eacute;) et de 
+            les simuler &eacute;galement en mode pas &agrave; pas tout en visionnant 
+            le contenu des registres et des variables. Apr&egrave;s l'avoir install&eacute;, 
+            vous trouverez un fichier (<a href="fichiers/MPL876.zip"><b>MPL876.HEX</b></a>) 
+            qui est en fait le programme &agrave; programmer dans le &micro;C 
+            PIC16F876 au coeur de <b>MPLAB ICD. </b></p>
+          <p align="left">Dans un premier temps familiarisez<b> </b>avec<b> MPLAB 
+            IDE </b>et testez des petits programmes assembleur ou C &agrave; l'aide 
+            du simulateur de PIC en cr&eacute;ant des projets (voir doc <b>MPLAB 
+            IDE</b>).Vous aurez besoin de le faire pour faire fonctionner votre 
+            d&eacute;bugeur. </p>
+          <p align="left">TEST DE VOTRE CLONE D'EMULATEUR MPLAB ICD (OU CELUI 
+            DU COMMERCE)</p>
+          <p align="left">Connecter MPLAB &agrave; un port COM du PC, alimentez 
+            le, la LED clignote. Pour acc&eacute;der &agrave; la fonction <b>MPLAB 
+            ICD</b> ouvrir le menu &quot;options&quot;, &quot;d&eacute;velopement 
+            mode&quot; et s&eacute;lectionnez &quot;MPLAB ICD debugger&quot;.</p>
+          <p align="left"><img src="images/mplabicdconf.gif" width="568" height="353"></p>
+          <p align="left">Apr&egrave;s avoir s&eacute;lectionn&eacute; le &micro;C, 
+            les fen&ecirc;tres suivantes s'ouvrent</p>
+          <p align="left"><img src="images/mplabicddialog.gif" width="554" height="145">:</p>
+          <p align="left"><img src="images/mplabicdoption.gif" width="554" height="547"></p>
+          <p align="left">A ce stade, tout va bien, votre d&eacute;bugeur <b>MPLAB 
+            ICD</b> est connect&eacute; au COM1 &agrave; 19200 (ou 57600) et reconnu 
+            par <b>MPLAB IDE</b>. Cliquez dans &quot;Options&quot;. La deuxi&egrave;me 
+            fen&ecirc;tre est pratiquement celle d'un logiciel de programmation 
+            de PIC. Il est donc n&eacute;cessaire de la configurer (Oscillator, 
+            Watchdog...) <b>remarque</b>: l'option Low voltage program doit rester 
+            <b>Disable, MPLAB ICD </b>ne g&eacute;rant pas le mode LVP.</p>
+          <p align="left"> Les tensions VDD et VPP sont celles mesur&eacute;es 
+            par le PIC16F876 du <b>MPLAB ICD. </b>Le prototype que j'avais r&eacute;alis&eacute; 
+            ne me donnait pas ces valeurs. Apr&egrave;s avoir t&acirc;tonner pendant 
+            plusieurs heures, j'ai constat&eacute; que c'est la LED D1, connect&eacute;e 
+            &agrave; RA3 (VRef+), qui sert de r&eacute;f&eacute;rence. La tension 
+            &agrave; mesurer aux bornes de la LED (allum&eacute;e) doit &ecirc;tre 
+            de l'ordre de 1,9 V - Apr&egrave;s &eacute;change de la LED tout est 
+            rentr&eacute; dans l'ordre.</p>
+          <p align="left">Si apr&egrave;s avoir v&eacute;rifi&eacute; les soudures, 
+            la programmation du PIC16F876 et que la LED clignote la connexion 
+            ne s'effectue pas, il est probable que le c&acirc;ble RS232 est mal 
+            c&acirc;bl&eacute; (voir c&acirc;blage dans LE MONTAGE) ou que vous 
+            soyez sur le mauvais port COM. </p>
+          <p align="left">Il ne vous reste plus qu'&agrave; charger un projet 
+            suivant le m&ecirc;me principe que le simulateur et de programmer 
+            le PIC16F87X de l'application (Header). Vous pouvez ensuite l'ex&eacute;cuter 
+            &agrave; pleine vitesse, en mode pas &agrave; pas ou avec un point 
+            d'arr&ecirc;t. En cas d'erreur de votre source, modifiez le, compilez, 
+            programmez et testez la modification. Simple et pratique puisque ce 
+            montage va vous donner l'&eacute;tat de vos registres et de vos variables 
+            et ainsi, vous r&eacute;v&eacute;ler le myst&egrave;re qui entoure 
+            un programme qui ne fonctionne pas., Merci Microchip...visitez leur 
+            site (pub gratuite), il y a une mine d'informations utiles (<a href="http://www.microchip.com/" target="_blank">http://www.microchip.com</a>)</p>
+          <p><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image3','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Image3" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a></p>
+          <p align="left"><font size="2"><br>
+            </font></p>
+          </td>
+      </tr>
+    </table>
+    <p align="center"><b></b></p>
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <blockquote> 
+            <blockquote> 
+              <blockquote> 
+                <blockquote> 
+                  <blockquote>&nbsp;</blockquote>
+                </blockquote>
+              </blockquote>
+            </blockquote>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+    <p>&nbsp;</p>
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","commentfaire_MPLAB","")</script>
+<noscript><img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=commentfaire_MPLAB" width="1" height="1" border="0">
+</noscript><!-- End Balise -->
+</html>
