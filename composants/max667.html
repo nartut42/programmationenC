@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Présentation de composants électroniques">
+    <meta name="keywords" content="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,sensory, voice extreme toolkit,reconnaissance vocale,servo,programmateur,electronique,robot,polyswitch,oscillateur,raychem,fusible,p16pro,picall">
+    
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+	
+	<title>Régulateur de tension MAX667 |  </title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <!-- Script pour le rendu des formules mathématiques -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Retour aux Composants</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Composant</span>
+            <h1>Régulateur de tension <span>MAX667 (ou ADP667)</span></h1>
+            <p class="subtitle">Réaliser une alimentation fixe de 5V ou ajustable, Low-Dropout, très faible consommation.[cite: 41]</p>
+        </div>
+
+        <div class="content-section">
+            <div class="tech-doc">
+                <h2>I.1 Introduction</h2>
+                <p>Vous cherchez un régulateur positif fixe (+5V) ou ajustable, très faible consommation, Low-Dropout et équipé d'un détecteur de batterie faible. Alors, oubliez les régulateurs 78XX et essayez le MAX667 de MAXIM (ou le ADP667 de Analog Device).[cite: 41]</p>
+                <p>Avec ses quelques dizaines de µA de consommation, le MAX667 est un régulateur rêvé pour vos montages équipés de piles ou d'accumulateurs. La preuve, le MAX667 du montage Bat_supervisor ne consomme que 80µA pour un courant de charge de 7mA.[cite: 41]</p>
+                <p>Typiquement la différence de tension entre l'entrée et la sortie peut être très faible (Low Dropout) soit 150mV (350mV Max.) pour un courant de charge de 200mA.[cite: 41]</p>
+
+                <h2>I.2 Description des pattes</h2>
+                <table class="spec-table" style="width: 100%;">
+                    <thead>
+                        <tr><th>PIN</th><th>NOM</th><th>FONCTION</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>DD</td><td>Sortie Dropout Detector - Collecteur ouvert d'un PNP - Change d'état quand le seuil Dropout est atteint[cite: 41]</td></tr>
+                        <tr><td>2</td><td>OUT</td><td>Sortie positive régulée[cite: 41]</td></tr>
+                        <tr><td>3</td><td>LBI</td><td>Entrée Low Battery Detector - Comparaison par rapport à une référence de 1.225V[cite: 41]</td></tr>
+                        <tr><td>4</td><td>GND</td><td>Masse[cite: 41]</td></tr>
+                        <tr><td>5</td><td>SHDN</td><td>Entrée Shutdown - connectée à la masse pour un fonctionnement normal.[cite: 41]</td></tr>
+                        <tr><td>6</td><td>SET</td><td>Entrée d'ajustage de la tension (Masse = 5V, diviseur = autres tensions)[cite: 41]</td></tr>
+                        <tr><td>7</td><td>LBO</td><td>Sortie Low Battery Output[cite: 41]</td></tr>
+                        <tr><td>8</td><td>IN</td><td>Tension d'entrée non régulée[cite: 41]</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>I.3 Exemple d'une régulation fixe +5V</h2>
+                <div class="img-container">
+                    <img src="images/sc1_max667.gif" alt="Schéma régulation fixe 5V">
+                </div>
+                <p>Les pins SET, GND et SHDN sont à la masse, ce montage fonctionnera du premier coup si vous prenez soin d'ajouter entre la sortie régulée (OUT) et la masse un condensateur de 10µF.[cite: 41]</p>
+
+                <h2>I.4 Exemple d'une régulation de tension ajustable</h2>
+                <div class="img-container">
+                    <img src="images/sc2_max667.gif" alt="Schéma régulation ajustable">
+                </div>
+                
+                <h3>Calcul de R1 et R2</h3>
+                <p>La valeur préconisée pour R1 est de 1MO. Fixons Vset = 1.22V :[cite: 41]</p>
+                $$V_{out} = V_{set} \times \frac{R_1+R_2}{R_1}$$
+                $$R_2 = R_1 \times \left(\frac{V_{out}}{V_{set}} - 1\right)$$
+
+                <h3>Détection tension de batterie faible (LBI)</h3>
+                <p>La tension issue du diviseur de tension R3-R4 est appliquée à l'entrée LBI. L'équation suivante permet de calculer les valeurs en fonction de la tension de la batterie (Vbat) et du seuil (VLBI) :[cite: 41]</p>
+                $$R_3 = R_4 \times \left(\frac{V_{bat}}{V_{LBI}} - 1\right)$$
+
+                <h2>I.5 Exemple de réalisation pratique</h2>
+                <div class="img-container">
+                    <img src="images/sc3_max667.gif" alt="Schéma pratique MAX667">
+                </div>
+                <p>Dans ce montage :[cite: 41]</p>
+                $$V_{out} = V_{set} \times \frac{R_{13}+R_{12}+R_{11}}{R_{13}}$$
+                <p>Soit Vout = 5.81V.[cite: 41]</p>
+
+                <p>Calcul de la tension de seuil LBI (avec VD2 = chute d'une diode silicium, 0.6V) :[cite: 41]</p>
+                $$V_{LBI} = \frac{(V_{bat} - V_{D2}) \times R_{10}}{R_{10} + R_9}$$
+                <p>La sortie LBO changera d'état pour une tension de batterie inférieure à :[cite: 41]</p>
+                $$V_{bat} = \frac{V_{LBI} \times (R_{10} + R_9)}{R_{10}} + V_{D2}$$
+                <p>Avec VLBI = 1.225V, VD2 = 0.6V, R9 = 8.2MO, R10 = 8.2MO, on obtient VBAT = 6.39V.[cite: 41]</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy;   | <a href="index.html">Retour aux Composants</a></p>
+    </footer>
+
+</body>
+</html>

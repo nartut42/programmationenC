@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation du DCL639 — PIC12C671 compatible FT639 | Claude Dreschel</title>
+    <meta name="description" content="Présentation du DCL639, circuit à base de PIC12C671 compatible avec le FT639 de FerretTronics, pour piloter cinq servo-moteurs.">
+    <meta name="keywords" content="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall">
+    <meta name="author" content="Claude Dreschel">
+    <meta name="robots" content="index,follow">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border: #334155;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        nav.mainnav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        nav.mainnav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        nav.mainnav a:hover { color: var(--accent); }
+
+        .subheader {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 5%;
+        }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.85rem; }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--accent); }
+        .subnav { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .subnav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.95rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .subnav a:hover { color: var(--accent); border-color: var(--accent); }
+        .subnav a.active { background: rgba(56,189,248,0.1); color: var(--accent); border-color: var(--accent); }
+
+        main { flex: 1; padding: 3.5rem 5%; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            display: inline-block;
+        }
+        h1 {
+            font-size: clamp(1.8rem, 3.6vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        h1 span { color: var(--accent); }
+        p.subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        .cover-figure {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0 3rem;
+        }
+        .cover-figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+        .cover-figure a img { transition: transform 0.2s, border-color 0.2s; }
+        .cover-figure a img:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+        .cta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .cta-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .cta-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .cta-card .n { font-family: 'Fira Code', monospace; color: var(--accent); font-size: 0.8rem; }
+        .cta-card h3 { color: var(--text-main); margin: 0.4rem 0 0.4rem; font-size: 1.05rem; }
+        .cta-card p { color: var(--text-muted); font-size: 0.85rem; margin: 0; }
+
+        .article-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .article-card h2 {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-card h2:first-child { margin-top: 0; }
+        .article-card p { margin-bottom: 1rem; color: #cbd5e1; }
+        .article-card strong { color: var(--text-main); }
+        .article-card a { color: var(--accent); text-decoration: none; }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card ul, .article-card ol { margin: 0 0 1rem 1.4rem; color: #cbd5e1; }
+        .article-card li { margin-bottom: 0.3rem; }
+
+        .figure {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .figure img { max-width: 100%; border-radius: 6px; }
+        .figure-caption { flex: 1; min-width: 220px; }
+        .figure-caption .fig-label {
+            color: var(--accent);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .figure-caption p { margin-bottom: 0.5rem; font-size: 0.92rem; }
+        .figure.center { justify-content: center; text-align: center; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.85rem; }
+        caption { caption-side: top; text-align: left; color: var(--accent); font-family: 'Fira Code', monospace; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; }
+        th, td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: center; }
+        th { background: rgba(56, 189, 248, 0.08); color: var(--accent); font-family: 'Fira Code', monospace; font-weight: 600; }
+        td { color: #cbd5e1; }
+        tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+        .mono { font-family: 'Fira Code', monospace; }
+        .table-scroll { overflow-x: auto; }
+
+        .callout {
+            background: rgba(248, 113, 113, 0.08);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+        }
+        .callout strong { color: #f87171; }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .back-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav class="mainnav">
+            <a href="../news/index.html">News</a>
+            <a href="../commentfaire/index.html">Comment faire ?</a>
+            <a href="../composants/index.html">Composants</a>
+            <a href="../liens/index.html">Liens</a>
+            <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+        </nav>
+    </header>
+
+    <div class="subheader">
+        <div class="breadcrumb"><a href="../index-2.html">Accueil</a> / <a href="pagegarde.html">Montages</a> / <span>DCL639 — PIC12C671 compatible FT639</span></div>
+        <nav class="subnav">
+            <a href="pagegarde.html" class="">Accueil du projet</a>
+            <a href="presentation.html" class="active">Présentation</a>
+            <a href="composan.html" class="">Le composant</a>
+            <a href="logicel.html" class="">Le logiciel</a>
+            <a href="commande.html" class="">Les commandes</a>
+        </nav>
+    </div>
+
+
+    <main>
+        <div class="article-card">
+            <h2>Présentation</h2>
+            <p>Vous connaissez sans doute le FT639, le circuit intégré de FerretTronics. Ce composant est capable de piloter cinq servo-moteurs RC. L'intérêt du FT639 est de se présenter sous la forme d'un circuit intégré à 8 pattes et de ne nécessiter qu'un minimum, voire aucun composant externe. Il a cependant, pour moi, un inconvénient : son prix.</p>
+            <p>Pour cette raison, mais aussi pour le plaisir, j'ai décidé de réaliser un circuit compatible avec le FT639. Ce circuit, le <strong>DCL639</strong> (le <strong>PIC12C671</strong>), est également un composant à 8 broches. Il se connecte de la même manière que le circuit de FerretTronics et réagit aux mêmes commandes. Par l'intermédiaire de ces commandes, le circuit positionne les servos dans l'une des 256 positions comprises entre 0 et 90 degrés ou entre 0 et 180 degrés suivant le mode de fonctionnement.</p>
+            <p>Pour contrôler les servos, des commandes (1 ou 2 octets) sont envoyées par une simple liaison série à 2400 Bds. Deux résistances et une diode suffisent pour relier le DCL639 à la liaison RS232 d'un PC ou à un BASIC Stamp, sans composant externe. Chacun des cinq servos peut être commandé indépendamment.</p>
+            <p>La programmation du DCL639 est à la portée de tous. Il suffit pour cela de télécharger le fichier programme et de réaliser (ou acheter) un programmateur de PIC12C671. Le prix du PIC12C671 est d'environ 30 FF.</p>
+            <a class="back-btn" href="../index-2.html">&larr; Retour à l'accueil</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Claude Dreschel &mdash; DCL639, PIC12C671 compatible FT639 | <a href="../index-2.html">Retour à l'accueil</a></p>
+    </footer>
+
+</body>
+</html>

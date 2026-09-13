@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Présentation du variateur de vitesse PWM : caractéristiques, fonctionnalités et principes de fonctionnement.">
+<title>Présentation — Variateur PWM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="../news/index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <div class="project-hero">
+        <div class="hero-badge">Projet — Variateur PWM</div>
+        <h1>Variateur de vitesse PWM (PIC16F876)</h1>
+        <p class="subtitle">Variateur de vitesse pour moteur à courant continu commandé en PWM, pour application de radiocommande.</p>
+    </div>
+
+    <nav class="project-nav">
+        <a href="index.html">Accueil</a>
+        <a href="presentation.html" class="active">Présentation</a>
+        <a href="montage.html">Montage</a>
+        <a href="logiciel.html">Logiciel</a>
+    </nav>
+
+    <figure class="screenshot">
+        <img src="images/proto_variateur.jpg" alt="Vue du variateur de vitesse réalisé">
+    </figure>
+
+    <section class="content-section">
+        <h2>Caractéristiques</h2>
+        <ul>
+            <li>Tension d'alimentation : nominal <strong>12V</strong> (plage d'utilisation possible entre 7V et 18V max).</li>
+            <li>Courant consommé par le montage : &lt; <strong>17 mA</strong>.</li>
+            <li>Courant moteur avec MOSFET <strong>IRFZ24N</strong> et <strong>IRF9Z24N</strong> : <strong>12 A</strong> (ou plus suivant modèle de transistors), valeur suffisante pour des « petits » moteurs de modèles réduits.</li>
+            <li>Commande d'un pont en H, constitué de transistors MOSFET de puissance commandés en <strong>PWM</strong> à <strong>43.2 kHz</strong>.</li>
+            <li>Dimension du CI : <strong>75 x 50 mm</strong>.</li>
+            <li>Poids : <strong>65 g</strong>.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>Fonctionnalités</h2>
+        <ul>
+            <li><i>Variateur de vitesse</i> pour moteur à courant continu avec inverseur du sens de rotation et commande en PWM à 43.2 kHz.</li>
+            <li><i>Frein moteur</i> autour du neutre.</li>
+            <li><i>Filtrage logiciel</i> des impulsions parasites non comprises entre 0.8 ms et 2.2 ms ou hors fenêtre de mesure.</li>
+            <li><i>Paramétrage</i> par l'utilisateur de quatre points de fonctionnement (<strong>min</strong> – <strong>neutre min</strong> – <strong>neutre max</strong> – <strong>max</strong>), la zone de neutre étant située entre <strong>neutre min</strong> et <strong>neutre max</strong>. Points de fonctionnement sauvegardés en mémoire <strong>EEPROM</strong>.</li>
+            <li><i>Détection tension d'alimentation faible</i>. Un seuil d'alerte fixé à <strong>8.8V</strong> est signalé par une LED et temporairement par une tension d'alimentation à 50% du moteur ; un passage par le neutre permet de revenir à un mode de fonctionnement normal.</li>
+            <li><i>Commande du moteur</i> après passage au neutre : pas de démarrage à pleine vitesse.</li>
+            <li><i>Coupure du moteur si absence de signal reçu</i> (panne récepteur ou émetteur, brouillages...) pendant 500 ms ; le signal de sortie (TEST) passe alors au niveau 1 — signal utilisable avec un système de sauvegarde et de localisation (buzzer &lt; 20 mA) de modèle réduit.</li>
+            <li><i>Option présentée</i> : alimentation du récepteur et des servomoteurs intégrée au montage.</li>
+        </ul>
+    </section>
+
+    <section class="content-section">
+        <h2>Principes</h2>
+        <p><i>Le récepteur</i> envoie au variateur des impulsions d'une durée comprise entre 1 ms et 2 ms toutes les 20 ms ; le neutre correspond généralement à une impulsion d'une durée de 1.5 ms (fig. 1).</p>
+        <figure class="screenshot">
+            <img src="images/signal_RC.gif" alt="Fig. 1 — Signal de radiocommande">
+        </figure>
+
+        <p>La <i>commande du moteur est réalisée en PWM</i> (Pulse Width Modulation), impulsion modulée en durée. La fréquence est fixe (43.2 kHz), le rapport cyclique est variable, ainsi la tension moyenne appliquée au moteur est variable également. Un rapport cyclique de 50% correspond à une vitesse (tension) moyenne du moteur ; un rapport cyclique qui tend vers 1 équivaut à une vitesse maximale du moteur (fig. 2). Le nombre de pas du rapport cyclique est fixé à 256.</p>
+        <figure class="screenshot">
+            <img src="images/PWM.gif" alt="Fig. 2 — Principe de la modulation PWM">
+        </figure>
+
+        <p><i>Un filtre logiciel antiparasites</i> rejette toutes les impulsions (en rouge, fig. 3) non comprises entre 0.8 ms et 2.2 ms, ainsi que celles qui surviennent en dehors d'une fenêtre de mesure. Cette fenêtre s'ouvre pendant 8 ms et se ferme pendant 16 ms. Chaque « bonne » impulsion synchronise la fermeture de la fenêtre. En absence de signal, la fenêtre de mesure se ferme 12 ms et s'ouvre 8 ms. Si aucune impulsion ne parvient au variateur pendant l'ouverture de la fenêtre au cours des 500 ms qui suivent, il faudra alors attendre 20 impulsions au « neutre » consécutives pour synchroniser la fenêtre.</p>
+        <figure class="screenshot">
+            <img src="images/fenetre.gif" alt="Fig. 3 — Fenêtre de mesure et filtrage des impulsions parasites">
+        </figure>
+
+        <p><i>Alarme tension faible</i> : le variateur mesure la tension de la batterie moteur (et récepteur si le régulateur 5V est câblé) et signale par une LED que le seuil d'alerte (8.8V) est atteint. S'il est commandé, le moteur passe en 1/2 puissance et revient à un état normal quand le manche de la radio est amené au neutre un court instant — 10V étant le seuil optimum pour commander la gate des transistors MOSFET. Le seuil critique dépend du type de régulateur 5V utilisé. Le seuil d'alerte est modifiable par le changement des valeurs des résistances constituant le diviseur de tension.</p>
+        <figure class="screenshot">
+            <img src="images/alarme_tension.gif" alt="Schéma de l'alarme tension faible">
+        </figure>
+    </section>
+
+    <div class="back-row">
+        <a href="index.html">&larr; Retour à l'accueil du projet</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

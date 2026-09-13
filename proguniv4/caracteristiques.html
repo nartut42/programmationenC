@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Caractéristiques du programmateur de 8051 et d'EPROM : composants pris en charge, tensions, fonctions.">
+<title>Caractéristiques — Programmateur 8051 &amp; EPROM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="../news/index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <div class="project-hero">
+        <div class="hero-badge">Projet — Micro-contrôleurs 8051</div>
+        <h1>Programmateur de 8051 et EPROM</h1>
+        <p class="subtitle">Réalisation d'un programmateur de µC de la famille 8051 et d'EPROM 2764-27512, construit autour d'un 87C51FA.</p>
+    </div>
+
+    <nav class="project-nav">
+        <a href="index.html">Accueil</a>
+        <a href="caracteristiques.html" class="active">Caractéristiques</a>
+        <a href="montage.html">Montage</a>
+        <a href="logiciel.html">Logiciel</a>
+    </nav>
+
+    <section class="content-section">
+        <h2>Fonctionnalités</h2>
+        <div class="tech-doc">- Programme la famille des µC 8051 (dont mémoire Flash) et les EPROM 2764, 27128, 27256 et 27512 (Vpp de 5 à 21V).
+- Construit autour d'un 87C51FA (8Ko EPROM).
+- Programme écrit en langage C.
+- Bibliothèque de composants évolutive, testée avec les composants suivants :</div>
+    </section>
+
+    <section class="content-section">
+        <h2>Composants testés</h2>
+        <table class="compat-table">
+            <thead>
+                <tr><th>Marque</th><th>Nom</th><th>Vpp</th><th>*Vcc</th><th>*Durée impulsion</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Atmel</td><td>AT89C51_12V</td><td>12V</td><td>5V</td><td>100 µS</td></tr>
+                <tr><td>Atmel</td><td>AT89C51_5V</td><td>5V</td><td>5V</td><td>100 µS</td></tr>
+                <tr><td>Atmel</td><td>AT89C52</td><td>12V</td><td>5V</td><td>100 µS</td></tr>
+                <tr><td>Fujitsu</td><td>MB27C256A</td><td>13V</td><td>6V</td><td>0,5 mS</td></tr>
+                <tr><td>Intel</td><td>D2764A</td><td>12.5V</td><td>6V</td><td>100 µS</td></tr>
+                <tr><td>National</td><td>NM27C64</td><td>13V</td><td>6V</td><td>0,5 mS</td></tr>
+                <tr><td>National</td><td>NM27C256</td><td>12.75V</td><td>6.25V</td><td>100 µS</td></tr>
+                <tr><td>National</td><td>NM27C512</td><td>12.75V</td><td>6.25V</td><td>100 µS</td></tr>
+                <tr><td>Nec</td><td>D2764D</td><td>21V</td><td>5V</td><td>1 mS</td></tr>
+                <tr><td>Nec</td><td>D27128D</td><td>21V</td><td>6V</td><td>1 mS</td></tr>
+                <tr><td>Nec</td><td>D27C512D</td><td>12.5V</td><td>6V</td><td>100 µS</td></tr>
+                <tr><td>Philips</td><td>87C52</td><td>12.75V</td><td>5V</td><td>25 x 100 µS</td></tr>
+                <tr><td>Philips</td><td>SC87C51CGF40</td><td>12.75V</td><td>5V</td><td>25 x 100 µS</td></tr>
+                <tr><td>Philips</td><td>S87C51FA</td><td>12.75V</td><td>5V</td><td>25 x 100 µS</td></tr>
+                <tr><td>SGS-Thomson</td><td>MC27C256B</td><td>12.75V</td><td>6.25V</td><td>100 µS</td></tr>
+            </tbody>
+        </table>
+        <p class="compat-note">* En mode programmation.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>Spécifications</h2>
+        <div class="tech-doc">- Tensions d'alimentation des composants à programmer (0 à 12V).
+- Tensions de programmation (0 à 21V).
+- Connexion à la liaison série d'un PC jusqu'à 19200 bds (recherche automatique de la vitesse de transfert).
+- Transfert des fichiers au format INTEL8 (.HEX).
+- Sauvegarde du dernier composant utilisé dans une EEPROM (I2C).
+- Fonctions utilisateur :
+    · Programmation des composants
+    · Lecture du contenu des mémoires
+    · Vérification par comparaison du contenu de la mémoire et d'un fichier
+    · Test de virginité
+    · Somme de contrôle
+    · Choix d'un autre composant</div>
+    </section>
+
+    <div class="back-row">
+        <a href="index.html">&larr; Retour à l'accueil du projet</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

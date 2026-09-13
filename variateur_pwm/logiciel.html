@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Logiciel du variateur de vitesse PWM (PIC16F876) : conversion analogique-numérique, génération PWM, gestion des timers.">
+<title>Le logiciel — Variateur PWM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="../news/index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <div class="project-hero">
+        <div class="hero-badge">Projet — Variateur PWM</div>
+        <h1>Variateur de vitesse PWM (PIC16F876)</h1>
+        <p class="subtitle">Variateur de vitesse pour moteur à courant continu commandé en PWM, pour application de radiocommande.</p>
+    </div>
+
+    <nav class="project-nav">
+        <a href="index.html">Accueil</a>
+        <a href="presentation.html">Présentation</a>
+        <a href="montage.html">Montage</a>
+        <a href="logiciel.html" class="active">Logiciel</a>
+    </nav>
+
+    <section class="content-section">
+        <h2>Le logiciel</h2>
+        <p>Le programme du microcontrôleur <strong>PIC16F876</strong> est bien entendu écrit en langage C ; il tient très largement dans les 4 Ko de sa mémoire de programme. Voyons le fonctionnement des principales fonctions et des registres associés : la mesure de la tension à l'aide du <strong>CAN 10 bits</strong>, le <strong>générateur PWM</strong>, et la gestion du temps à l'aide des <strong>TIMER0</strong> et <strong>1</strong>.</p>
+
+        <h3 style="font-family:'Fira Code', monospace; color: var(--accent); font-size: 1.05rem; margin: 1.75rem 0 1rem;">Fichiers à télécharger</h3>
+        <table class="compat-table">
+            <thead>
+                <tr><th>Fichier</th><th>Description</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>programme.zip</td>
+                    <td>Code source complet du programme (PIC16F876)</td>
+                    <td><a class="download-link" href="fichiers/programme.zip">📦 Télécharger</a></td>
+                </tr>
+                <tr>
+                    <td>variateur_sch.pdf</td>
+                    <td>Schéma électronique complet (PDF)</td>
+                    <td><a class="download-link" href="fichiers/variateur_sch.pdf">📦 Télécharger</a></td>
+                </tr>
+                <tr>
+                    <td>variateur_sch_CI.zip</td>
+                    <td>Schéma et typons du circuit imprimé (187 Ko)</td>
+                    <td><a class="download-link" href="fichiers/variateur_sch_CI.zip">📦 Télécharger</a></td>
+                </tr>
+                <tr>
+                    <td>comp_variateur.zip</td>
+                    <td>Liste des composants du variateur</td>
+                    <td><a class="download-link" href="fichiers/comp_variateur.zip">📦 Télécharger</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="content-section">
+        <h2>Le convertisseur A/N sur 10 bits</h2>
+        <p>Il est utilisé pour mesurer la tension d'alimentation sur le canal 0 (RA0), la référence de tension étant la tension de 5V régulée par le L7805.</p>
+        <div class="code-block"><pre><b>ADFM</b>=1; <span style="color:#60a5fa">//mot 10bits justifié à gauche</span>
+<b>ADCS1</b>=1; <span style="color:#60a5fa">//Fosc/32</span>
+<b>ADON</b>=1; <span style="color:#60a5fa">// Convertisseur =ON</span>
+
+void mesure(void)
+{
+unsigned int <span style="color:#4ade80">valeur</span>;
+
+<span style="color:#4ade80">valeur</span>=0;
+<b>ADIF</b>=0;
+<b>ADGO</b>=1;
+<span style="color:#f87171">while</span>(!<b>ADIF</b>);
+<span style="color:#4ade80">valeur</span> = <b>ADRESL</b>;
+<span style="color:#4ade80">valeur</span> +=(<b>ADRESH</b> &lt;&lt; 8);
+<span style="color:#f87171">if</span> (<span style="color:#4ade80">valeur</span> &lt; 292) <span style="color:#60a5fa">//292 pour 1.425V = référence tension seuil alerte tension faible</span>
+{
+<span style="color:#f87171">if</span>(<i>nombre_batt_faible</i>++ == 50) <i>tension_faible</i>=1; <span style="color:#60a5fa">// compte le nombre mesure batt_ faible successive</span>
+<i>led_batt_faible</i>=1;
+}
+<span style="color:#f87171">else</span>
+{
+<i>led_batt_faible</i>=0;
+<i>nombre_batt_faible</i>=0;
+}
+<span style="color:#f87171">if</span> (<i>led_batt_faible</i>) LED=ON;
+<span style="color:#f87171">else</span> LED=OFF;
+}</pre></div>
+        <p>La fonction <i>mesure()</i> lance le convertisseur A/N afin de mesurer la tension présente sur <strong>RA0</strong> (diviseur de tension R9-R10). Le résultat (10 bits) de la conversion est placé dans la variable locale « valeur ». Cette variable est ensuite comparée à la référence <strong>1.425V</strong>. La variable de type <i>bit</i> « tension_faible » est positionnée à 1 si, successivement, 50 mesures sont sous le seuil d'alerte, ceci afin de « filtrer » les pics de courant qui pourraient faire chuter la tension de la batterie ponctuellement. Cependant la LED s'allumera au rythme des seuils détectés.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>Le générateur PWM</h2>
+        <p>Il est configuré pour les deux sorties PWM, <strong>CCP1</strong> et <strong>CCP2</strong>. La résolution souhaitée, ou le nombre de pas du rapport cyclique, doit être de <strong>8 bits</strong>.</p>
+        <p style="margin-left:1.5rem;"><strong>Résolution (bits) = log(Fosc/FPWM) / log(2)</strong>, ce qui donne pour une résolution de 8 bits avec FOSC = 11.0592 MHz : <strong>FPWM = 43200 Hz</strong>.</p>
+        <p>La période du signal PWM est calculée ainsi :</p>
+        <p style="margin-left:1.5rem;"><strong>PWM (période) = (PR2+1) × 4 × Tosc × (TMR2 valeur prédiviseur)</strong>, soit pour une fréquence de 11.0592 MHz, un prédiviseur à 1 et PWM (période) = 2.31e-5 s (1/F<sub>PWM</sub>) : <strong>PR2 = 63</strong>.</p>
+        <p>Le rapport cyclique est fixé par la valeur sur 10 bits placée dans CCPRxL et CCPxCON&lt;5:4&gt;, la résolution maximum étant fixée à 8 bits ; il est bien entendu inutile d'y placer des valeurs qui ne seraient pas comprises entre les deux valeurs extrêmes « 0 » et « 255 ». « 0 » donne pour résultat sur les sorties CCP1 et CCP2 une tension en permanence à 0V, et 255 une tension permanente à 5V. Les valeurs intermédiaires font varier le rapport cyclique du signal PWM.</p>
+        <p style="margin-left:1.5rem;"><strong>PWM (duty cycle) = (CCPRxL:CCPxCON&lt;5:4&gt;) × Tosc × (TMR2 valeur prédiviseur)</strong>. Par exemple, la valeur <strong>128</strong> donnera un rapport cyclique de <strong>50%</strong>.</p>
+        <div class="code-block"><pre>void init_PWM(void)
+{
+<b>PR2</b>=63; <span style="color:#60a5fa">//PWM=43.200KHz periode=2,3148e-5S</span>
+<b>CCPR1L</b>=0; <span style="color:#60a5fa">//Duty cycle =0</span>
+<b>CCPR2L</b>=0; <span style="color:#60a5fa">//Duty cycle =0</span>
+<b>CCP1CON</b>= 0b00001100; <span style="color:#60a5fa">//PWM1 mode Duty cycle =0</span>
+<b>CCP2CON</b>= 0b00001100; <span style="color:#60a5fa">//PWM2 mode Duty cycle =0</span>
+<b>TMR2ON</b>=1; <span style="color:#60a5fa">// Timer2 =On</span>
+}</pre></div>
+    </section>
+
+    <section class="content-section">
+        <h2>Le TIMER0 sur 8 bits / 256</h2>
+        <p>Il cadence l'ouverture (8 ms) et la fermeture (12 ms) de la fenêtre de mesure en absence de synchronisation par une impulsion valide. Pour la synchro, le registre TMR0 est chargé pour obtenir 16 ms de temps de fermeture de la fenêtre au début de l'impulsion valide. Ainsi, quelle que soit la durée de l'impulsion, la durée de fermeture de la fenêtre reste constante. « valeur » correspond à la durée de l'impulsion mesurée sur <strong>RC3</strong>, « 44200 » à environ 16 ms.</p>
+        <div class="code-block"><pre>void calcul_TMR0(unsigned int <span style="color:#4ade80">valeur</span>)
+{
+<b>TMR0</b>=256 - (unsigned char)((44200 - <span style="color:#4ade80">valeur</span>) &gt;&gt; 8); <span style="color:#60a5fa">// pendant 16ms</span>
+<i>tempo_fenetre</i>=0; <span style="color:#60a5fa">// ferme la fenetre</span>
+}</pre></div>
+    </section>
+
+    <section class="content-section">
+        <h2>Le TIMER1 sur 16 bits</h2>
+        <p>Il est utilisé (sous interruption) pour signaler au programme principal que depuis 500 ms il n'y a pas de signal reçu du récepteur.</p>
+        <div class="code-block"><pre>void interrupt traite_int(void)
+{
+
+<span style="color:#f87171">if</span>(<b>TMR1IF</b>)
+{
+<span style="color:#f87171">if</span>(++tempo_pulse == 20) <i>absence_pulse</i>=1; <span style="color:#60a5fa">// 1/2 seconde</span>
+<b>TMR1IF</b>=0;
+}
+<span style="color:#f87171">if</span>(<b>TMR0IF</b>)
+{
+<i>tempo_fenetre</i> ^= 1;
+
+<span style="color:#f87171">if</span>(<i>tempo_fenetre</i>)
+{
+<b>TMR0</b>=169; <span style="color:#60a5fa">//8ms</span>
+}<span style="color:#f87171">else</span> <b>TMR0</b>=126; <span style="color:#60a5fa">//12ms</span>
+<b>TMR0IF</b>=0;
+}
+
+}</pre></div>
+        <p>Le <strong>TIMER1</strong> sert également à mesurer la durée des impulsions reçues du récepteur. La mesure d'une impulsion est assez simple à réaliser : il suffit, une fois l'impulsion positive détectée, de démarrer le timer tant que l'impulsion est présente et tant que la fenêtre de mesure est ouverte. Au-delà, l'impulsion n'est pas valide.</p>
+        <div class="code-block"><pre>unsigned int mesure_pulse(void)
+{
+unsigned int <span style="color:#4ade80">resultat</span>;
+
+<b>TMR1ON</b>=0;
+<b>TMR1H</b>=0;
+<b>TMR1L</b>=0;
+<b>TMR1ON</b>=1; <span style="color:#60a5fa">// Timer1 on</span>
+<span style="color:#f87171">while</span>(RX_PULSE &amp;&amp; tempo_fenetre);
+<b>TMR1ON</b>=0; <span style="color:#60a5fa">//Timer1 Off</span>
+<span style="color:#4ade80">resultat</span>=0;
+<span style="color:#4ade80">resultat</span>=<b>TMR1H</b>;
+<span style="color:#4ade80">resultat</span> &lt;&lt;=8;
+<span style="color:#4ade80">resultat</span> |= <b>TMR1L</b>;
+<span style="color:#f87171">if</span>(<i>tempo_fenetre</i>) return(<span style="color:#4ade80">resultat</span>);
+<span style="color:#f87171">else</span> return(0);
+}</pre></div>
+    </section>
+
+    <section class="content-section">
+        <h2>Le TIMER2 sur 16 bits</h2>
+        <p>Il est associé au générateur PWM.</p>
+    </section>
+
+    <div class="back-row">
+        <a href="index.html">&larr; Retour à l'accueil du projet</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

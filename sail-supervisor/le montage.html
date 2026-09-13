@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Schéma électronique, typon et guide de montage du Bat-Supervisor avec PIC16F873.">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <title>Montage et Schémas - Bat-Supervisor | Claude Dreschel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .img-container {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+        .img-caption {
+            margin-top: 1rem;
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            color: #2c3e50;
+            font-style: italic;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Accueil Projet</a>
+            <a href="fonctions.html">Fonctions</a>
+            <a href="le montage.html" class="active">Montage</a>
+            <a href="logiciel.html">Logiciel</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Projet — Sail-Supervisor</span>
+            <h1>Schéma et <span>Montage</span></h1>
+            <p class="subtitle">Réalisation de l'électronique autour du PIC16F873 et des composants faible consommation.</p>
+        </div>
+
+        <div class="project-nav">
+            <a href="index.html">Accueil Projet</a>
+            <a href="fonctions.html">Fonctions</a>
+            <a href="le montage.html" class="active">Montage</a>
+            <a href="logiciel.html">Logiciel</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Fichiers à télécharger</h2>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+                <a href="fichiers/bat_873.zip" class="download-link">?? Télécharger le schéma (bat_873.zip)</a>
+                <a href="fichiers/circuits.zip" class="download-link">?? Télécharger le circuit imprimé (circuits.zip)</a>
+                <a href="fichiers/listecomp_bat_873.zip" class="download-link">?? Télécharger la liste des composants</a>
+            </div>
+
+            <h2>1. Le Schéma Électronique</h2>
+            <div class="tech-doc">
+                <p>Le montage est construit autour d'un microcontrôleur <strong><a href="fichiers/PIC16F87X.pdf" target="_blank">PIC16F873</a></strong>. Ses 4Ko de mémoire Flash, ses 22 lignes I/O, son convertisseur A/N 10 bits et sa faible consommation en font l'élément central idéal.</p>
+                
+                <div class="img-container">
+                    <a href="images/bat_873.gif" target="_blank">
+                        <img src="images/bat_873.gif" alt="Schéma Bat-Supervisor">
+                    </a>
+                    <p class="img-caption">Schéma électronique complet (cliquez pour agrandir)</p>
+                </div>
+
+                <p>La consommation en courant est un paramètre critique : 2mA max pour l'afficheur LCD 2x16, 10µA pour le <a href="fichiers/MAX872CPA.pdf" target="_blank">MAX872</a> (référence de tension), 20µA pour le <a href="fichiers/MAX667CPA.pdf" target="_blank">MAX667</a> (régulateur), 1mA pour le <a href="fichiers/MAX4376FAU.pdf" target="_blank">MAX4376</a> (capteur de courant) et 17µA pour le <a href="fichiers/MAX478EPA.pdf" target="_blank">MAX478</a> (AOP), soit une consommation totale inférieure à <strong>7 mA</strong>.</p>
+            </div>
+
+            <h2>2. Réalisation et Implantation</h2>
+            <div class="tech-doc">
+                <div class="img-container">
+                    <img src="images/top.jpg" alt="Implantation des composants">
+                    <p class="img-caption">Implantation des composants sur le circuit imprimé</p>
+                </div>
+                
+                <p><strong>Remarque importante :</strong> À partir de la version V1.11, la résistance R7 de 2.2 MOhm est remplacée par un strap. Veillez également à bien souder les composants double-face et à contrôler les connexions des MAX4376 en boîtier miniature.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Claude Dreschel - <a href="../index-2.html">Retour au site principal</a></p>
+    </footer>
+
+</body>
+</html>

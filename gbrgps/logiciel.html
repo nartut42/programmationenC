@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Téléchargez les codes sources en langage C, schémas et notices techniques (PIC16F873, PIC16F84 et GameBoy) du projet GBRGPS.">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <title>Logiciel et Fichiers GBRGPS | Claude Dreschel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html">Présentation</a>
+            <a href="montage.html">Montage</a>
+            <a href="logiciel.html" class="active">Logiciel</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Projet — GBRGPS</span>
+            <h1>Logiciels & Fichiers à <span>Télécharger</span></h1>
+            <p class="subtitle">Programmes complets en langage C pour PIC16F873, PIC16F84, GameBoy et schémas techniques.</p>
+        </div>
+
+        <div class="project-nav">
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html">Présentation</a>
+            <a href="montage.html">Montage</a>
+            <a href="logiciel.html" class="active">Logiciel</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Fichiers et Archives disponibles</h2>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+                <a href="fichiers/GBRGPS_soft.zip" class="download-link">?? Télécharger GBRGPS_soft.zip (Sources C complets)</a>
+                <a href="fichiers/Sch%25E9ma_GBRGPS.zip" class="download-link">?? Télécharger Schéma_GBRGPS.zip (Schémas et typons)</a>
+                <a href="fichiers/GBRGPS_84.pdf" target="_blank" class="download-link">?? Consulter GBRGPS_84.pdf (Notice récepteur PIC16F84)</a>
+                <a href="fichiers/GBRGPS_873.pdf" target="_blank" class="download-link">?? Consulter GBRGPS_873.pdf (Notice émetteur PIC16F873)</a>
+            </div>
+
+            <h2>Aperçu du code (Réception série PIC)</h2>
+            <div class="code-block">
+<pre>
+//*******************************************************************
+// fonction getch(): lecture d'un caractere sur la liaison serie. 
+// 4800,N,8,1 
+//*******************************************************************
+unsigned char getch(void)
+{
+    while(!RCIF);
+    return (RCREG);
+}
+</pre>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Claude Dreschel - <a href="../index-2.html">Retour au site principal</a></p>
+    </footer>
+
+</body>
+</html>

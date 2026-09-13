@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Montage du variateur de vitesse PWM pour moteur à courant continu, piloté par un PIC16F876 : schéma, réalisation, programmation et liste des composants.">
+<title>Le montage — Variateur PWM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="../news/index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <div class="project-hero">
+        <div class="hero-badge">Projet — Variateur PWM</div>
+        <h1>Variateur de vitesse PWM (PIC16F876)</h1>
+        <p class="subtitle">Variateur de vitesse pour moteur à courant continu commandé en PWM, pour application de radiocommande.</p>
+    </div>
+
+    <nav class="project-nav">
+        <a href="index.html">Accueil</a>
+        <a href="presentation.html">Présentation</a>
+        <a href="montage.html" class="active">Montage</a>
+        <a href="logiciel.html">Logiciel</a>
+    </nav>
+
+    <figure class="screenshot">
+        <a href="fichiers/variateur_sch.pdf" target="_blank">
+            <img src="images/variateur_sch.gif" alt="Schéma électronique du variateur PWM — cliquer pour agrandir">
+        </a>
+        <figcaption>Cliquer sur le schéma pour l'agrandir (PDF)</figcaption>
+    </figure>
+
+    <section class="content-section">
+        <h2>I. Description du montage</h2>
+        <p style="margin-bottom:1rem;"><a class="download-link" href="fichiers/variateur_sch_CI.zip">📦 Télécharger le schéma et les typons (187 Ko)</a></p>
+
+        <p><i>Partie microcontrôleur :</i></p>
+        <p>Le cœur du variateur, un microcontrôleur <strong>PIC16F876-20</strong> cadencé par un quartz à <strong>11.0592 MHz</strong> (fond de tiroir), est alimenté en 5V par le régulateur <strong>IC4</strong> (L7805). Ce régulateur peut être supprimé en cas d'alimentation du montage par la batterie du récepteur de radiocommande à travers la borne <strong>P3</strong>. Dans la configuration présentée c'est le variateur qui alimente le récepteur et ses servomoteurs via <strong>P3</strong>. Le régulateur est en mesure de fournir jusqu'à 1.5A à condition bien sûr d'y fixer un radiateur s'il chauffe exagérément. La diode <strong>D2</strong> protège le montage des inversions de tension. La consommation du montage, sans le moteur, n'excède pas 17 mA. La batterie moteur de 12V est connectée entre les points <strong>P8</strong> et <strong>P9</strong> du montage.</p>
+
+        <p>Les résistances <strong>R9</strong> et <strong>R10</strong> constituent le diviseur de tension chargé d'adapter le niveau de tension appliqué à l'entrée <strong>RA0</strong> du CAN 10 bits du µC. Le <i>seuil de tension faible</i> est fixé à <strong>8.8V</strong>, ce qui correspond à un seuil de <strong>1.425V</strong> pour le µC. Ce seuil est calculé ainsi : (8.8V−0.7V)×(R10/(R9+R10)) = (8.1 × 4.7) / 26.7 = <strong>1.425V</strong>. Une modification de la valeur de <strong>R9</strong> et <strong>R10</strong> aura pour effet de fixer un autre seuil de tension faible. La diode zener de 5.1V (optionnelle) protège l'entrée <strong>RA0</strong> du µC des tensions supérieures à 5V ; il faudrait avec ces valeurs de résistances que la tension d'alimentation excède 28V, ce qui n'est guère recommandé.</p>
+
+        <p>La <strong>LED D3</strong>, commandée par un niveau bas présent sur la sortie <strong>RB1</strong> du µC, sert pour deux fonctions distinctes. La première pour signaler que la tension de la batterie est inférieure au seuil d'alerte (cette LED ne s'allume que si l'émetteur est en fonction). La deuxième fonction est associée au bouton poussoir <strong>S1</strong> (entrée <strong>RB0</strong>) : elle permet à l'utilisateur de visionner les phases de la programmation des points de fonctionnement du variateur « <strong>MIN</strong> », « <strong>NEUTRE_MIN</strong> », « <strong>NEUTRE_MAX</strong> » et « <strong>MAX</strong> ». Les points de fonctionnement sont ensuite mémorisés en mémoire <strong>EEPROM</strong>. Ces points sont fixés par défaut à : <strong>1.10 ms</strong> – <strong>1.45 ms</strong> – <strong>1.55 ms</strong> et <strong>1.90 ms</strong> si vous ne voulez pas les programmer.</p>
+
+        <figure class="screenshot">
+            <img src="images/points_fonct.gif" alt="Points de fonctionnement du variateur">
+        </figure>
+
+        <p>Les impulsions positives d'une période de 20 ms proviennent du récepteur par <strong>P4</strong> et sont appliquées à l'entrée <strong>RC3</strong> du µC. Un filtre logiciel rejette toutes les impulsions d'une durée inférieure à 0.8 ms ou supérieure à 2.2 ms, ainsi que celles qui n'entrent pas dans la fenêtre de mesure ouverte pendant 8 ms si nécessaire et fermée pendant 16 ms. La sortie <strong>RB4</strong>, « TEST », passe à l'état « 1 » en absence de signal reçu du fait d'une panne d'émetteur, de récepteur ou d'un brouillage (hors fenêtre de mesure). Cette sortie pourra signaler à un dispositif de localisation (buzzer) ou de sauvegarde le défaut.</p>
+
+        <p><i>Partie commande de puissance :</i></p>
+        <p>La commande de puissance utilise un pont en H constitué de deux transistors <strong>MOSFET</strong> de type P, <strong>T1</strong> et <strong>T2</strong>, et de deux transistors MOSFET de type N, <strong>T3</strong> et <strong>T4</strong>. Les MOSFET <strong>T3</strong> et <strong>T4</strong> sont continuellement bloqués ou passants, alors que <strong>T1</strong> et <strong>T2</strong> sont soit soumis à une tension découpée de rapport cyclique variable (PWM), soit bloqués alternativement.</p>
+
+        <p>En <i>marche avant</i>, <strong>T2</strong> et <strong>T3</strong> sont bloqués, <strong>T4</strong> est saturé et <strong>T1</strong> est commandé en PWM. En <i>marche arrière</i>, <strong>T1</strong> et <strong>T4</strong> sont bloqués, <strong>T3</strong> est saturé et <strong>T2</strong> est commandé en PWM.</p>
+
+        <figure class="screenshot">
+            <img src="images/av-ar.gif" alt="Schéma marche avant / marche arrière">
+        </figure>
+
+        <p>Dans la zone du neutre, le moteur est freiné en court-circuitant ses deux pôles. Dans cette configuration du pont en H, les MOSFET <strong>T1</strong> et <strong>T2</strong> sont bloqués, <strong>T3</strong> et <strong>T4</strong> sont saturés.</p>
+
+        <figure class="screenshot">
+            <img src="images/frein.gif" alt="Schéma de freinage du moteur">
+        </figure>
+
+        <p>Le choix des transistors fixera le courant moteur admissible. Avec des <strong>IRFZ24N</strong> (17A) et <strong>IRF9Z24N</strong>, le courant peut atteindre <strong>12A</strong> (avec radiateurs), mais il est possible d'obtenir plusieurs dizaines d'ampères avec d'autres modèles (le « N » indique qu'une diode de roue libre est intégrée au transistor). En tout état de cause, les transistors MOSFET conviennent parfaitement du fait de leur résistance de passage très faible (R<sub>DS(on)</sub> 0.175 Ohm et 0.07 Ohm) et donc de leur faible chute de tension. En revanche, ces derniers (type N) conduisent à partir de V<sub>GS</sub> = 4.5V et sont parfaitement saturés pour un V<sub>GS</sub> de 10V, ce qui impose d'utiliser des drivers de MOSFET, <strong>IC2</strong> et <strong>IC3</strong>. Les <strong>MAX4426</strong> sont des doubles drivers de MOSFET, inverseurs, haute vitesse. Alimentés par la tension de la batterie moteur à travers <strong>D2</strong>, ils commandent les « Gates » des transistors avec le courant et surtout la tension appropriés. Le <strong>MAX4426 IC2</strong> reçoit sur ses entrées 2 et 4 les deux signaux PWM générés par le <strong>PIC16F876</strong> sur les sorties <strong>RC1</strong> (<i>PWM_AV</i>) et <strong>RC2</strong> (<i>PWM_AR</i>). <strong>IC3</strong> est commandé par les sorties <strong>RB2</strong> (<i>AV</i>) et <strong>RB3</strong> (<i>AR</i>) du µC ; ses sorties saturent et bloquent les MOSFET <strong>T3</strong> et <strong>T4</strong>, fixant ainsi le sens de rotation du moteur.</p>
+
+        <p>Le choix du µC <strong>PIC16F876</strong> est dû en partie à sa capacité d'utiliser deux sorties PWM distinctes <strong>RC1</strong> et <strong>RC2</strong>. Quand l'une de ces sorties PWM n'est pas utilisée, la ligne en question est positionnée en « entrée » (TRISCx=1) tout en étant forcée au « 0 » logique par les résistances <strong>R6</strong> et <strong>R7</strong> afin d'obtenir une tension positive (+12V) sur la sortie correspondante de <strong>IC2</strong> et sur la gate de <strong>T1</strong> ou <strong>T2</strong> pour le bloquer.</p>
+
+        <figure class="screenshot">
+            <img src="images/conduction_pont.gif" alt="Conduction du pont en H">
+        </figure>
+
+        <p>Le moteur est alimenté entre <strong>P10</strong> et <strong>P11</strong>. L'inversion de la polarité des fils du moteur vous permettra de faire tourner le moteur dans le sens voulu.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>II. Réalisation du montage</h2>
+        <p>Le circuit imprimé est un circuit double face ; contrôler la continuité des pistes à l'ohmmètre. Commencer par charger en soudure à l'étain les pistes qui vont aux MOSFET (P8, P9, P10, P11) afin d'augmenter le courant admissible par les pistes, puis souder les résistances, les supports de CI... Finir par le régulateur 5V et les transistors MOSFET. Sans trous métallisés, veillez bien à souder des deux côtés les composants qui doivent l'être ainsi que ceux qui sont à la masse. Si le courant consommé par le moteur est important, connecter directement les fils du moteur au « drain » des transistors MOSFET en les reliant deux à deux (T1-T3, T2-T4) par un morceau de tôle de laiton qui servira de radiateur au MOSFET.</p>
+
+        <p>Deux typons de circuit imprimé sont disponibles en téléchargement. L'un pour les <strong>MAX4426</strong> en boîtier <strong>DIP8</strong>, l'autre pour les boîtiers <strong>8SO</strong>.</p>
+
+        <figure class="screenshot">
+            <img src="images/proto_variateur.jpg" alt="Vue du montage réalisé">
+            <figcaption>Vue du montage réalisé</figcaption>
+        </figure>
+        <figure class="screenshot">
+            <img src="images/implantation.gif" alt="Implantation des composants (MAX4426 en DIP8)">
+            <figcaption>Implantation des composants (MAX4426 en DIP8)</figcaption>
+        </figure>
+        <figure class="screenshot">
+            <img src="images/top.gif" alt="Vue de dessus du CI - MAX4426 DIP8" style="max-width:48%; display:inline-block; margin:0 1%;">
+            <img src="images/top_8SO.gif" alt="Vue de dessus du CI - MAX4426 8SO" style="max-width:48%; display:inline-block; margin:0 1%;">
+            <figcaption>Vue de dessus du CI — MAX4426 DIP8 et 8SO</figcaption>
+        </figure>
+        <figure class="screenshot">
+            <img src="images/bottom.gif" alt="Vue de dessous du CI - MAX4426 DIP8">
+            <figcaption>Vue de dessous du CI — MAX4426 DIP8</figcaption>
+        </figure>
+    </section>
+
+    <section class="content-section">
+        <h2>III. Programmation des points de fonctionnement</h2>
+        <p>Appuyez sur <strong>S1</strong> <i>en même temps</i> que la mise sous tension. La LED s'allume et doit s'éteindre une fois l'émetteur branché et manche au neutre. Cette fonction permet de vérifier que le récepteur et l'émetteur fonctionnent correctement.</p>
+        <ul>
+            <li>Positionner le manche en position « <strong>MIN</strong> » (impulsion de durée minimum &gt; 0.8 ms), appuyer sur <strong>S1</strong>, la LED clignote <i>une fois</i> par seconde.</li>
+            <li>Positionner le manche en position « <strong>NEUTRE_MIN</strong> », appuyer sur <strong>S1</strong>, la LED clignote <i>deux fois</i> par seconde.</li>
+            <li>Positionner le manche en position « <strong>NEUTRE_MAX</strong> », appuyer sur <strong>S1</strong>, la LED clignote <i>trois fois</i> par seconde.</li>
+            <li>Positionner le manche en position « <strong>MAX</strong> » (impulsion de durée maximum &lt; 2.2 ms), appuyer sur <strong>S1</strong>, la LED clignote <i>quatre fois</i> par seconde. Puis le variateur passe en mode de fonctionnement normal en tenant compte des quatre points programmés en EEPROM.</li>
+        </ul>
+        <p><strong>En cas d'erreur</strong>, comme par exemple le non-respect de l'ordre de programmation, la LED s'allume pendant 4 secondes puis le variateur passe en mode de fonctionnement normal avec les points de fonctionnement mémorisés précédemment (ou ceux par défaut). Pour obtenir un fonctionnement en « tout ou rien », soit pleine vitesse sans palier, il suffit, lors de la programmation, de suffisamment « rapprocher » les points « MIN » et « NEUTRE_MIN » ou « NEUTRE_MAX » et « MAX ».</p>
+        <p><strong>Attention</strong> de bien positionner l'inverseur de canal de l'émetteur en position « NORMAL » afin d'obtenir une durée croissante des impulsions lors des quatre phases de programmation.</p>
+    </section>
+
+    <section class="content-section">
+        <h2>IV. Liste des composants</h2>
+        <p style="margin-bottom:1rem;"><a class="download-link" href="fichiers/comp_variateur.zip">📦 comp_variateur.zip</a></p>
+        <table class="compat-table">
+            <thead><tr><th>Référence</th><th>Valeur / Type</th></tr></thead>
+            <tbody>
+                <tr><td>C1, C2</td><td>27 pF</td></tr>
+                <tr><td>C3</td><td>22 µF / 16V</td></tr>
+                <tr><td>C5</td><td>10 µF / 25V</td></tr>
+                <tr><td>C6, C7, C9</td><td>100 nF</td></tr>
+                <tr><td>D2</td><td>Diode 1N4004</td></tr>
+                <tr><td>D3</td><td>LED 3mm</td></tr>
+                <tr><td>D4</td><td>Zener BZX55-5.1V</td></tr>
+                <tr><td>IC1</td><td>PIC16F876</td></tr>
+                <tr><td>IC2, IC3</td><td>MAX4426CPA ou MAX4426ESA (Maxim), DIP8 ou 8SO</td></tr>
+                <tr><td>IC4</td><td>Régulateur 5V L7805</td></tr>
+                <tr><td>L1</td><td>Self de choc</td></tr>
+                <tr><td>Q1</td><td>Quartz 11.0592 MHz HC49/S</td></tr>
+                <tr><td>R1, R2, R3, R4</td><td>4.7 Ω 1/4W</td></tr>
+                <tr><td>R5</td><td>47 kΩ 1/4W</td></tr>
+                <tr><td>R6, R7, R9</td><td>22 kΩ 1/4W</td></tr>
+                <tr><td>R10</td><td>4.7 kΩ 1/4W</td></tr>
+                <tr><td>R11</td><td>220 kΩ 1/4W</td></tr>
+                <tr><td>R13</td><td>1 kΩ 1/4W</td></tr>
+                <tr><td>S1</td><td>Bouton poussoir Micro-Cosmos réf. 33-1148 (Selectronic)</td></tr>
+                <tr><td>T1, T2</td><td>IRF9Z24N</td></tr>
+                <tr><td>T3, T4</td><td>IRFZ24N</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <div class="back-row">
+        <a href="index.html">&larr; Retour à l'accueil du projet</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

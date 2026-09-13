@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Le montage du programmateur 8051/EPROM : schéma, alimentation, liste des composants.">
+<title>Le montage — Programmateur 8051 &amp; EPROM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="../news/index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <div class="project-hero">
+        <div class="hero-badge">Projet — Micro-contrôleurs 8051</div>
+        <h1>Programmateur de 8051 et EPROM</h1>
+        <p class="subtitle">Réalisation d'un programmateur de µC de la famille 8051 et d'EPROM 2764-27512, construit autour d'un 87C51FA.</p>
+    </div>
+
+    <nav class="project-nav">
+        <a href="pagegarde.html">Accueil</a>
+        <a href="caracteristiques.html">Caractéristiques</a>
+        <a href="montage.html" class="active">Montage</a>
+        <a href="logiciel.html">Logiciel</a>
+    </nav>
+
+    <section class="content-section">
+        <h2>Le montage</h2>
+        <div class="tech-doc">&nbsp;
+			
+			<center>
+				
+      <p><a href="images/proguniv.jpg" target="_blank"><u><b><img src="images/proguniv.gif" alt="Cliquez pour mieux voir (210Ko)" align="middle" border="1" width="334" height="238"></b></u></a></p>
+			</center><center>
+			<p><a class="download-link" href="fichiers/prog_schema.zip">📦 Télécharger les schémas du programmateur (260 Ko)</a></p>
+			<p></p>
+		</center>
+		
+			
+			
+				<b>I. Description du montage.</b>
+				<p><u>I.1 Le micro-contr&ocirc;leur coeur du syst&egrave;me.</u></p>
+				<p>Le coeur du montage est un microcontr&ocirc;leur 87C51FA , ce composant de 40 broches dispose de quatre ports d'entr&eacute;es/sorties de 8 bits soit 32 lignes. Le programme est implant&eacute; dans l'EPROM de 8Ko du microcontr&ocirc;leur.</p>
+				&nbsp;
+				<u>I.2 La liaison s&eacute;rie.</u>
+				&nbsp;
+				
+      Le 87C51FA est cadenc&eacute; par un quartz &agrave; 11.0592 Mhz. Cette 
+        fr&eacute;quence &laquo; biscornue &raquo; permet au processeur de communiquer 
+        &agrave; 1200, 2400, 4800, 9600 et 19200 bauds. Le Timer 1 du micro-contr&ocirc;leur 
+        est utilis&eacute; en g&eacute;n&eacute;rateur de bauds afin de cadencer 
+        la liaison s&eacute;rie. Le logiciel le configure en mode 2 (8 bits auto-reload). 
+        Le circuit MAX232 adapte les niveaux de la liaison s&eacute;rie entre 
+        le PC et le programmateur (lignes Rxd et Txd). Avec les versions r&eacute;centes 
+        des MAX232 (voir pages composants) il est posible de remplacer les condensateurs 
+        de 10&micro;F (C6 - C7 - C8 - C9 - C10) par des condensateurs de 0.1 &micro;F 
+        &agrave; 1 &micro;F. La ligne CTS (Clear To Send), simul&eacute;e par 
+        P3.4, permet le contr&ocirc;le mat&eacute;riel du flux de donn&eacute;es 
+        issues du terminal connect&eacute;. Un niveau haut (-10V c&ocirc;t&eacute; 
+        RS232) sur cette ligne bloque l'&eacute;mission de caract&egrave;res du 
+        terminal. Cet artifice permet au programmateur de bloquer le transfert 
+        de fichier pendant la programmation d'une m&eacute;moire sans perte de 
+        caract&egrave;res &agrave; 19200 bds.<br>
+				Le c&acirc;ble de connexion que nous utilisons est c&acirc;bl&eacute; <u>crois&eacute;</u> suivant le principe d'une liaison DTE-DTE modem nul. (C&acirc;blage d&eacute;taill&eacute; &agrave; t&eacute;l&eacute;charger)<br>
+				&nbsp;
+				<u>I.3 Le port P0</u>.
+				&nbsp;
+				Le port P0 est d&eacute;di&eacute; au transfert bidirectionnel des donn&eacute;es entre le microcontr&ocirc;leur et les composants &agrave; programmer. Il est donc connect&eacute; au bus de donn&eacute;es de 8 bits pr&eacute;sent sur tous les composants compatibles avec le programmateur.<br>
+				&nbsp;
+				<u>I.4 Le port P1.</u>
+				&nbsp;
+				Les fonctions du port P1 sont multiples, il permet d'une part de placer les adresses sur le bus d'adresse et d'autre part de charger des valeurs sur 8 bits dans les Convertisseurs Num&eacute;rique/Analogique (CNA) affect&eacute;s &agrave; la r&eacute;alisation des tensions Vpp et Vcc.
+				&nbsp;
+				<u>I.4.1 Le bus d'adresse.</u>
+				&nbsp;
+				Les adresses &eacute;tant fugitives sur le port P1, il convient donc de m&eacute;moriser les adresses hautes et basses (A0...A7, A8..A15). Cette t&acirc;che est confi&eacute;e &agrave; deux octuples bascules D de type 74HC373 (U5, U6), un niveau bas sur la broche 11 (EN) de ces bascules verrouille les poids faibles et forts sur le bus d'adresse du support 40 broches qui supportera les composants &agrave; traiter. Ce sont les lignes Adr_haut (P2.1) et Adr_bas (P2.0) qui commandent les bascules D.<br>
+				&nbsp;
+				<u>I.4.2 La r&eacute;alisation des tensions Vpp et Vcc commut&eacute;es.</u><br>
+				&nbsp;
+				Le programmateur doit permettre de programmer des composants dont les tensions de programmation et d'alimentation sont diff&eacute;rentes. Concr&egrave;tement la tension Vpp doit pouvoir &eacute;voluer entre 0 et 21V, la tension Vcc entre 0 et 6,25V.<br>
+				Les circuits Convertisseur Num&eacute;rique Analogique (AD557) qui r&eacute;alisent ces tensions sont identiques, seules les r&eacute;sistances R3 et R5 sont diff&eacute;rentes. En effet, Il n'est pas utile d'avoir un gain aussi &eacute;lev&eacute; pour Vcc que pour Vpp puisque Vcc sera au maximum de 6.25V et Vpp pourra atteindre 21V. Le port P1 pr&eacute;sente aux CNA des valeurs binaires de 8 bits correspondant &agrave; la tension &agrave; obtenir.<br>
+				L'AD557, fabriqu&eacute; par Analog Device, est un convertisseur N/A 8 bits qui permet de g&eacute;n&eacute;rer en sortie une dynamique de tensions comprise entre 0 volt et 2,55 volts. Int&eacute;gr&eacute; dans un bo&icirc;tier 16 broches, ce composant ne n&eacute;cessite qu'une unique tension de +5V. Sa consommation en courant est assez faible, de l'ordre de 15 mA. Ce composant a &eacute;t&eacute; choisit pour sa simplicit&eacute; de mise en oeuvre car aucun &eacute;l&eacute;ment externe ou de r&eacute;glage n'est requis pour son fonctionnement. La commande de conversion est simple &agrave; r&eacute;aliser puisqu'une unique impulsion (front montant actif) de plus de 225 nS sur CE ou CS est suffisante.<br>
+				Une donn&eacute;e sur P1 &eacute;gale &agrave; 00 appliqu&eacute;e sur le bus de donn&eacute;es du CNA produit une tension de 0 volt sur sa broche 14 (vout), un FF, une tension maximum de 2,55 volts. Cette tension doit &ecirc;tre maintenue stable pendant toute la dur&eacute;e de la lecture ou de la programmation d'un composant. Le temps n&eacute;cessaire &agrave; la conversion est inf&eacute;rieur &agrave; la micro seconde.
+				La tension maximum disponible en sortie du CAN n'est pas suffisante puisque la tension auxiliaire de programmation doit pouvoir atteindre de 12 &agrave; 21V et que certains algorithmes pr&eacute;voient d'alimenter les m&eacute;moires avec 6V ou 6,25V. Pour ces raisons l'amplification en tension est confi&eacute;e &agrave; un amplificateur op&eacute;rationnel LM358 (U7) aliment&eacute; entre 0 et 28V et mont&eacute; en ampli non inverseur. Le gain est fix&eacute; par les r&eacute;sistances R2, R4 et R3, R5.
+			
+			&nbsp;
+			
+			
+				<b>Circuit Vcc:Vout = (Vcc x R4) / (R4+R5)</b>
+				
+					<b>Circuit Vpp:Vout= (Vpp x R2) / (R2+R3)</b>
+					&nbsp;
+				
+				<u>Exemples</u>: Circuit Vpp (R2=3.3Kohm R3= 33Kohm)
+				
+				
+					
+					
+						
+						
+							
+							<table class="spec-table">
+								<tr>
+									<td>&nbsp;<b>Donn&eacute;es</b></td>
+									<td>&nbsp;<b>Vout</b></td>
+									<td>&nbsp;<b>Vpp</b></td>
+								</tr>
+								<tr>
+									<td align="center">190</td>
+									<td align="center">1,90 V</td>
+									<td align="center">21V</td>
+								</tr>
+								<tr>
+									<td align="center">45</td>
+									<td align="center">0,45 V</td>
+									<td align="center">5 V</td>
+								</tr>
+							</table>
+							&nbsp;
+						
+					
+				
+				La valeurs des donn&eacute;es repr&eacute;sentant Vpp et Vcc seront incluses dans la librairie des composants.<br>
+				&nbsp;
+				<u>I.5 Visualisation de pr&eacute;sence des tensions Vpp et Vcc.</u>
+				&nbsp;
+				Le composant a programmer doit &ecirc;tre plac&eacute; sur le support hors tension. Pour cette raison, les deux diodes &eacute;lectroluminescentes LED1 et LED2 signalent &agrave; l'utilisateur la pr&eacute;sence des tensions Vpp et Vcc. C'est &eacute;galement une indication du bon d&eacute;roulement pendant la phase de programmation ou de lecture d'une m&eacute;moire.
+				&nbsp;
+				<u>I.6 Les ports P2 et P3</u>
+				&nbsp;
+				Les lignes encore disponibles sur les ports P2 et P3 constituent le bus de contr&ocirc;le des m&eacute;moires. La ligne &laquo; Prog &raquo; (P2.4) fournit l'impulsion de programmation g&eacute;n&eacute;ralement active sur un niveau bas. La dur&eacute;e de cette impulsion, fix&eacute;e par le constructeur de m&eacute;moire, est m&eacute;moris&eacute;e dans la librairie des composants. P27_OE (P2.5) et P33_CE (P3.2) servent &agrave; la validation des EPROM ainsi qu'&agrave; la d&eacute;termination du mode de fonctionnement du micro-contr&ocirc;leur plac&eacute; sur le support 40 broches.<br>
+				Les lignes P2.7 et P2.6 du 87C51 ont une double fonction. Elles servent &agrave; la programmation des micro-contr&ocirc;leurs ( Voir <a href="fichiers/87C51FA.zip">datasheet du 8051</a>) mais &eacute;galement au contr&ocirc;le de protocole du bus I2C utilis&eacute; par la m&eacute;moire EEPROM U10.
+				&nbsp;
+				<u>I.7 La m&eacute;moire EEPROM sur bus I2C</u>
+				&nbsp;
+				L'EEPROM (Electrically Erasable Programmable Read Only Memory) U10 est une m&eacute;moire de type <a href="fichiers/eeprom24CXX.zip">24C08</a> de 1Ko dont la fonction est de m&eacute;moriser le dernier type de composant trait&eacute; par le programmateur.<br>
+				Cette m&eacute;moire non volatile est aliment&eacute;e par le +5V permanent. La m&eacute;moire MN24C08 est compatible avec le protocole I2C
+				 (Inter-Integrated Circuit) d&eacute;velopp&eacute; par la soci&eacute;t&eacute; Philips. Ce protocole &agrave; l'int&eacute;r&ecirc;t de n'utiliser que deux lignes pour fonctionner.<br>
+				La ligne SCL est une entr&eacute;e d'horloge pour synchroniser les donn&eacute;es entrant ou sortant de l'EEPROM. SCL est command&eacute;e par le 87C51, le micro-contr&ocirc;leur est alors &laquo; Ma&icirc;tre &raquo;. Une m&eacute;moire est toujours consid&eacute;r&eacute;e comme &eacute;tant &laquo; Esclave &raquo;. La ligne SDA est bidirectionnelle, les octets &agrave; &eacute;crire ou &agrave; lire dans l'EEPROM sont transmis bit apr&egrave;s bit. Le bit de poids fort est transmis le premier. Le dialogue peut s'effectuer jusqu'&agrave; 100Khz. Toutes les phases d'&eacute;criture ou de lecture commencent par une condition &laquo; START &raquo; et se terminent par une condition &laquo; STOP &raquo;.<br>
+				La condition &laquo; START &raquo; est une transition de la ligne SDA du niveau haut vers un niveau bas tandis que la ligne SCL est au niveau haut.<br>
+				La condition &laquo; STOP &raquo; est une transition de la ligne SDA du niveau bas vers le niveau haut quand SCL est au niveau haut.<br>
+				Le protocole I2C pr&eacute;voit &eacute;galement que le composant qui a lu un octet r&eacute;ponde par un accus&eacute; r&eacute;ception, &laquo; ACKNOWLEDGE &raquo;. L'acknowledge provient soit du micro-contr&ocirc;leur apr&egrave;s une lecture soit de la m&eacute;moire EEPROM apr&egrave;s une &eacute;criture. La lecture ou l'&eacute;criture de l'accus&eacute; r&eacute;ception est toujours cadenc&eacute; par le front montant de SCL.<br>
+				L'EEPROM poss&egrave;de une &laquo; adresse I2C &raquo; sur 8 bits. Les quatre bits de poids forts (1010) identifient tous les mod&egrave;les de m&eacute;moire EEPROM de ce type. Le bit A2 est &agrave; la masse et compl&egrave;te donc l'adresse par un '0'. Les bits A1 et A2 adressent l'un des quatre blocks de 256 bits. Le bit 0, R/W indique &agrave; la m&eacute;moire si le &laquo; Ma&icirc;tre &raquo; va &eacute;crire ou lire.<br>
+				C'est en respectant strictement le protocole que le micro-contr&ocirc;leur &eacute;crit et lit dans la m&eacute;moire le type de composant en cours d'utilisation. Trois octets sont n&eacute;cessaires, l'octet &quot;0&quot; &agrave; &laquo; 1 &raquo; signifie que les octets qui suivent sont valides, les octets &quot;2&quot; et &quot;3&quot; contiennent le num&eacute;ro d'ordre dans la librairie de composants ( soit en th&eacute;orie un maximum de 65536 composants).
+				&nbsp;
+				<u>I.8 Support de programmation et adaptateur pour EPROM</u>.<br>
+				&nbsp;
+				Le support &agrave; insertion nul de programmation est c&acirc;bl&eacute; pour recevoir les micro-contr&ocirc;leurs de la famille 8051. Il re&ccedil;oit le bus d'adresse (A0..A15) provenant des bascules D (U5, U6) et le bus de donn&eacute;es (D0..D7) du port P0. Un support adaptateur est n&eacute;cessaire pour programmer les EPROM 2764 &agrave; 27256. Le sch&eacute;ma de l'adaptateur est le suivant:<br>
+				&nbsp;
+			
+		
+		<center>
+			<p><a href="images/adaptateur.jpg" target="_blank" title="Pour mieux voir cliquez sur l'image"><img src="images/adaptateur.gif" alt="Pour mieux voir cliquez sur l'image" border="1" width="219" height="321"></a></p>
+		</center>
+		
+			
+				&nbsp;
+				<u>I.9 L'alimentation.</u><br>
+				&nbsp;
+				Trois tensions sont requises pour alimenter le programmateur 28V (100mA), 12V(180mA) et 5V (100mA). Le tranformateur utilis&eacute; fournit 32V eff. Apr&egrave;s le pont de diodes on trouve le r&eacute;gulateur ajustable LM317T qui fournit le +28V servant &agrave; fabriquer la tension Vpp commut&eacute;e et &agrave; alimenter les amplis op&eacute;rationnels. Les r&eacute;gulateurs fixes, 7812CN et 7805 fournissent respectivement 12V et 5V. Le r&eacute;glage de la tension 28V s'effectue en agissant sur le potentiom&egrave;tre P1. La formule suivante permet de calculer la valeur des r&eacute;sistances R2 et R1:<br>
+				&nbsp;
+				
+					
+						
+							
+								
+									
+										
+											<b>Vout= 1,25V (1+ (R2+P1)/R1)</b>.
+											
+										
+									
+								
+							
+						
+					
+				
+				<center>
+					<a href="images/alim_prog.jpg" target="_blank" title="Alimentation"><img src="images/alim_prog.gif" alt="Pour mieux voir cliquez sur l'image" border="1" width="462" height="281"></a></center>
+				&nbsp;
+				&nbsp;
+				
+				
+					
+        Toute alimentation capable de g&eacute;n&eacute;rer ces tensions continues 
+          et stables peut convenir. 
+      
+			
+		
+		
+			
+				<p><u>I.10 Listes des composants du programmateur:</u></p>
+			
+			
+				
+     
+      Télécharger le fichier <a class="download-link" href="fichiers/prog_comp.zip">📦 prog_comp.zip</a>
+    
+  
+			
+					
+    <p>*Je n'ai pas de circuit imprim&eacute; &agrave; vous proposer, le montage 
+      a &eacute;t&eacute; wrapp&eacute; sur une plaque &eacute;poxy.
+    <p>&nbsp;</div>
+    </section>
+
+    <div class="back-row">
+        <a href="pagegarde.html">&larr; Retour à l'accueil du projet</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

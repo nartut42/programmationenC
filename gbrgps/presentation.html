@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation de GBRGPS | Claude Dreschel</title>
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html" class="active">Présentation</a>
+            <a href="montage.html">Montage</a>
+            <a href="logiciel.html">Logiciel</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Projet — GBRGPS</span>
+            <h1>Présentation du <span>Système</span></h1>
+            <p class="subtitle">Affichage d'informations GPS sur une GameBoy par liaison radio.</p>
+        </div>
+
+        <div class="project-nav">
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html" class="active">Présentation</a>
+            <a href="montage.html">Montage</a>
+            <a href="logiciel.html">Logiciel</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Principe général</h2>
+            <div class="tech-doc">
+                <p>Le <b>GameBoy Repeater for Global Positional System</b> (<b>GBRGPS</b>) affiche sur une GameBoy des informations <b>GPS</b> transmises par liaison radio. Ces informations, provenant d'un GPS, sont extraites d'une chaîne de caractères au format <b>NMEA183 V.2</b>. La transmission est réalisée à la fréquence normalisée de <b>433.92 MHz</b>.</p>
+                
+                <div style="text-align: center; margin: 1.5rem 0;">
+                    <img src="images/game_boy_color2.jpg" alt="GameBoy Color GBRGPS" style="max-width: 100%; border-radius: 8px;">
+                </div>
+
+                <p>Le cœur du système est un <b>PIC16F84</b> qui utilise une GameBoy couleur pour périphérique. Elle a en charge la mise en forme et l'affichage des informations. Le <b>GBRGPS</b> reçoit ses données d'un module récepteur intégré à la GameBoy à l'aide d'un module Aurel 433MHz.</p>
+                
+                <h2>La trame NMEA183</h2>
+                <p>La norme NMEA183 définit les caractéristiques électriques et le format des données transmises par des instruments. Le projet n'utilise que deux types d'informations essentiels : <b>GPRMC</b> et <b>GPRMB</b> (Recommended Minimum Navigation Information).</p>
+                
+                <p><b>Exemple de trame :</b></p>
+                <code>$GPRMC,133756,A,4755.2122,N,00231.1871,E,5.6,213.6,040801,1.4,W,A*06</code>
+
+                <h2>Les Menus sur GameBoy</h2>
+                <p>Trois menus sont disponibles et commandés par les flèches HAUT et BAS de la GameBoy :</p>
+                <ul>
+                    <li><b>Menu 1 :</b> Cap du mobile - Gisement, distance du point à atteindre et indication d'arrivée.</li>
+                    <li><b>Menu 2 :</b> Latitude, Longitude, cap et vitesse en nœuds (kt) du mobile.</li>
+                    <li><b>Menu 3 :</b> Gisement Magnétique et distance du Point à atteindre (WAYPOINT) - ROUTE du mobile.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Claude Dreschel - <a href="../index-2.html">Retour au site principal</a></p>
+    </footer>
+
+</body>
+</html>

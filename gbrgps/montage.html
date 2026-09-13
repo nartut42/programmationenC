@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Schémas électroniques et guide de montage de l'émetteur PIC16F873 et du récepteur GameBoy PIC16F84 pour le projet GBRGPS.">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <title>Schémas et Montage du GBRGPS | Claude Dreschel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .img-container {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+        .img-caption {
+            margin-top: 1rem;
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            color: #2c3e50;
+            font-style: italic;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html">Présentation</a>
+            <a href="montage.html" class="active">Montage</a>
+            <a href="logiciel.html">Logiciel</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Projet — GBRGPS</span>
+            <h1>Schémas et <span>Montage</span></h1>
+            <p class="subtitle">Réalisation de l'émetteur (PIC16F873) et du récepteur (PIC16F84 sur GameBoy).</p>
+        </div>
+
+        <div class="project-nav">
+            <a href="index.html">Accueil</a>
+            <a href="presentation.html">Présentation</a>
+            <a href="montage.html" class="active">Montage</a>
+            <a href="logiciel.html">Logiciel</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Fichiers à télécharger</h2>
+            <a href="fichiers/Sch%25E9ma_GBRGPS.zip" class="download-link">?? Télécharger les schémas complets (Schéma_GBRGPS.zip)</a>
+
+            <h2>1. L'Émetteur (PIC16F873)</h2>
+            <div class="tech-doc">
+                <p>Le cœur de l'émetteur (IC4) est un µC <b>PIC16F873</b> cadencé à <b>11.0592 MHz</b>. L'alimentation est comprise entre 9V et 12V. Le signal au format NMEA183 du GPS est connecté à travers un optocoupleur <b>4N35</b> qui assure l'isolation galvanique.</p>
+                <div class="img-container">
+                    <img src="images/GPS_873_IMPL.gif" alt="Implantation des composants émetteur GBRGPS" loading="lazy">
+                    <p class="img-caption">Implantation des composants de l'émetteur</p>
+                </div>
+            </div>
+
+            <h2>2. Le Récepteur (PIC16F84 & GameBoy)</h2>
+            <div class="tech-doc">
+                <p>Le montage récepteur s'insère directement dans l'emplacement cartouche de la GameBoy. Le <b>PIC16F84</b> (IC2) utilise l'horloge externe de la GameBoy (CLK) à <b>1.0486 MHz</b>, évitant l'ajout d'un quartz.</p>
+                <div class="img-container">
+                    <img src="images/GPS_84.gif" alt="Schéma récepteur GPS GameBoy 84" loading="lazy">
+                    <p class="img-caption">Schéma du récepteur GPS 84</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Claude Dreschel - <a href="../index-2.html">Retour au site principal</a></p>
+    </footer>
+
+</body>
+</html>

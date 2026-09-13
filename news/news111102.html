@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Oscillateur 1KHz-20MHz - LTC6900 Linear Technology">
+<title>11/11/2002 — Les news de l'électronique</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <section class="content-section">
+        <span class="news-article-title">11/11/2002</span>
+        <h1>Oscillateur 1 kHz - 20 MHz — LTC6900, Linear Technology</h1>
+
+        <figure class="screenshot">
+            <img src="images/sot23.jpg" alt="Boîtier SOT-23 du LTC6900">
+        </figure>
+
+        <p>Le <strong>LTC6900</strong> de <strong>Linear Technology</strong> est un nouveau composant intégré dans un petit boîtier <strong>SOT-23</strong>. Il permet de réaliser un oscillateur qui génère n'importe quelle fréquence de <strong>1 kHz à 20 MHz</strong>, avec une <strong>précision de ±0.6%</strong>, par l'ajout d'une simple résistance de 0.1% — sans quartz ni résonateur céramique. De fait, le schéma reste très simple et compact :</p>
+
+        <figure class="screenshot">
+            <img src="images/LTC6900_sch.gif" alt="Schéma du LTC6900" style="max-width:48%; display:inline-block; margin-right:1%;">
+            <img src="images/LTC6900_pac.gif" alt="Brochage du LTC6900" style="max-width:30%; display:inline-block;">
+        </figure>
+
+        <p>Comme le montre le schéma, il est possible de diviser la fréquence par 100 ou par 10. La formule qui permet de calculer la valeur de la résistance est la suivante :</p>
+        <figure class="screenshot">
+            <img src="images/formule.gif" alt="Formule de calcul de la résistance">
+        </figure>
+
+        <p>L'architecture interne du composant assure le maintien de la précision sur toute l'étendue des variations de température et de tension, à moins de <strong>0.004%/°C et 0.05%/V</strong>.</p>
+        <figure class="screenshot">
+            <img src="images/LTC6900_bloc.gif" alt="Schéma-bloc interne du LTC6900">
+        </figure>
+
+        <p>Le circuit s'alimente jusqu'à 6V, et le courant consommé est de <strong>500 µA</strong> pour un signal de sortie de 3V à 3 MHz.</p>
+
+        <p><a class="download-link" href="fichiers/6900i.pdf" target="_blank">📦 Télécharger le datasheet du LTC6900</a></p>
+    </section>
+
+    <div class="back-row">
+        <a href="index.html">&larr; Retour aux news</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

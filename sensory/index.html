@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Découvrez le module Voice Extreme de SENSORY : donnez une capacité de reconnaissance vocale à vos réalisations, programmable en langage C.">
+    <meta name="keywords" content=",PIC,8051,i2C,microcontroleur,micro-controleur,ft639,sensory, voice extreme toolkit,reconnaissance vocale,servo,programmateur,electronique,robot,lego mindstorms,rcx,nqc,p16pro,picall">
+    
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+    
+	
+	<title>Voice Extreme Toolkit SENSORY | </title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            margin-left: 1.5rem;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        main {
+            padding: 4rem 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2.5rem;
+        }
+
+        .section-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-card h3 {
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.5rem 0;
+            color: var(--text-main);
+        }
+
+        .section-card p, .section-card ul {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .section-card ul {
+            padding-left: 1.5rem;
+        }
+
+        .section-card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .img-container {
+            text-align: center;
+            margin: 2rem 0;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        .img-caption {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 4rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="../index.html">&larr; Retour à l'accueil</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Module Voice Extreme <span>SENSORY</span></h1>
+            <p>Si vous avez rêvé un jour de commander à la voix une réalisation, ce module Voice Extreme est pour vous.</p>
+        </div>
+
+        <div class="section-card">
+            <h2>Présentation du Kit</h2>
+            <p>Le module de reconnaissance vocale <strong>VoiceDirect</strong> fabriqué par SENSORY n'est pas une nouveauté. Ce qui l'est, c'est ce kit de développement qui constitue un outil destiné à intégrer une réelle capacité de reconnaissance vocale à vos propres réalisations. Son originalité : la possibilité de le programmer en <strong>langage C</strong> (Voice Extreme -C).</p>
+            
+            <div class="img-container">
+                <img src="images/Kit.jpg" alt="Kit Voice Extreme">
+            </div>
+
+            <h3>Composition du kit :</h3>
+            <ul>
+                <li>Plaquette d'expérimentations avec microphone et haut-parleur inclus.</li>
+                <li>Module de reconnaissance vocale Voice Extreme.</li>
+                <li>Alimentation secteur & Câble de liaison série RS232.</li>
+                <li>Manuel d'utilisation.</li>
+                <li>CD-ROM (soft : Voice Extreme IDE - Quick Synthesis - Exemples - Documentation).</li>
+            </ul>
+            <p><em>Configuration requise :</em> Un PC tournant sous Windows (95 à XP), 16Mo de RAM, 15Mo sur disque dur et un port RS232.</p>
+        </div>
+
+        <div class="section-card">
+            <h2>La Carte et le Module</h2>
+            <div class="img-container">
+                <img src="images/Toolkit.jpg" alt="Plaquette Toolkit">
+                <span class="img-caption">La plaquette d'expérimentation</span>
+            </div>
+            
+            <p>Le cœur du kit est le module <strong>Voice Extreme</strong> qui comporte un processeur, une ROM contenant le progiciel et une mémoire <strong>FLASH de 2Mo</strong> dans laquelle prendront place vos programmes. Le module peut être retiré et implanté sur votre application à l'aide d'un connecteur 34 points.</p>
+            
+            <p>La plaquette d'expérimentation comporte une zone pastillée destinée à recevoir l'électronique de l'utilisateur. Vous disposez d'une liaison série RS232, d'entrées micro et haut-parleur externes, de trois LED et de cinq boutons poussoirs.</p>
+
+            <div class="img-container">
+                <img src="images/Voiceextreme.jpg" alt="Module Voice Extreme">
+            </div>
+
+            <h3>Caractéristiques Techniques :</h3>
+            <ul>
+                <li>Processeur de traitement du signal (convertisseur A/N).</li>
+                <li>Générateur de tonalité DTMF et synthétiseur vocal.</li>
+                <li>Convertisseur N/A et amplificateur de puissance MLI (PWM).</li>
+                <li>Lignes d'E/S numériques programmables.</li>
+                <li>Faible consommation : de l'ordre de 10 mA.</li>
+            </ul>
+            
+            <div class="img-container">
+                <img src="images/E-S.gif" alt="Lignes E/S du module">
+                <span class="img-caption">Affectation des lignes d'Entrée/Sortie</span>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <h2>L'Environnement Logiciel</h2>
+            <p>Vous disposez pour programmer le module en langage C d'un Environnement de Développement Intégré (IDE). Cet environnement facilite la programmation claire et structurée grâce à la coloration syntaxique.</p>
+            
+            <div class="img-container">
+                <img src="images/VE_IDE.jpg" alt="Voice Extreme IDE">
+            </div>
+
+            <p>Le Kit logiciel comprend l'IDE, un compilateur C (proche de l'ANSI-C), un éditeur de liens (linker), un programme de transfert et le logiciel <strong>Quick Synthesis</strong> qui permet de convertir des fichiers audio .WAV dans le format reconnu par le module.</p>
+            
+            <div class="img-container">
+                <img src="images/synthesis.gif" alt="Quick Synthesis">
+            </div>
+            
+            <h3>Pour bien démarrer :</h3>
+            <p>Vous pouvez vous familiariser rapidement avec le module en essayant les nombreux programmes d'exemples fournis : écrivez votre code dans l'IDE, téléchargez-le dans la mémoire FLASH via la RS232, et exécutez-le. Les débutants en C n'auront aucune difficulté grâce à l'abondante documentation sur les fonctions de reconnaissance vocale.</p>
+        </div>
+
+        <div class="section-card">
+            <h2>Fournisseurs</h2>
+            <p>À l'époque, plusieurs fournisseurs existaient en France, dont :</p>
+            <ul>
+                <li><strong>SELECTRONIC</strong> (Réf: 22.7888)</li>
+                <li><strong>LEXTRONIC</strong> (Réf: KDVE364)</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Site sur les microcontrôleurs programmés en C | <a href="../index.html">Retour à l'accueil</a></p>
+    </footer>
+
+</body>
+</html>

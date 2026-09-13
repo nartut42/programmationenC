@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Présentation de composants électroniques">
+    <meta name="keywords" content="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,sensory, voice extreme toolkit,reconnaissance vocale,servo,programmateur,electronique,robot,polyswitch,oscillateur,raychem,fusible,p16pro,picall">
+    
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+	
+	
+	<title>Émetteur MAX2606 |  </title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Retour aux Composants</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Composant</span>
+            <h1>La Hi-Fi partout chez soi : <span>Émetteur MAX2606</span></h1>
+            <p class="subtitle">Réaliser un émetteur FM à composant unique grâce à la famille MAX260X de Maxim.[cite: 42]</p>
+        </div>
+
+        <div class="content-section">
+            <div class="tech-doc">
+                <h2>I.1 Introduction</h2>
+                <p>La famille des <strong>MAX260X</strong> est grande. Elle commence avec le MAX2605 et se termine avec le MAX2609.[cite: 42] Ils ont tous le même brochage et permettent de réaliser un émetteur à circuit unique.[cite: 42] Ce qui les différencie, c'est leur gamme de fréquence, qui s'étend de <strong>45MHz à 650MHz</strong>.[cite: 42]</p>
+
+                <h2>I.2 Description du MAX2606</h2>
+                <p>Le MAX260X se présente sous la forme d'un boîtier <strong>SOT23-6</strong>.[cite: 42] Il est alimenté entre 2.7V et 5.5V, avec une très faible consommation (1.9mA à 3.9mA).[cite: 42] La fréquence centrale du VCO est déterminée par la valeur de la self connectée entre les broches 1 et 2 (IND et Masse).[cite: 42]</p>
+                <p>La broche TUNE est connectée à une diode Varicap intégrée, permettant de faire varier la fréquence centrale avec une tension comprise entre +0.4V et +2.4V.[cite: 42]</p>
+
+                <h2>I.3 Application : Émetteur FM 88MHz - 108MHz</h2>
+                <div class="img-container">
+                    <img src="images/EMETTE_1.gif" alt="Schéma de l'émetteur FM MAX2606">
+                </div>
+                <p>Ce montage vous permettra d'écouter votre musique préférée dans votre jardin ou sur l'autoradio de votre véhicule.[cite: 42] L'oscillateur est ajusté par le potentiomètre R8, et sa fréquence nominale (100MHz) est fixée par une self de <strong>390nH</strong>.[cite: 42]</p>
+                <p>La puissance de sortie (environ -21dBm dans 50O) est suffisante pour un usage domestique avec une antenne de 75cm, tout en respectant la réglementation.[cite: 42] Les signaux audio gauche/droite sont additionnés par R5 et R6 pour moduler le VCO via l'entrée TUNE.[cite: 42]</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

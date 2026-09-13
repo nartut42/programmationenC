@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Le logiciel du programmateur 8051/EPROM : description du fonctionnement et code source complet en langage C.">
+<title>Le logiciel — Programmateur 8051 &amp; EPROM</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="../news/index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <div class="project-hero">
+        <div class="hero-badge">Projet — Micro-contrôleurs 8051</div>
+        <h1>Programmateur de 8051 et EPROM</h1>
+        <p class="subtitle">Réalisation d'un programmateur de µC de la famille 8051 et d'EPROM 2764-27512, construit autour d'un 87C51FA.</p>
+    </div>
+
+    <nav class="project-nav">
+        <a href="pagegarde.html">Accueil</a>
+        <a href="caracteristiques.html">Caractéristiques</a>
+        <a href="montage.html">Montage</a>
+        <a href="logiciel.html" class="active">Logiciel</a>
+    </nav>
+
+    <section class="content-section">
+        <h2>Le logiciel</h2>
+        <p style="margin-bottom:1rem;">Le code source complet est reproduit ci-dessous. Les fichiers complémentaires (source, documentation) sont disponibles sur la <a class="download-link" href="fichiers/prog.html">📁 page de téléchargement</a>.</p>
+        <div class="tech-doc">Ce logiciel implant&eacute; dans l'EPROM du 87C51FA est d&eacute;velopp&eacute; en langage C et compil&eacute; &agrave; 
+l'aide du compilateur C51 de '<b>Keil Elektronik</b>'. Evidemment, un autre compilateur peut
+convenir avec peut &ecirc;tre quelques l&eacute;g&egrave;res adaptations de syntaxe. L'avantage du C n'est
+plus a d&eacute;montrer, vous pouvez juger de sa simplicit&eacute;, en lisant le listing, quand il 
+est utilis&eacute; avec des micro-contr&ocirc;leurs.
+Outre la programmation des composants, le logiciel se charge de communiquer avec le PC
+(via la RS232). Le soft utilis&eacute; sur le terminal est '<b>PROCOMM&nbsp;PLUS</b>'. '<b>Hyperterminal</b>' de 
+Windows ne convient pas car il ne g&egrave;re pas convenablement le flux lors du transfert de 
+fichiers vers le programmateur. En effet, il y a risque de perdre des caract&egrave;res m&ecirc;me 
+(et c'est le cas) quand le programmateur contr&ocirc;le le flux hard. 
+Sur la version DOS (ou windows) de Procomm, il convient de configurer ainsi (Alt S)
+pour obtenir un affichage correct:
+<u>Terminal options:</u>
+<img height="243" width="472" src="images/term_option.gif">
+<u>General options:</u>
+<u><img height="247" width="475" src="images/gen_opt.gif"></u>
+Le logiciel dialogue avec le terminal de 1200 &agrave; 19200 bds. Il attend au d&eacute;marrage que
+l'utilisateur frappe au clavier le caract&egrave;re 'espace' pour afficher le menu.
+<u>LES&nbsp;FONCTIONS:</u>
+La fonction main() initialise les variables et le hard. Elle lit la config. dans 
+l'EEPROM II2C, recherche la vitesse de la liaison s&eacute;rie et traite apr&egrave;s l'avoir affich&eacute;
+les options du menu.
+
+  
+
+
+- Programmation
+- Test de virginit&eacute;
+- Lecture
+- Somme de contr&ocirc;le
+- V&eacute;rification
+- Efface m&eacute;moire Flash
+- Choix autre composant.
+<u>La librairies de composants:</u>
+Chaque composant est d&eacute;fini par sa marque, sa r&eacute;f&eacute;rence et ses param&egrave;tres de 
+programmation. La liste des marques est contenue dans le tableau <i>tab_fab[]</i>. Il peut
+&ecirc;tre compl&eacute;t&eacute; par d'autres marques en prenant soin de modifier le nombre de marques 
+dans <i>nb_fab (max 255)</i>.
+La structure du mod&egrave;le '<i>library</i>' regroupe la collection des composants. Le nombre 
+d'&eacute;l&eacute;ments est pr&eacute;cis&eacute; par '<i>nb_composant</i>' (max 65535).
+Pour ajouter un nouveau composant il suffit donc (si n&eacute;cessaire) d'ajouter sa marque
+dans '<i>tab_fab</i>', et d'incr&eacute;menter '<i>nb_fab</i>'. Puis d'ajouter les &eacute;l&eacute;ments d&eacute;finissant le
+nouveau composant dans '<i>tab_lib</i>'.
+                
+                 1 octet =fabricant (0=Atmel .. n=X)
+                 1 octet = type algorithme initialisation
+                 1 octet = type algorithme programmation
+                 1 octet = type algorithme verification et lecture
+                 1 octet = nombre d'impulsions pour programmer un octet
+                 1 octet = nombre de cycles pour programmer un octet
+                 1 octet = valeur de V_CAN = ((Vpp*3.3)/36.3)*100)
+                 1 octet = valeur de V_CAN = ((Vcc* 3.3)/13.3)*100)
+                 1 octet = duree d'une impulsion (X*100 &micro;S)
+                 1 octet = Taille en Ko
+                 n octets=nom du composant
+Pour finir, incr&eacute;menter '<i>nb_composant</i>'. 
+Ne pas oublier qu'en 'C', l'indice 0 (z&eacute;ro) d'un tableau pointe sur le premier &eacute;l&eacute;ment.
+ 
+<u>Les algorithmes de programmation:</u>
+Les algorithmes permettant de programmer et de lire les composants ont &eacute;t&eacute; d&eacute;compos&eacute;s 
+en trois mod&egrave;les (ou types):
+                - algorithme d'initialisation '<i>init_X</i>'
+                - algorithme de programmation '<i>prog_X</i>'   
+                - algorithme de lecture et v&eacute;rification '<i>verif_lect_X</i>'
+Ce qui permet d'obtenir des petites fonctions qu'il est ais&eacute; de cr&eacute;er si un nouveau 
+composant (&agrave; ajouter) utilise d'autres algorithmes.
+A titre d'exemple (NM27C512), si  'algo_init' (type algorithme initialisation) = 3, 
+algo_prog = 2 et algo_verif = 2 alors, le programme fera appel aux fonctions:
+                                   - init_3
+                                   - prog_2
+                                   - verif_lect_2
+S'IL EST NECESSAIRE DE FAIRE EVOLUER LE LOGICIEL:
+           
+           Modifier: initialisation()
+                     verif_lecture()
+                     prog_octet()
+           Ajouter : init_X()
+                     prog_X()
+                     verif_lect_X()
+  Algo                 Fonctions           Composants
+   0                   init_0()             : 8051
+   1                   init_1()             : 2764,27128
+   2                   init_2()             : 27256
+   3                   init_3()             : 27512
+   0                   prog_0()             : 8051
+   1                   prog_1()             : 2764,27128
+   2                   prog_2()             : 27256,27512
+   0                   verif_lect_0         : 8051
+   1                   verif_lect_1         : 2764,27128,27256
+   2                   verif_lect_2         : 27512
+<u>Fonctions II2C</u>
+           <i>start()</i>: g&eacute;n&egrave;re un START sur le bus IIC
+           <i>stop()</i> : g&eacute;n&egrave;re un STOP sur le bus IIC
+           <i>emi_ack()</i>: Emission d'un accus&eacute; r&eacute;ception vers l'EEPROM
+           <i>rec_ack()</i>: Attend un accus&eacute; r&eacute;ception de l'EEPROM
+           <i>ecrit_octet_IIC</i>: Ecrit un octet (donnee) dans l'EEPROM
+           <i>lect_octet_IIC</i>: Lecture d'un octet &agrave; l'adresse courante.
+           <i>ecriture_IIC</i>: Ecriture &agrave; l'@ X de N octets lus dans le buffer[]
+           <i>lecture_IIC</i>: Lecture &agrave; l'@ X de N octets et stocke dans buffer[]
+Avantage du 'C' vous pouvez utiliser ces fonctions pour piloter en master un bus 
+II2C avec un PIC par exemple.</div>
+    </section>
+
+    <section class="content-section">
+        <h2>Le programme (code source complet)</h2>
+        <div class="code-block"><pre><span style="color:#7dd3a0"> /***************************************************************************
+*                 PROGRAMMATEUR Universel de Micro-controleurs              *
+*                 de la famille 8051 et d'EPROM (2764 &agrave; 27512)              *
+*                                                                           *
+*                                                                           *
+*                           C.DRESCHEL - avec la collaboration de JC. DENIS *
+*                           PROGUNIV4.C   V4.00                             *
+*                                                                           *
+* Version comprenant la reconnaissance automatique de la vitesse            *
+* de la liaison s&eacute;rie et la m&eacute;morisation dans l'EEPROM du dernier           *
+* composant utilis&eacute;.                                                        *
+****************************************************************************/</span>
+<span style="color:#f87171">#include &lt;reg51f.h&gt;
+#include &lt;intrins.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;stdio.h&gt;</span>
+<span style="color:#7dd3a0">/***************************************************************************
+            Configuration Hard
+****************************************************************************/</span>
+<span style="color:#f87171">#define PORT_DATA   P0
+#define ADR_VOLT    P1
+sbit Adr_bas=       P2^0;
+sbit Adr_haut=      P2^1;
+sbit DA1=           P2^2;
+sbit DA2=           P3^5;
+sbit CTS=           P3^4;
+sbit Prog=          P2^3;
+sbit P2_6=          P2^4;
+sbit P2_7_OE=       P2^5;
+sbit P3_6_SCL=      P2^6;
+sbit P3_7_SDA =     P3^2;</span>
+<span style="color:#7dd3a0">/**********************************************************************
+                 Librairie des composants et fabricants.
+                 ajouter vos nouveaux composants &agrave; la suite
+                 dans 'tab_lib[]'
+                 1 octet =fabricant (0=Atmel .. n=X)
+                 1 octet = type algorithme initialisation
+                 1 octet = type algorithme programmation
+                 1 octet = type algorithme verification et lecture
+                 1 octet = nombre d'impulsions pour programmer un octet
+                 1 octet = nombre de cycles pour programmer un octet
+                 1 octet = valeur de V_CAN = ((Vpp*3.3)/36.3)*100)
+                 1 octet = valeur de V_CAN = ((Vcc* 3.3)/13.3)*100)
+                 1 octet = duree d'une impulsion (X*100 &micro;S)
+                 1 octet = Taille en Ko
+                 n octets=nom du composant
+**********************************************************************/</span>
+<span style="color:#60a5fa">code unsigned char nb_fab=7;
+code unsigned char *tab_fab[]={&quot;Atmel&quot;,&quot;Fujitsu&quot;,&quot;Intel&quot;,&quot;National&quot;,
+                               &quot;Nec&quot;,&quot;Philips&quot;,&quot;SGS-Thomson&quot;};
+code unsigned int nb_composant=15;
+code struct library{
+         unsigned char fab;
+         unsigned char algo_init;
+         unsigned char algo_prog;
+         unsigned char algo_verif;
+         unsigned char nb_pulse;
+         unsigned char nb_cycle;
+         unsigned char vpp;
+         unsigned char vcc;
+         unsigned char nb_100;
+         unsigned char taille;
+         unsigned char *nom;
+      } tab_lib[]={
+      0,0,0,0,1,1,109,124,1,4,&quot;AT89C51_12V&quot;,</span>   <span style="color:#7dd3a0">/*12V 5V 100&micro;S */</span>
+      <span style="color:#60a5fa">0,0,0,0,1,1,45,124,1,4,&quot;AT89C51_5V&quot;,</span>     <span style="color:#7dd3a0">/*5V 5V 100&micro;S */</span>
+      <span style="color:#60a5fa">0,0,0,0,25,1,109,124,1,8,&quot;AT89C52&quot;,</span>      <span style="color:#7dd3a0">/*12V 5V 100&micro;S */</span>
+      <span style="color:#60a5fa">1,2,2,1,1,25,118,148,5,32,&quot;MB27C256A&quot;,</span>   <span style="color:#7dd3a0">/* 13V 6V 500&micro;S */</span>
+      <span style="color:#60a5fa">2,1,1,1,1,25,113,148,1,8,&quot;D2764A&quot;,</span>      <span style="color:#7dd3a0"> /* 12.5V 6V 100&micro;S */</span>
+      <span style="color:#60a5fa">3,1,1,1,1,20,118,148,5,8,&quot;NM27C64&quot;,</span>     <span style="color:#7dd3a0"> /* 13V   6V 500&micro;S */</span>
+      <span style="color:#60a5fa">3,2,2,1,1,20,115,155,1,32,&quot;NM27C256&quot;,</span>    <span style="color:#7dd3a0">/* 12.75V 6.25V 100&micro;S */</span>
+      <span style="color:#60a5fa">3,3,2,2,1,25,115,155,1,64,&quot;NM27C512&quot;,</span>    <span style="color:#7dd3a0">/* 12.75V 6.25V 100&micro;S */</span>
+      <span style="color:#60a5fa">4,1,1,1,1,25,190,124,10,8,&quot;D2764D&quot;,</span>      <span style="color:#7dd3a0">/* 21V 5V 1mS */</span>
+      <span style="color:#60a5fa">4,1,1,1,1,25,190,148,10,16,&quot;D27128D&quot;,</span>    <span style="color:#7dd3a0">/* 21V 6V 1mS */</span>
+      <span style="color:#60a5fa">4,3,2,2,1,25,113,148,1,64,&quot;D27C512D&quot;,</span>    <span style="color:#7dd3a0">/* 12.5V 6V 100&micro;S */</span>
+      <span style="color:#60a5fa">5,0,0,0,25,1,115,124,1,8,&quot;87C52&quot;, </span>       <span style="color:#7dd3a0">/* 12.75V 5V 100&micro;S */</span>
+      <span style="color:#60a5fa">5,0,0,0,25,1,115,124,1,4,&quot;SC87C51CGF40&quot;,</span> <span style="color:#7dd3a0">/* 12.75V 5V 100&micro;S */</span>
+      <span style="color:#60a5fa">5,0,0,0,25,1,115,124,1,8,&quot;S87C51FA&quot;,</span>     <span style="color:#7dd3a0">/* 12.75V 5V 100&micro;S */</span>
+      <span style="color:#60a5fa">6,2,2,1,1,25,115,155,1,32,&quot;M27C256B&quot;}; </span>  <span style="color:#7dd3a0">/* 12.75V 6.25V 100&micro;S */</span>
+<span style="color:#60a5fa">code unsigned char vitesse[4]={0x0E8,0x0F4,0x0FA,0xFD};</span> <span style="color:#7dd3a0">/* param. RS232 */
+/***********************************************************************
+         Prototypes des fonctions
+************************************************************************/</span>
+<span style="color:#a78bfa">void fichier_hex_in(void);
+void put_char(char c);
+char get_char(void);
+void put_string(char table[]);
+void rec_serie(void);
+void compte(void);
+void init_timer0(void);
+void curseur(unsigned char direction,unsigned char nombre);
+void X_cent_microS(unsigned char X);
+void affiche_erreur(void);
+unsigned char lecture_donnee (void);
+unsigned char choix_fabricant(void);
+void choix_composant(unsigned char indice_fab);
+void menu(void);
+void init_zero_volt(void);
+void init_0(void);
+void init_1(void);
+void init_2(void);
+void init_3(void);
+void prog_0(void);
+void prog_1(void);
+void prog_2(void);
+unsigned char verif_lect_0(void);
+unsigned char verif_lect_1(void);
+unsigned char verif_lect_2(void);
+void dix_microS(void);
+void vcc_tension(unsigned char tension);
+void vpp_tension(unsigned char tension);
+void place_adresse(unsigned int adr);
+void aff_en_place(void);
+bit memoire_vierge(void);
+void test_virginite(void);
+void initialisation(void);
+unsigned char verif_lecture(void);
+void programmation(void);
+void prog_ligne(unsigned int adr_debut,unsigned char nb_donnee);
+void prog_octet(void);
+void verification(void);
+void lecture(void);
+void somme_controle(void);
+void sauve_octet_faux(unsigned char x);
+void aff_octet_faux(void);
+void efface(void);
+void aff_titre(void);
+void cherche_vitesse(void);
+void ecrit_octet_IIC(void);
+bit attend_ack(void);
+void emi_ack(void);
+unsigned char lect_octet_IIC(void);
+void lecture_IIC(unsigned char adr,unsigned char nb_octet);
+void ecriture_IIC(unsigned char adr,unsigned char nb_octet);
+void lecture_config(void);
+void init_table();</span>
+<span style="color:#7dd3a0">/***********************************************************************
+             Variables globales
+***********************************************************************/</span>
+<span style="color:#a78bfa">unsigned char  buffer[16];
+unsigned char  type_erreur,
+               clock,
+               indice_fab,
+               vcc,vpp,
+               nb_pulse,nb_100,taille,
+               prog_n,init_n,
+               nb_cycle,verif_n;
+unsigned int   indice_comp,adresse,adr_fin;
+bit            emi_ok,
+               rs232_ok,
+               flag_erreur,
+               time_out,
+               mode,fin_fichier;
+unsigned char bdata donnee;
+sbit           bit_7=donnee^7;
+sbit           bit_0=donnee^0;
+</span>
+<span style="color:#7dd3a0">/**********************************************************************
+                     Constantes
+**********************************************************************/</span>
+<span style="color:#a78bfa">#define   VCC_5V         124
+#define   VPP_5V         45
+#define   IIC_adr_lect   0xA1</span>   <span style="color:#7dd3a0">/*1010 0001  adresse EEPROM en lecture*/</span>
+<span style="color:#a78bfa">#define   IIC_adr_ecrit  0xA0</span>   <span style="color:#7dd3a0">/*1010 0000  adresse EEPROM en &eacute;criture*/
+/***********************************************************************
+                   Programme principal.
+                   mode=0: mode programmation.
+                   mode=1: mode lecture et v&eacute;rification.
+***********************************************************************/</span>
+main()
+{
+unsigned char car;
+      CTS=0;              <span style="color:#7dd3a0">/* ligne CTS active */</span>
+      init_zero_volt();   <span style="color:#7dd3a0">/* toutes les tensions &agrave; z&eacute;ro */</span>
+      lecture_config();   <span style="color:#7dd3a0">/* lecture du dernier composant utilis&eacute; */</span>
+      init_zero_volt();
+      cherche_vitesse();  <span style="color:#7dd3a0">/* cherche la vitesse de la liaison s&eacute;rie */</span>
+      do{
+           menu();
+           car=get_char();
+           switch (car)
+           {
+             case '0':  programmation();
+                        break;
+             case '1':  mode=1;
+                        test_virginite();
+                        break;
+             case '2':  mode=1;
+                        lecture();
+                        break;
+             case '3':  mode=1;
+                        somme_controle();
+                        break;
+             case '4':  mode=1;
+                        verification();
+                        break;
+             case '5':  efface();
+                        break;
+             case '6':  indice_fab = choix_fabricant();
+                        choix_composant(indice_fab);
+                        break;
+             default:   break;
+           }
+      }while(!0);
+}
+<span style="color:#7dd3a0">/************************************************************************
+              Fonction  aff_titre():
+              Affiche le titre 'PROGRAMMATEUR UNIVERSEL'
+************************************************************************/</span>
+void aff_titre(void)
+{
+unsigned char x;
+      put_string(&quot;\t\t&quot;);
+      put_char(201);
+      for(x=0;x&lt;36;x++) put_char(205);
+      put_char(187);
+      put_string(&quot;\r\n\t\t&quot;);
+        put_char(186);
+       put_string(&quot;\tPROGRAMMATEUR UNIVERSEL      &quot;);
+       put_char(186);
+       put_string(&quot;\r\n\t\t&quot;);
+       put_char(200);
+       for(x=0;x&lt;36;x++)put_char(205);
+       put_char(188);
+}
+<span style="color:#7dd3a0">/************************************************************************
+            Fonction lecture_config()
+            Lecture dans l'EEPROM &agrave; l'adresse 0 de 3 octets.
+            Les octets sont stock&eacute;s dans le buffer[].
+            l'octet 'donnes valides' en buffer[0]
+            l'indice du composant en buffer[1..2]
+            Si octet 'buffer[0]' est &lt;&gt; 1 affiche la liste de marques et
+            composants de la marque.
+************************************************************************/</span>
+void lecture_config(void)
+{
+    lecture_IIC(0,3);
+    if(buffer[0]==1)
+    {
+       indice_comp=buffer[2];    <span style="color:#7dd3a0">/* poids fort */</span>
+       indice_comp &lt;&lt;=8;
+       indice_comp=buffer[1];    <span style="color:#7dd3a0">/* poids faible */</span>
+       init_table();             <span style="color:#7dd3a0">/* initialise les variables */</span>
+    }
+    if((indice_comp&gt;nb_composant) &amp;&amp; (buffer[0]==1))
+    {
+      indice_fab = choix_fabricant();  <span style="color:#7dd3a0">/* renvoie l'indice du fabricant */</span>
+      choix_composant(indice_fab);     <span style="color:#7dd3a0">/* choix du composant */</span>
+    }
+}
+<span style="color:#7dd3a0">/************************************************************************
+               choix_fabricant()
+     Affiche la liste des fabricants et retourne le choix
+     sous la forme de son indice dans le  tableau des fabricants.
+     i = indice du tableau fabricants
+     p = num&eacute;ro de ligne ('0'..'9')
+     n = indice de debut de page.
+************************************************************************/</span>
+unsigned char choix_fabricant(void)
+{
+  unsigned char i,p,n,tempo,car;
+  bit digit,fin_aff;
+          i=0;
+          fin_aff=0;
+     do
+     {
+          p=0;
+          n=i;
+          put_string(&quot;\x1B[2J&quot;);
+          aff_titre();
+          put_string(&quot;\r\n\n\n\n\n&quot;);
+          put_string(&quot;\t\tMarques:&quot;);
+          put_string(&quot;\r\n\n&quot;);
+          /* affiche une liste de 10 marques */
+          for (i=n ; ((i &lt; nb_fab) &amp;&amp; (i &lt; (n+10))); i++)
+          {
+            put_string(&quot;\t\t&quot;);
+            put_char(p+48);
+            put_char(':');
+            put_char(' ');
+            put_string(tab_fab[i]);
+            put_char(0x0D);
+            put_char(0x0A);
+            p++;
+           }
+          if (i &lt; nb_fab) put_string(&quot;Espace &gt; suite\r\n&quot;);
+            put_string(&quot;\n\t\tChoix:&quot;);
+            do
+            {
+               car=get_char();
+               digit=isdigit(car);
+            }while((digit != 1) &amp;&amp; (car != 0x20));
+            tempo=car;
+            if(digit==1)
+            {
+               car -= 48;
+               n += car;
+               if(n &lt; i)              <span style="color:#7dd3a0">/* valeur &lt;= valeur affich&eacute;e */</span>
+               {
+                 fin_aff=1;          <span style="color:#7dd3a0"> /* alors valide */</span>
+               }
+            }
+            if (i == nb_fab) i = 0;   <span style="color:#7dd3a0">/* si fin de liste retour au d&eacute;but */</span>
+     }while(fin_aff == 0);
+     put_char(tempo);
+     while((car=get_char()) != 0x0D);
+            return(n);
+}
+<span style="color:#7dd3a0">/************************************************************************
+         Fonction  choix_composant(indice fabricant)
+         Affiche la liste des composants ayant fab=indice fabricant.
+         par liste de 10 composants (ou moins).
+         i = indice du tableau composants
+         p = num&eacute;ro de ligne ('0'..'9')
+         n = indice de d&eacute;but de liste.
+         compte_aff= nombre de composants affich&eacute;s.
+************************************************************************/</span>
+void choix_composant(unsigned char indice_fab)
+{
+unsigned char p,car,tempo,compte,comp_aff;
+unsigned int i,n;
+bit digit,fin_aff;
+    <span style="color:#7dd3a0"> /* Cette partie compte le nombre de composants de la marque choisie */</span>
+     compte=0;
+     for (i=0; i &lt; nb_composant; i++)
+     {
+             if (tab_lib[i].fab==indice_fab) compte++;
+     }
+          i=0;
+          comp_aff=0;
+          fin_aff=0;
+     do
+     {
+          p=0;
+          n=i;
+          put_string(&quot;\x1B[2J&quot;);
+          aff_titre();
+          put_string(&quot;\r\n\n\n\n\n&quot;);
+          put_string(&quot;\t\tComposants  &quot;);
+          put_string(tab_fab[indice_fab]);
+          put_string(&quot;\r\n\n&quot;);
+          /* cette partie affiche une liste de 10 composants */
+          for (i=n ; ((i &lt; nb_composant) &amp;&amp; ( p &lt; 10)); i++)
+          {
+            if (tab_lib[i].fab==indice_fab)
+            {
+              comp_aff++;
+              put_string(&quot;\t\t&quot;);
+              put_char(p+48);
+              put_char(':');
+              put_char(' ');
+              put_string(tab_lib[i].nom);
+              put_char(0x0D);
+              put_char(0x0A);
+              p++;
+            }
+          }
+          if (compte &gt; 10) put_string(&quot;\t\tEspace &gt; suite\r\n&quot;);
+            put_string(&quot;\n\t\tChoix:&quot;);
+            do
+            {
+               car=get_char();
+               digit=isdigit(car);
+            }while((digit != 1) &amp;&amp; (car != 0x20));
+             tempo=car;
+            if(digit==1)       <span style="color:#7dd3a0"> /* valeur saisie entre '0' et '9' */</span>
+            {
+               car -= 48;
+               if(car &lt; p)     <span style="color:#7dd3a0">/* valeur saisie &lt; valeur affich&eacute;e */</span>
+               {
+                fin_aff=1;
+               }
+            }
+             if (comp_aff == compte)   <span style="color:#7dd3a0"> /* si fin de liste */</span>
+             {
+               i = 0;
+               comp_aff = 0;
+             }
+     }while(fin_aff == 0);
+     put_char(tempo);
+     while((tempo = get_char()) != 0x0D);  <span style="color:#7dd3a0">/* attend un CR */</span>
+     p=0x0FF;
+     i=n;
+     do
+     {
+         if (tab_lib[i].fab == indice_fab) p++;  <span style="color:#7dd3a0">/* cherche l'indice r&eacute;el */</span>
+         i++;                                    <span style="color:#7dd3a0">/* dans la table composants*/</span>
+     }while ( car != p );                        <span style="color:#7dd3a0">/* &agrave; partir de l'indice de */</span>
+     i--;                                        <span style="color:#7dd3a0">/* d&eacute;but de liste n        */</span>
+     indice_comp=i;        <span style="color:#7dd3a0">/* m&eacute;morise l'indice du composant */</span>
+     init_table();         <span style="color:#7dd3a0">/* initialise les variables        */</span>
+     buffer[0]=1;          <span style="color:#7dd3a0">/* valide les donn&eacute;es de l'EEPROM */</span>
+     buffer[1]=i;          <span style="color:#7dd3a0">/* l'&eacute;criture dans l'EEPROM */</span>
+     i &gt;&gt;=8;               <span style="color:#7dd3a0">/* de l'indice du composant */</span>
+     buffer[2]=i;
+     ecriture_IIC(0,3);   <span style="color:#7dd3a0">/* &eacute;criture &agrave; l'adresse 0 de 3 octets */</span>
+}
+<span style="color:#7dd3a0">/************************************************************************
+          Fonction init_table()
+          Apr&eacute;s avoir lu dans l'EEPROM l'indice de la biblioth&egrave;que de
+          composant, cette fonction initialise les variables globales.
+************************************************************************/</span>
+void init_table(void)
+{
+     vcc=tab_lib[indice_comp].vcc;
+     vpp=tab_lib[indice_comp].vpp;
+     init_n=tab_lib[indice_comp].algo_init;
+     prog_n=tab_lib[indice_comp].algo_prog;
+     verif_n=tab_lib[indice_comp].algo_verif;
+     nb_pulse=tab_lib[indice_comp].nb_pulse;
+     nb_cycle=tab_lib[indice_comp].nb_cycle;
+     taille=tab_lib[indice_comp].taille;
+     nb_100=tab_lib[indice_comp].nb_100;
+}
+<span style="color:#7dd3a0">/************************************************************************
+          Fonction menu()
+          Efface l'&eacute;cran, affiche le nom du composant
+          et le menu &agrave; options
+************************************************************************/</span>
+void menu(void)
+{
+     put_string(&quot;\x1B[2J&quot;);
+     aff_titre();
+     put_string(&quot;\r\n\n\n\n\n&quot;);
+     /*put_string(&quot;\x1B[5;1H&quot;);*/
+     put_string(&quot;\t\t&quot;);
+     put_string(tab_fab[tab_lib[indice_comp].fab]);
+     put_char(':');
+     put_char(' ');
+     put_string(tab_lib[indice_comp].nom);
+     put_string(&quot;\r\n\n&quot;);
+     put_string(&quot;\t\t0: Programmation.\r\n&quot;);
+     put_string(&quot;\t\t1: Test de virginit&eacute;.\r\n&quot;);
+     put_string(&quot;\t\t2: Lecture.\r\n&quot;);
+     put_string(&quot;\t\t3: Somme de contr&ocirc;le.\r\n&quot;);
+     put_string(&quot;\t\t4: V&eacute;rification.\r\n&quot;);
+     put_string(&quot;\t\t5: Effacement m&eacute;moire Flash.\r\n&quot;);
+     put_string(&quot;\t\t6: Autres composants.\r\n\n&quot;);
+     put_string(&quot;\t\tChoix:&quot;);
+}
+<span style="color:#7dd3a0">/************************************************************************
+     Routines liaison Serie: Put_char: Emission d'un caractere
+     get_char: Reception d'un caractere
+     put_string: Emission d'une chaine de caracteres
+     recherche_vitesse: De 1200 &agrave; 19200 bds, attend un 'Espace'
+                        pour se connecter &agrave; la vitesse du terminal.</span>
+<span style="color:#7dd3a0">**************************************************************************/</span>
+void put_char(char c)
+{
+ while(!emi_ok);
+ emi_ok=0;
+ SBUF = c;
+}
+char get_char(void)
+{
+ while(!rs232_ok &amp;&amp; !time_out);
+ rs232_ok=0;
+ return (SBUF);
+}
+void put_string(char table[])
+{
+unsigned char p;
+ p=0;                          <span style="color:#7dd3a0">/* pointe le 1er caractere */</span>
+ while (table[p] != 0)         <span style="color:#7dd3a0">/* jusqu'au dernier=0 */</span>
+ {
+      put_char(table[p]);
+      p++;
+ }
+}
+void rec_serie(void) interrupt 4 {     <span style="color:#7dd3a0">/* Interruption 23h */</span>
+     if(!RI)
+     {                         <span style="color:#7dd3a0">/* si RI=0 */</span>
+      TI=0;
+      emi_ok=1;
+     }
+     else{
+        RI=0;
+        rs232_ok=1;
+     }
+}
+void cherche_vitesse(void)
+{
+unsigned char car,x;
+bit fin_recherche;
+      CTS=0;              <span style="color:#7dd3a0">/* ligne CTS active */</span>
+      TMOD=0x21;          <span style="color:#7dd3a0">/* 8 bits autoload */</span>
+      SCON=0x50;
+      IE=0x92;            <span style="color:#7dd3a0">/* valide interrupt EA,ES,T0 */</span>
+      IP=0x12;            <span style="color:#7dd3a0">/* PS=1 PT0=1 */</span>
+      TI=1;
+      car=0;
+      init_timer0();
+      do
+      {    TR1=0;
+           fin_recherche=0;
+           TH1=0xFD;
+           TL1=0xFD;
+           PCON |=128;     <span style="color:#7dd3a0">/* 19200 Bds SMOD=1 */</span>
+           rs232_ok=0;
+           car=0;
+           clock=25;       <span style="color:#7dd3a0">/* 0,25 seconde  d'attente */</span>
+           time_out=0;
+           TR1=1;          <span style="color:#7dd3a0">/* Timer1 On */</span>
+           TR0=1;          <span style="color:#7dd3a0">/* Timer0 On */</span>
+           car=get_char(); <span style="color:#7dd3a0">/* Attend un Espace */</span>
+           TR0=0;
+           time_out=0;
+           if(car==0x20) fin_recherche=1;    <span style="color:#7dd3a0">/* si re&ccedil;u 'Espace' alors fin */</span>
+           if (fin_recherche==0)
+           {
+              for(x=0;x&lt;5;x++)
+              {
+                 TR1=0;
+                 PCON &amp;=0x7F;           <span style="color:#7dd3a0">/* &lt;=9600 bds SMOD=0 */</span>
+                 TH1=vitesse[x];
+                 TL1=TH1;
+                 clock=15;             <span style="color:#7dd3a0">/* 1 S d'attente */</span>
+                 time_out=0;
+                 rs232_ok=0;
+                 car=0;
+                 TR1=1;                <span style="color:#7dd3a0">/* Timer1 On */</span>
+                 X_cent_microS(1);
+                 TR0=1;                <span style="color:#7dd3a0">/* Timer0 On */</span>
+                 car=get_char();
+                 TR0=0;                <span style="color:#7dd3a0">/* Timer0 Off */</span>
+                 time_out=0;
+                 if(car==0x20)         <span style="color:#7dd3a0">/* si re&ccedil;u Espace */</span>
+                 {
+                    fin_recherche=1;
+                    x=5;               <span style="color:#7dd3a0">/* fin de la recherche */</span>
+                 }
+               }
+           }
+       }while(fin_recherche==0);
+}
+<span style="color:#7dd3a0">/***************************************************************************
+                    Fonction compte():
+                    Appel par l'interruption du timer 0.
+                    Cette fonction positionne &agrave; '1'
+                    les drapeaux 'Time_out'et 'flag_erreur'
+                    quand clock est &eacute;gal &agrave; 30 (environ 2 secondes).
+                    Fonction init_timer0(): initialise le Timer0
+***************************************************************************/</span>
+void compte(void) interrupt 1
+{
+     clock++;
+     if(clock == 30)   <span style="color:#7dd3a0">/* 2 s */</span>
+     {
+          flag_erreur=1;
+          time_out=1;
+      }
+}
+void init_timer0(void) 
+{
+  time_out=0;
+  clock=0;
+  TH0=0;
+  TL0=0;
+ TR0=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction X_100_microS
+            Execute une boucle d'attente de X fois 100&micro;S
+             (100 &micro;S &agrave; 25.5 mS)
+**************************************************************************/</span>
+void X_cent_microS(unsigned char X)
+{
+unsigned char fois;
+     do
+     {
+        fois=21;
+        while(--fois);
+     }while (--X);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction dix_microS
+            Execute une boucle d'attente de 10 &micro;S
+**************************************************************************/</span>
+void dix_microS(void)
+{
+unsigned char fois;
+     fois=1;
+     while(--fois);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonctions aff_en_place():
+            affichage le message  &quot;Mettre le composant...&quot;
+**************************************************************************/</span>
+void aff_en_place(void)
+{
+unsigned char car;
+     put_string(&quot;\x1B[2J&quot;);
+     put_string(&quot;\x1B[5;1H&quot;);
+     put_string(&quot;Mettre le composant en place&quot;);
+     put_string(&quot;\r\nAppuyer sur une touche&quot;);
+     car=get_char();
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction memoire_vierge()
+            test si tous les octets de la m&eacute;moire sont &eacute;gaux &agrave; FF
+            vierge = 1 si vierge
+            vierge = 0 si non vierge
+**************************************************************************/</span>
+bit memoire_vierge(void)
+{
+unsigned int adresse;
+unsigned char donnee;
+bit vierge;
+     put_string(&quot;\r\nTest de viginit&eacute; en cours&quot;);
+     adr_fin=(taille*1024)-1;      <span style="color:#7dd3a0">/* taille en Ko - 1 */</span>
+     vierge=1;
+     adresse=0xFFFF;               <span style="color:#7dd3a0">/* FFFF+1=0000 */</span>
+     do
+     {
+       adresse++;
+       place_adresse(adresse);
+       donnee=verif_lecture();
+       if(donnee != 0xFF) vierge=0;    <span style="color:#7dd3a0">/* si donnee &lt;&gt; FF =&gt; non vierge */</span>
+     }while((adresse&lt;adr_fin) &amp;&amp; (vierge));
+     return(vierge);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonctions attention():
+            affichage le message  &quot;Attention: ...Mettre le composant...&quot;
+**************************************************************************/</span>
+void attention(void)
+{
+unsigned char car;
+     put_string(&quot;\x1B[2J&quot;);
+     put_string(&quot;\x1B[5;1H&quot;);
+     put_string(&quot;ATTENTION: M&eacute;moires Flash uniquement !\r\n\n&quot;);
+     put_string(&quot;Mettre le composant en place&quot;);
+     put_string(&quot;\r\nAppuyer sur une touche&quot;);
+     car=get_char();
+}
+<span style="color:#7dd3a0">/*************************************************************************
+            Fonction efface()
+            Efface les memoires FLASH des 89C51
+            a l'aide d'une impulsion de 10 mS
+*************************************************************************/</span>
+void efface(void)
+{
+     attention();
+     Prog=1;
+     P2_6=1;
+     P2_7_OE=0;
+     P3_6_SCL=0;
+     P3_7_SDA=0;
+     vcc_tension(vcc);
+     vpp_tension(vpp);
+     X_cent_microS(100);    <span style="color:#7dd3a0">/* permet au micro de s'initialiser */</span>
+     Prog=0;
+     X_cent_microS(100);    <span style="color:#7dd3a0">/* une seule impulsion de 10mS */</span>
+     Prog=1;
+     init_zero_volt();      <span style="color:#7dd3a0">/* toutes les tensions &agrave; zero */</span>
+}
+                                                                                        
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction test_virginite(void)
+            Initialise les tensions et lignes de contr&ocirc;le puis
+            appel la fonction memoire_vierge().
+            Le r&eacute;sultat r&eacute;sultat du test est affich&eacute;.
+**************************************************************************/</span>
+void test_virginite(void)
+{
+unsigned char car;
+     aff_en_place();
+     initialisation();
+     if(memoire_vierge())
+     {
+       put_string(&quot;\r\nCOMPOSANT VIERGE&quot;);
+     }else
+     {
+       put_string(&quot;\r\nCOMPOSANT A EFFACER&quot;);
+     }
+     init_zero_volt();               <span style="color:#7dd3a0">/* toutes les broches &agrave; z&eacute;ro volt *</span>/
+     put_string(&quot;\r\n\nAppuyer sur une touche&quot;);
+     car=get_char();
+}
+<span style="color:#7dd3a0">/************************************************************************
+            Fonction somme_controle();
+            Additionne les octets lus dans la memoire
+            et affiche la somme en hexad&eacute;cimal.
+************************************************************************/</span>
+void somme_controle(void)
+{
+unsigned int somme;
+unsigned char donnee;
+     aff_en_place();
+     adr_fin=(taille*1024)-1;
+     adresse=0xFFFF;
+     somme=0;
+     initialisation();
+     put_string(&quot;\r\n\nSomme de controle: &quot;);
+     do
+     {
+       adresse++;
+       place_adresse(adresse);
+       _nop_();
+       _nop_();
+       donnee=verif_lecture();
+       somme +=donnee;
+     }while(adresse != adr_fin);
+     init_zero_volt();
+     ES=0;                <span style="color:#7dd3a0">/* pour utiliser printf, inhibe l'interruption */</span>
+     TI=1;                <span style="color:#7dd3a0">/* de la liaison s&eacute;rie */</span>
+     printf(&quot;%04X&quot;,somme);
+     while(!TI);
+     ES=1;                <span style="color:#7dd3a0">/* Valide l'interruption s&eacute;rie */</span>
+     put_string(&quot;\r\n\nESC pour quitter.&quot;);
+     donnee=get_char();
+}
+<span style="color:#7dd3a0">/*************************************************************************
+            Fonction lecture():
+            Lecture et affichage du contenu de la m&eacute;moire
+            en hexa et en ASCII.
+*************************************************************************/</span>
+void lecture(void)
+{
+unsigned int adresse;
+unsigned int donnee;
+unsigned char i;
+     adr_fin=(taille*1024)-1;
+     adresse=0xFFFF;
+     aff_en_place();
+     ES=0;                       <span style="color:#7dd3a0">/* pas d'interruption liaison s&eacute;rie */</span>
+     TI=1;
+     initialisation();
+     do
+     {
+        printf(&quot;\r\n%04X: &quot;,adresse+1);
+        for(i=0;i&lt;16;i++)         <span style="color:#7dd3a0">/*affiche 16 donn&eacute;es  */</span>
+        {
+                adresse++;
+                place_adresse(adresse);
+                donnee=verif_lecture();
+                printf(&quot;%02X &quot;,donnee);
+                buffer[i]=donnee;   <span style="color:#7dd3a0">/* m&eacute;morise 16 valeurs */</span>
+        }
+        printf(&quot;   &quot;);
+        for(i=0;i&lt;16;i++)
+        {
+            if(buffer[i]&gt;31)          <span style="color:#7dd3a0"> /* si caract&egrave;re imprimable */</span>
+            {
+              printf(&quot;%c&quot;,buffer[i]);  <span style="color:#7dd3a0">/* affiche les 16 valeurs en ASCII*/</span>
+            }else printf(&quot;.&quot;);         <span style="color:#7dd3a0">/* sinon affiche un point */</span>
+        }
+        if(RI)                  <span style="color:#7dd3a0">/* caract&egrave;re recu ? */</span>
+        {
+          RI=0;
+          i=SBUF;
+          if(i==27)             <span style="color:#7dd3a0">/* si ESC alors quitte */</span>
+          {
+             adresse=adr_fin;
+           }else  while(!RI);   <span style="color:#7dd3a0">/* attend un caract&egrave;re */</span>
+           RI=0;
+        }
+     }while(adresse != adr_fin);
+     init_zero_volt();
+     while(!RI);
+     RI=0;
+     ES=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction aff_resultat():
+            Affiche le r&eacute;sultat d'une programmation
+            ou d'une comparaison de la m&eacute;moire avec
+            un fichier HEX.
+**************************************************************************/</span>
+void aff_resultat(void)
+{
+unsigned char car,sauve_type_erreur;
+         sauve_type_erreur=type_erreur; <span style="color:#7dd3a0">/* sauvegarde de l'erreur retourn&eacute;e*/</span>
+         init_timer0();
+         while(!time_out)       <span style="color:#7dd3a0">/* lit la fin du fichier */</span>
+         {
+           car = get_char();
+           clock=0;
+         }
+         TR0=0;
+         if(fin_fichier==1) flag_erreur=0;
+         type_erreur=sauve_type_erreur;
+         if(flag_erreur)
+         {
+             affiche_erreur();
+         }else
+         {
+             if(mode==0) put_string(&quot;\r\n\nPROGRAMMATION OK&quot;);
+             if(mode==1) put_string(&quot;\r\n\nVERIFICATION OK&quot;);
+         }
+         time_out=0;
+         put_string(&quot;\r\n\nESC pour quitter.&quot;);
+         car=get_char();
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction sauve_octet_faux()
+            sauvegarde l'octet dans la memoire au moment
+            de l'erreur de programmation
+**************************************************************************/</span>
+void sauve_octet_faux(unsigned char x)
+{
+unsigned char donnee;
+         
+         donnee=buffer[x];      <span style="color:#7dd3a0">/* valeur qu'il fallait programmer */</span>
+         buffer[0]=donnee;      <span style="color:#7dd3a0">/* sauve cette valeur dans buffer[0] */</span>
+         donnee=verif_lecture(); <span style="color:#7dd3a0">/* lecture dans la memoire */</span>
+         buffer[1]=donnee;       <span style="color:#7dd3a0">/* et sauve */</span>
+}
+void aff_octet_faux(void)
+{
+unsigned int donnee;
+         donnee=buffer[1];
+         printf(&quot; %02X &quot;,donnee);
+         donnee=buffer[0];
+         printf(&quot;au lieu de %02X&quot;,donnee);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction programmation()
+**************************************************************************/</span>
+void programmation(void)
+{
+unsigned char car,sauve_type_erreur;
+     flag_erreur = 0;
+     fin_fichier=0;
+     aff_en_place();
+     mode=1;
+     initialisation();
+     if(memoire_vierge()==0)
+     {
+         put_string(&quot;\r\nCOMPOSANT A EFFACER&quot;);
+         put_string(&quot;\r\n\nENTER: Continuer.\r\nESC  : Quitter.&quot;);
+         car=get_char();
+         if(car != 0x0D)
+         {
+             flag_erreur=1;
+             type_erreur=5;
+          }
+     }
+     if (flag_erreur==0)
+     {
+         mode=0;
+         adr_fin=(taille*1024)-1;  <span style="color:#7dd3a0"> /* calcul l'adresse de fin memoire */</span>
+         fichier_hex_in();
+     }
+     init_zero_volt();
+     aff_resultat();
+}
+<span style="color:#7dd3a0">/**************************************************************************
+         Fonction prog_ligne()
+         Programmation des composants avec les octets d'une ligne
+         du fichier HEX en m&eacute;moire dans le buffer.
+**************************************************************************/</span>
+void prog_ligne(unsigned int adr_debut,unsigned char nb_donnee)
+{
+unsigned char x,n,donnee;
+     x=0;
+     n=nb_cycle;
+     do
+     {
+         if (adr_debut &gt; adr_fin)
+         {
+            flag_erreur=1;
+            type_erreur=7;
+         }
+         if(flag_erreur) break;
+         if(buffer[x] != 0x0FF)      <span style="color:#7dd3a0">/* inutile de programmer un FF */</span>
+         {
+            place_adresse(adr_debut);
+            _nop_();
+            PORT_DATA=buffer[x];
+            _nop_();
+            do
+            {
+                flag_erreur=0;
+                prog_octet();
+                donnee= verif_lecture();
+                if(donnee != buffer[x])
+                {
+                    flag_erreur=1;
+                    type_erreur=3;
+                    n--;
+                }else
+                {
+                    n=0;
+                    flag_erreur=0;
+                }
+             }while(n != 0);
+         }
+         x++;
+         nb_donnee--;
+         adr_debut++;
+     }while((nb_donnee != 0) &amp;&amp; (flag_erreur==0));
+     if(flag_erreur)
+     {
+         adr_debut--;
+         adresse=adr_debut;
+         x--;
+         sauve_octet_faux(x);
+     }
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction verification()
+            controle si le contenu de la m&eacute;moire
+            correspond au contenu du fichier HEX.
+***************************************************************************/</span>
+void verification(void)
+{
+unsigned char car;
+     flag_erreur=0;
+     fin_fichier=0;
+     aff_en_place();
+     fichier_hex_in();
+     init_zero_volt();
+     aff_resultat();
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction verif_ligne(adresse,nb_donnee)
+            compare le contenu d'une ligne d'un fichier .HEX
+            avec les 'nb_donnee' &agrave; partir de 'adresse'
+**************************************************************************/</span>
+void verif_ligne(unsigned int adr_debut,unsigned char nb_donnee)
+{
+unsigned char x,donnee;
+     x=0;
+     do
+     {
+            place_adresse(adr_debut);
+            donnee = verif_lecture();
+            if(donnee != buffer[x])
+            {
+                    flag_erreur=1;
+                    type_erreur=9;
+            }
+            x++;
+            nb_donnee--;
+            adr_debut++;
+     }while((nb_donnee != 0) &amp;&amp; (flag_erreur==0));
+     if(flag_erreur)
+     {
+        adr_debut--;
+         adresse=adr_debut;
+         x--;
+        sauve_octet_faux(x);
+     }
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction init_zero_volt(void)
+            Initialise Adresse_haute et basse =0
+            VPP=0 et VCC=0;
+            Lignes de controle =0;
+            lignes PORT_DATA=0
+**************************************************************************/</span>
+void init_zero_volt(void)
+{
+     ADR_VOLT=0;    <span style="color:#7dd3a0">/* P1 = 0 */</span>
+     Adr_haut=1;
+     Adr_bas=1;
+     Adr_haut=0;
+     Adr_bas=0;
+     DA1=0;              <span style="color:#7dd3a0">/* Vpp=0 */</span>
+     _nop_();
+     DA1=1;
+     _nop_();
+     DA2=0;
+     _nop_();
+     DA2=1;              <span style="color:#7dd3a0">/* Vcc=0 */</span>
+     X_cent_microS(255);
+     X_cent_microS(255); <span style="color:#7dd3a0">/* tempo de decharge des condensateurs */</span>
+     Prog=0;
+     P2_6=0;
+     P2_7_OE=0;
+     P3_6_SCL=0;
+     P3_7_SDA=0;
+     P3_3_CE=0;
+     PORT_DATA=0;   <span style="color:#7dd3a0">/* P0 = 0 */</span>
+}
+<span style="color:#7dd3a0">/**************************************************************************
+         Fonction vcc_tension(tension) vpp_tension(tension)
+         applique sur le composant &agrave; programmer
+         les valeurs Vcc et Vpp
+         Vpp:0=0V;46=5V;   Vcc:0=0V;124=5V
+**************************************************************************/</span>
+void vcc_tension(unsigned char tension)
+{
+     ADR_VOLT=tension;
+     _nop_();
+     DA2=0;
+     _nop_();
+     _nop_();
+     DA2=1;
+     _nop_();
+}
+void vpp_tension(unsigned char tension)
+{
+     ADR_VOLT=tension;
+     _nop_();
+     DA1=0;
+     _nop_();
+     _nop_();
+     DA1=1;
+     _nop_();
+}
+<span style="color:#7dd3a0">/**************************************************************************
+                Fonction place_adresse() (adresse=variable globale)
+                Place l'adresse basse, apres 8 d&eacute;calages &agrave; droite
+                place l'adresse haute sur le port ADR_VOLT et latch
+**************************************************************************/</span>
+void place_adresse(unsigned int adr)
+{
+     ADR_VOLT=(unsigned char)adr;    <span style="color:#7dd3a0">/* Adresse basse */</span>
+     Adr_bas=1;
+     _nop_();
+     Adr_bas=0;
+     adr &gt;&gt;=8;                       <span style="color:#7dd3a0">/* poids faible = poids fort */</span>
+     ADR_VOLT=(unsigned char)adr;   <span style="color:#7dd3a0"> /* Adresse haute */</span>
+     Adr_haut=1;
+     _nop_();
+     Adr_haut=0;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+           LES FONCTIONS SUIVANTES SONT PROPRES A CHAQUE FAMILLE DE
+           MEMOIRES. S'IL EST NECESSAIRE DE FAIRE EVOLUER LE LOGICIEL:
+           Modifier: initialisation()
+                     verif_lecture()
+                     prog_octet()
+           Ajouter : init_X()
+                     prog_X()
+                     verif_lect_X()
+  Algo                 Fonctions           Composants
+   0                   init_0()             : 8051
+   1                   init_1()             : 2764,27128
+   2                   init_2()             : 27256
+   3                   init_3()             : 27512
+   0                   prog_0()             : 8051
+   1                   prog_1()             : 2764,27128
+   2                   prog_2()             : 27256,27512
+   0                   verif_lect_0         : 8051
+   1                   verif_lect_1         : 2764,27128,27256
+   2                   verif_lect_2         : 27512
+***************************************************************************</span>
+<span style="color:#7dd3a0">            Fonction initialisation()
+            suivant la valeur de algo_init (voir librairie)
+            charge init_X();
+            Ajouter les futurs num&eacute;ro de librairie init_X()
+            sous la forme: case X: init_X();
+                                   break;
+**************************************************************************/</span>
+void initialisation(void)
+{
+     switch(init_n)
+     {
+        case 0: init_0();
+                 break;
+        case 1: init_1();
+                 break;
+        case 2: init_2();
+                 break;
+        case 3: init_3();
+                break;
+        default:break;
+      }
+}
+<span style="color:#7dd3a0">/**************************************************************************
+           Fonction verif_lecture(void)
+           appel de verif_lect_X()
+           retourne la valeur lue
+           Ajouter les futurs numeros X et verif_lect_X()
+            sous la forme: case X: return(verif_lect_X());
+                                   break;
+**************************************************************************/</span>
+unsigned char verif_lecture(void)
+{
+     switch(verif_n)
+     {
+        case 0: return(verif_lect_0());
+                break;
+        case 1: return(verif_lect_1());
+                break;
+        case 2: return(verif_lect_2());
+                break;
+        default:break;
+     }
+}
+<span style="color:#7dd3a0">/**************************************************************************
+            Fonction prog_octet()
+            appel les fonction prog_X() suivant la valeur de algo_prog.
+**************************************************************************/</span>
+void prog_octet(void)
+{
+     switch(prog_n)
+     {
+        case 0: prog_0();
+                break;
+        case 1: prog_1();
+                break;
+        case 2: prog_2();
+                break;
+        default:break;
+     }
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo initialisation=0: 8751, AT89C51 (5 et 12V)
+          Fonction init_0()
+          initialise les lignes de controle, Vcc et Vpp
+          mode=0 &gt; programmation et v&eacute;rification
+          mode=1 &gt; lecture
+**************************************************************************/</span>
+void init_0(void)
+{
+     P2_7_OE=1;
+     P3_3_CE=1;
+     P2_6= 0;
+     P3_7_SDA= 1;
+     P3_6_SCL= 1;
+     Prog=1;
+     if(mode==0) vcc_tension(vcc);
+     if(mode==1) vcc_tension(VCC_5V);
+     X_cent_microS(1);
+     if(mode==0)
+     {
+         vpp_tension(vpp);
+     } else vpp_tension(VPP_5V);
+     X_cent_microS(1);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo initialisation=1: EPROM 2764, 27128
+          Fonction init_1()
+          initialise les lignes de controle, Vcc et Vpp
+          mode=0 &gt; programmation et v&eacute;rification
+          mode=1 &gt; lecture
+**************************************************************************/</span>
+void init_1(void)
+{
+     P3_3_CE=1;
+     Prog=1;
+     P2_7_OE=1;
+     _nop_();
+     if(mode==0) vcc_tension(vcc);
+     if(mode==1) vcc_tension(VCC_5V);
+     X_cent_microS(1);
+     if(mode==0)
+     {
+         vpp_tension(vpp);
+         _nop_();
+         P3_3_CE=0;
+     }else vpp_tension(VPP_5V);
+     X_cent_microS(1);
+}
+<span style="color:#7dd3a0">/*************************************************************************
+   Type algo initialisation=2: EPROM 27256
+          Fonction init_2()
+          initialise les lignes de controle, Vcc et Vpp
+          mode=0 &gt; programmation et v&eacute;rification
+          mode=1 &gt; lecture
+**************************************************************************/</span>
+void init_2(void)
+{
+     P3_3_CE=1;
+     P2_7_OE=1;
+     _nop_();
+     if(mode==0) vcc_tension(vcc);
+     if(mode==1) vcc_tension(VCC_5V);
+     X_cent_microS(1);
+     if(mode==0)
+     {
+         vpp_tension(vpp);
+     }else vpp_tension(VPP_5V);
+     X_cent_microS(1);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo initialisation=3: EPROM 27512
+          Fonction init_3()
+          initialise les lignes de controle, Vcc et Vpp
+          mode=0 &gt; programmation et v&eacute;rification
+          mode=1 &gt; lecture
+**************************************************************************/</span>
+void init_3(void)
+{
+     P3_3_CE=1;
+     if(mode==0) vcc_tension(vcc);
+     if(mode==1) vcc_tension(VCC_5V);
+     X_cent_microS(1);
+     if(mode==0)
+     {
+         vpp_tension(vpp);
+     }else vpp_tension(VPP_5V);
+     X_cent_microS(1);
+     
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo programmation=0:   8751, AT89C51 (5 et 12V)
+           Fonction prog_0()
+           Commande les lignes de contr&ocirc;le et les tensions
+           pour programmer un octet
+           mode=0 &gt; programmation et verification
+           mode=1 &gt; lecture
+**************************************************************************/</span>
+void prog_0(void)
+{
+unsigned char x;
+     x=nb_pulse;
+     do
+     {
+        Prog=0;
+        X_cent_microS(nb_100);
+        Prog=1;
+        dix_microS();
+        x--;
+     }while(x);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo programmation=1:   2764, 27128
+           Fonction prog_1()
+           Commande les lignes de contr&ocirc;le et les tensions
+           pour programmer un octet
+           mode=0 &gt; programmation  et verification
+           mode=1 &gt; lecture
+**************************************************************************/</span>
+void prog_1(void)
+{
+     Prog=0;
+     X_cent_microS(nb_100);
+     Prog=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo programmation=2:   27256, 27512
+           Fonction prog_2()
+           Commande les lignes de contr&ocirc;le et les tensions
+           pour programmer un octet
+           mode=0 &gt; programmation  et verification
+           mode=1 &gt; lecture
+**************************************************************************/</span>
+void prog_2(void)
+{
+   P3_3_CE=0;
+   X_cent_microS(nb_100);
+   P3_3_CE=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo v&eacute;rification=0:   8751, AT89C51 (5 et 12V)
+           Fonction verif_lect_0()
+           V&eacute;rification du contenu &agrave; une adresse
+           la valeur lue est retourn&eacute;e.
+           mode=0 &gt; programmation verification
+           mode=1 &gt; lecture
+**************************************************************************/</span>
+unsigned char verif_lect_0(void)
+{
+unsigned char donnee;
+     vpp_tension(VPP_5V);
+     X_cent_microS(1);         <span style="color:#7dd3a0">/* tps de decharge des condensateurs */</span>
+     PORT_DATA=0x0FF;           <span style="color:#7dd3a0">/* P0 en lecture */</span>
+     P3_3_CE=0;                <span style="color:#7dd3a0"> /* pour 8751FC*/</span>
+     P2_7_OE=0;
+     dix_microS();              <span style="color:#7dd3a0">/* maxi 48TCLCL */</span>
+     donnee=PORT_DATA;          <span style="color:#7dd3a0">/* lecture des donn&eacute;es */</span>
+     P2_7_OE=1;
+     P3_3_CE=1;
+     if (mode==0) vpp_tension(vpp);
+     X_cent_microS(1);
+     return(donnee);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo v&eacute;rification=1:   2764, 27128, 27256
+          Fonction verif_lect_1()
+          V&eacute;rification ou lecture du contenu &agrave; une adresse
+          la valeur lue est retourn&eacute;e.
+          mode=0 &gt; programmation et v&eacute;rification
+          mode=1 &gt; lecture
+**************************************************************************/</span>
+unsigned char verif_lect_1(void)
+{
+unsigned char donnee;
+     PORT_DATA=0x0FF;
+     if(mode==1) P3_3_CE=0;
+     P2_7_OE=0;
+     _nop_();
+     donnee=PORT_DATA;
+     P2_7_OE=1;
+     if(mode==1) P3_3_CE=1;
+     return(donnee);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+Type algo v&eacute;rification=2:   27512
+          Fonction verif_lect_2()
+          V&eacute;rification du contenu &agrave; une adresse
+          la valeur lue est retourn&eacute;e.
+          mode=0 &gt; programmation et v&eacute;rification
+          mode=1 &gt; lecture
+**************************************************************************/</span>
+unsigned char verif_lect_2(void)
+{
+unsigned char donnee;
+     if(mode==0)                <span style="color:#7dd3a0">/* en mode verification */</span>
+     {
+        vpp_tension(0);
+        X_cent_microS(1);
+        PORT_DATA=0x0FF;
+        P3_3_CE=0;
+        _nop_();
+        _nop_();
+        donnee=PORT_DATA;
+        P3_3_CE=1;
+       _nop_();
+       vpp_tension(vpp);
+       X_cent_microS(1);
+     }
+     else{                    <span style="color:#7dd3a0">/* en mode lecture */</span>
+       PORT_DATA=0x0FF;
+       P3_3_CE=0;
+       _nop_();
+       vpp_tension(0);
+       X_cent_microS(1);
+       donnee=PORT_DATA;
+       vpp_tension(VPP_5V);
+       X_cent_microS(1);
+       P3_3_CE=1;
+     }
+     return(donnee);
+}
+<span style="color:#7dd3a0">/**************************************************************************
+             FIN DES FONCTIONS PROPRES AUX FAMILLES DE MEMOIRES
+**************************************************************************/
+/**************************************************************************
+          AFFICHE LE TYPE DE L'ERREUR CONSTATEE.
+          0: Trop de donnees par ligne de fichier HEX.
+          1: Erreur fichier.
+          2: Erreur CS.  (Check Sum)
+          3: Erreur de programmation.
+          4: Depassement Time out.
+          5: M&eacute;moire non vierge.
+          6: Donnee &lt;&gt; '0'..'F'.
+          7: Depassement capacite du composant.
+          8: Erreur type (type &lt;&gt; 00=Donnees &agrave; suivre, 01=Fin fichier).
+          9: Erreur de verification.
+**************************************************************************/</span>
+void affiche_erreur(void)
+{
+unsigned char car;
+     ES=0;          <span style="color:#7dd3a0">/* stop interruption s&eacute;rie */</span>
+     TI=1;
+     printf(&quot;\r\n\n\n&quot;);
+     switch(type_erreur)
+     {
+        case 0: printf(&quot;DONNEES PAR LIGNE &gt; 16&quot;);
+                break;
+        case 1: printf(&quot;ERREUR FORMAT FICHIER&quot;);
+                break;
+        case 2: printf(&quot;ERREUR CS&quot;);
+                break;
+        case 3: printf(&quot;ERREUR PROGRAMMATION EN %04X:&quot;,adresse);
+                aff_octet_faux();
+                break;
+        case 4: printf(&quot;TIME OUT&quot;);
+                break;
+        case 5: printf(&quot;MEMOIRE NON VIERGE&quot;);
+                break;
+        case 6: printf(&quot;DONNEE &lt;&gt; '0'..'F'&quot;);
+                break;
+        case 7: printf(&quot;MEMOIRE INSUFFISANTE&quot;);
+                break;
+        case 8: printf(&quot;ERREUR DU CHAMP TYPE&quot;);
+                break;
+        case 9: printf(&quot;ERREUR VERIFICATION EN %04X:&quot;,adresse);
+                aff_octet_faux();
+        default: break;
+     }
+     while(!TI);
+     ES=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+          CONVERSION D'UN OCTET HEXA EN ENTIER
+          Lit le premier caract&egrave;re, test si [0..F] si non erreur=6
+          Soustrait 48 ou 55,
+          poids fort de 'donnee'=valeur
+          Lit le deuxi&egrave;me caract&egrave;re, test si [0..F] si non erreur=6
+          Soustrait 48 ou 55
+          donnee = poids fort + poids faible
+**************************************************************************/</span>
+unsigned char lecture_donnee (void)
+{
+unsigned char donnee,valeur;
+     valeur = get_char();
+     if (isxdigit (valeur))
+     {
+         if (valeur &gt;= 48 &amp;&amp; valeur &lt;= 57)   <span style="color:#7dd3a0">/* poids fort */</span>
+     {
+        donnee = valeur - 48;
+        donnee &lt;&lt;=4;                <span style="color:#7dd3a0">/* 4 d&eacute;calages &agrave; gauche */</span>
+     }
+     else
+    {
+        donnee = valeur - 55;
+        donnee &lt;&lt;=4;
+     }
+     valeur=get_char();
+     if (isxdigit (valeur))
+     {
+     if (valeur &gt;= 48 &amp;&amp; valeur &lt;= 57)     <span style="color:#7dd3a0">/* poids faible */</span>
+     {
+         donnee += (valeur - 48);
+     }
+     else
+     {
+          donnee += (valeur - 55);
+     }
+     }else
+     {
+        flag_erreur = 1;
+        type_erreur=6;
+     }
+     }else
+     {
+        flag_erreur = 1;
+        type_erreur=6;
+     }
+     return (donnee);
+}
+<span style="color:#7dd3a0">/*************************************************************************
+                   Chargement fichier INTEL (en Hexa)
+   format =  :05 010F 00 FE 12 56 2A 78 XX CR(pour 5 donnees, XX=CS)
+   lecture du nombre de donnee, de l'adresse, type, donnees, controle du CS
+   les octets sont m&eacute;moris&eacute;s par ligne (maxi 16)
+   dans un buffer puis programm&eacute;s ou v&eacute;rifi&eacute;s suivant le bit 'mode'
+   0 = programmation.
+   1 = v&eacute;rification.
+*************************************************************************/</span>
+void fichier_hex_in(void){
+unsigned char donnee,CS,type,nb_donnee,compteur;
+unsigned int adresse;
+     init_timer0();
+     TR0=0;
+     put_string(&quot;\x1B[2J&quot;);     <span style="color:#7dd3a0">/* efface l'&eacute;cran */</span>
+     put_string(&quot;\x1B[5;1H&quot;);   <span style="color:#7dd3a0">/* ligne 5 colonne 1 */</span>
+     put_string(&quot;Envoyez le fichier HEX&quot;);
+     CTS=0;
+     initialisation();
+     do
+     {
+       adresse=0;
+       flag_erreur=0;
+       CS=0;
+       donnee=get_char();
+       TR0=1;
+       if(donnee != 58)     <span style="color:#7dd3a0">/*  &quot;:&quot; debut d'un fichier INTEL */</span>
+       {
+          flag_erreur=1;
+          type_erreur=1;
+       }
+       if (flag_erreur) break;
+                <span style="color:#7dd3a0"> /* lecture du nombre de donnee. */</span>
+       nb_donnee = lecture_donnee();
+       if (nb_donnee &gt; 16)
+       {
+          flag_erreur=1;
+          type_erreur=0;
+       }
+       if (flag_erreur) break;
+       CS +=nb_donnee;
+                /* lecture de l'adresse. */
+       donnee= lecture_donnee();
+       CS += donnee;
+       adresse = donnee;             <span style="color:#7dd3a0">/* adresse de poids fort */</span>
+       adresse &lt;&lt;=8;                 <span style="color:#7dd3a0">/* 8 d&eacute;calages &agrave; gauche */</span>
+       donnee = lecture_donnee();
+       CS += donnee;
+       adresse += donnee;           <span style="color:#7dd3a0"> /* adresse de poids faible */</span>
+       if (flag_erreur) break;
+                                    <span style="color:#7dd3a0">/* lecture du type. */</span>
+       type = lecture_donnee();
+       CS += type;
+                                    <span style="color:#7dd3a0">/* lecture des donnees .*/</span>
+    if (type == 0)
+   {
+          clock=0;
+                      <span style="color:#7dd3a0"> /* m&eacute;morise les octets dans le buffer en RAM */</span>
+          for (compteur=0; compteur &lt; nb_donnee; compteur++)
+          {
+                donnee = lecture_donnee();
+                if (flag_erreur) break;
+                CS += donnee;
+                buffer[compteur]=donnee;
+          }
+          if (flag_erreur) break;
+          donnee= lecture_donnee();         <span style="color:#7dd3a0">/* lecture du CS  */</span>
+          CS=~CS;                           <span style="color:#7dd3a0">/*calcul du CS    */</span>
+          CS++;
+          if (CS != donnee)
+          {
+              flag_erreur=1;
+              type_erreur=2;
+          }
+          }else
+          {
+              if (type != 1)
+              {
+                 flag_erreur=1;
+                 type_erreur=8;
+              }
+           }
+          TR0=0;
+          CTS=1;                    <span style="color:#7dd3a0">/* stop le flux */</span>
+          EA=0;
+          if (flag_erreur==0 &amp;&amp; mode==0 &amp;&amp; type==0)
+          {
+               prog_ligne(adresse,nb_donnee);
+          }
+          if (flag_erreur==0 &amp;&amp; mode==1 &amp;&amp; type==0)
+          {
+               verif_ligne(adresse,nb_donnee);
+          }
+          EA=1;
+          CTS=0;                    <span style="color:#7dd3a0">/* autorise le flux */</span>
+          clock=0;
+          TR0=1;
+          donnee=get_char();        <span style="color:#7dd3a0">/* lecture du CR fin de ligne */</span>
+ }while (flag_erreur==0 &amp;&amp; type==0);
+     TR0=0;
+     if(time_out==1) type_erreur=4;
+     if((flag_erreur==0) &amp;&amp; (type==1)) fin_fichier=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************
+           Routine EEPROM IIC
+           start(): g&eacute;n&egrave;re un START sur le bus IIC
+           stop() : g&eacute;n&egrave;re un STOP sur le bus IIC
+           emi_ack(): Emission d'un accus&eacute; r&eacute;ception vers l'EEPROM
+           rec_ack(): Attend un accus&eacute; r&eacute;ception de l'EEPROM
+           ecrit_octet_IIC: Ecrit un octet (donnee) dans l'EEPROM
+           lect_octet_IIC: Lecture d'un octet &agrave; l'adresse courante.
+           ecriture_IIC: Ecriture &agrave; l'@ X de N octets lus dans le buffer[]
+           lecture_IIC: Lecture &agrave; l'@ X de N octets et stocke dans buffer[]
+**************************************************************************/</span>
+void start(void)
+{
+   P3_7_SDA=1;
+   P3_6_SCL=1;
+   dix_microS();
+   P3_7_SDA=0;
+   dix_microS();
+   P3_6_SCL=0;
+}
+<span style="color:#7dd3a0">/*************************************************************************/</span>
+void stop(void)
+{
+   P3_7_SDA=0;
+   P3_6_SCL=1;
+   dix_microS();
+   P3_7_SDA=1;
+   dix_microS();
+}
+<span style="color:#7dd3a0">/*************************************************************************/</span>
+void emi_ack(void)
+{
+    P3_7_SDA=0;
+    _nop_();
+    P3_6_SCL=1;
+    dix_microS();
+    P3_6_SCL=0;
+    P3_7_SDA=1;
+}
+<span style="color:#7dd3a0">/*************************************************************************/</span>
+bit attend_ack(void)
+{
+unsigned int idata tempo;
+bit valeur;
+        P3_7_SDA=1;
+        tempo=4500;
+        P3_6_SCL=1;
+      do
+      {
+        tempo--;
+        if(!tempo) break;
+        valeur=P3_7_SDA;
+      }while(valeur==1);
+      dix_microS();
+      P3_6_SCL=0;
+      if(valeur==0)
+      {
+          return(1);
+      }else return(0);
+}
+<span style="color:#7dd3a0">/*************************************************************************/</span>
+void ecrit_octet_IIC(void)
+{
+unsigned char n;
+   n=8;
+   do
+   {
+        P3_7_SDA=bit_7;
+        _nop_();
+        P3_6_SCL=1;
+        dix_microS();
+        P3_6_SCL=0;
+        donnee &lt;&lt;=1;
+        n--;
+   }while(n);
+      P3_7_SDA=1;
+}
+<span style="color:#7dd3a0">/**************************************************************************/</span>
+unsigned char lect_octet_IIC(void)
+{
+unsigned char n;
+   P3_7_SDA=1;  /* entree */
+   n=8;
+   donnee=0;
+   do
+   {
+       donnee &lt;&lt;=1;
+       P3_6_SCL=1;
+       _nop_();
+       bit_0=P3_7_SDA;
+       dix_microS();
+       P3_6_SCL=0;
+       n--;
+    }while(n);
+    P3_7_SDA=1;
+    return(donnee);
+}
+<span style="color:#7dd3a0">/***********************************************************************/</span>
+void lecture_IIC(unsigned char adr,unsigned char nb_octet)
+{
+bit continu;
+unsigned char x;
+    continu=0;
+    x=0;
+    start();
+    donnee= IIC_adr_ecrit;
+    ecrit_octet_IIC();
+    continu=attend_ack();
+    if (continu)
+    {
+      donnee=adr;
+      ecrit_octet_IIC();
+      continu=attend_ack();
+    }
+    if (continu)
+    {
+         start();
+         donnee=IIC_adr_lect;
+         ecrit_octet_IIC();
+         continu=attend_ack();
+    }
+    if (continu)
+    {
+        do
+        {
+          buffer[x]=lect_octet_IIC();
+          x++;
+          nb_octet--;
+          if(nb_octet!=0) emi_ack();
+        }while(nb_octet);
+        stop();
+    }
+        stop();
+}
+<span style="color:#7dd3a0">/*************************************************************************/</span>
+void ecriture_IIC(unsigned char adr,unsigned char nb_octet)
+{
+bit continu;
+unsigned char x;
+         x=0;
+       continu=0;
+       start();
+       donnee=IIC_adr_ecrit;
+       ecrit_octet_IIC();
+       continu=attend_ack();
+       if(continu==1)
+       {
+            donnee=adr;
+            ecrit_octet_IIC();
+            continu=attend_ack();
+       }
+       if(continu==1)
+       {
+         do
+         {
+            donnee=buffer[x];
+            ecrit_octet_IIC();
+            continu=attend_ack();
+            x++;
+            nb_octet--;
+        }while((nb_octet!=0) &amp;&amp; (continu==1));
+        stop();
+       }
+       stop();
+}
+<span style="color:#7dd3a0">/*************************************************************************
+                              FIN
+************************************************************************ </span>
+</p></blockquote></blockquote></blockquote></pre></pre></div>
+    </section>
+
+    <div class="back-row">
+        <a href="pagegarde.html">&larr; Retour à l'accueil du projet</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

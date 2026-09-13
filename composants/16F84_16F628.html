@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Présentation de composants électroniques">
+    <meta name="keywords" content="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,sensory, voice extreme toolkit,reconnaissance vocale,servo,programmateur,electronique,robot,polyswitch,oscillateur,raychem,fusible,p16pro,picall">
+    
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+	
+	
+	<title>Comparatif : PIC16F84 ou PIC16F628 ? | Claude Dreschel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Retour aux Composants</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Comparatif</span>
+            <h1>PIC16F84 ou <span>PIC16F628 ?</span></h1>
+            <p class="subtitle">Concurrents ou simplement complémentaires ? Lequel choisir pour vos montages.[cite: 47]</p>
+        </div>
+
+        <div class="content-section">
+            <div class="tech-doc">
+                <h2>I. Les boîtiers et la mémoire</h2>
+                <p>Tous deux sont livrés en boîtier DIP18. Le boîtier du <strong>PIC16F84</strong> est compatible avec le <strong>PIC16F628</strong> (mais l'inverse n'est pas vrai car le 16F628 a 15 lignes de ports contre 13 pour le 16F84).[cite: 47]</p>
+                
+                <table class="spec-table" style="width:100%; text-align:center; margin: 2rem 0;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;">Microcontrôleur</th>
+                            <th>FLASH Program</th>
+                            <th>RAM Data</th>
+                            <th>EEPROM Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align:left;"><strong>PIC16F84</strong></td>
+                            <td>1024 x 14</td>
+                            <td>68 x 8</td>
+                            <td>64 x 8</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left; color: var(--accent);"><strong>PIC16F628</strong></td>
+                            <td style="color: var(--accent);">2048 x 14</td>
+                            <td style="color: var(--accent);">224 x 8</td>
+                            <td style="color: var(--accent);">128 x 8</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><em>🎯 Avantage net pour le PIC16F628 sur toute la ligne mémoire.</em>[cite: 47]</p>
+
+                <h2>II. Les Périphériques</h2>
+                <table class="spec-table" style="width:100%; text-align:center; margin: 2rem 0;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;">Fonctionnalité</th>
+                            <th>PIC16F84</th>
+                            <th style="color: var(--accent);">PIC16F628</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="text-align:left;">Watch Dog</td><td>✅</td><td>✅</td></tr>
+                        <tr><td style="text-align:left;">Timer 0 (8 bits)</td><td>✅</td><td>✅</td></tr>
+                        <tr><td style="text-align:left;">Timer 1 (16 bits)</td><td>❌</td><td>✅</td></tr>
+                        <tr><td style="text-align:left;">Timer 2 (8 bits)</td><td>❌</td><td>✅</td></tr>
+                        <tr><td style="text-align:left;">PWM, Capture, Compare</td><td>❌</td><td>✅</td></tr>
+                        <tr><td style="text-align:left;">USART</td><td>❌</td><td>✅</td></tr>
+                        <tr><td style="text-align:left;">Voltage Reference</td><td>❌</td><td>✅</td></tr>
+                    </tbody>
+                </table>
+                
+                <h2>III. Conclusion</h2>
+                <p>Avantage très net pour le <strong>PIC16F628</strong>. Là où les choses se gâtent pour le PIC16F84, c'est au niveau du prix : certains revendeurs le vendent plus cher que le PIC16F628 ! N'hésitez plus, choisissez le PIC16F628.[cite: 47]</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

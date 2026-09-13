@@ -1,0 +1,316 @@
+/* ============================================================
+   Style partagé — sous-pages du projet "Programmateur 8051/EPROM"
+   Basé sur les tokens visuels de index.html (programmationenc.pages-perso.free.fr)
+   ============================================================ */
+
+:root {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-hover: #0ea5e9;
+    --border: #334155;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* ===== Header (identique à index.html) ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    border-bottom: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.logo {
+    font-family: 'Fira Code', monospace;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+nav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+nav a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+nav a:hover { color: var(--accent); }
+
+main {
+    flex: 1;
+    padding: 3rem 5% 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+h1, h2, h3, h4 { letter-spacing: -0.01em; }
+
+/* ===== Bannière de projet ===== */
+.project-hero { margin-bottom: 2rem; }
+.project-hero .hero-badge {
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent);
+    padding: 0.4rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    display: inline-block;
+}
+.project-hero h1 {
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+.project-hero p.subtitle { color: var(--text-muted); max-width: 70ch; }
+
+/* ===== Sous-navigation du projet ===== */
+.project-nav {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+}
+.project-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+}
+.project-nav a:hover { color: var(--text-main); border-color: var(--accent); }
+.project-nav a.active { color: var(--bg-color); background: var(--accent); border-color: var(--accent); }
+
+/* ===== Sections de contenu ===== */
+.content-section { margin-bottom: 2.5rem; }
+.content-section h2 {
+    font-family: 'Fira Code', monospace;
+    color: var(--accent);
+    font-size: 1.3rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* ===== Bloc "documentation technique" (préserve la mise en forme d'origine) ===== */
+.tech-doc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.88rem;
+    white-space: pre-wrap;
+    line-height: 1.75;
+    color: var(--text-main);
+    overflow-x: auto;
+}
+.tech-doc p { margin-bottom: 1rem; white-space: pre-wrap; }
+.tech-doc u {
+    text-decoration: none;
+    color: var(--accent);
+    font-weight: 700;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+.tech-doc b, .tech-doc strong { color: var(--text-main); }
+.tech-doc i { color: var(--text-muted); font-style: italic; }
+.tech-doc a { color: var(--accent); }
+.tech-doc a:hover { color: var(--accent-hover); }
+.tech-doc img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+.tech-doc center { display: block; margin: 1rem 0; }
+
+/* ===== Tableau de spécifications ===== */
+.spec-table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+}
+.spec-table td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+/* ===== Bloc de code source ===== */
+.code-block {
+    background: #0b1220;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    overflow-x: auto;
+    max-height: 640px;
+    overflow-y: auto;
+}
+.code-block pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    white-space: pre;
+}
+
+/* ===== Liens de téléchargement ===== */
+.download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 0.6rem 1.1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+.download-link:hover { background: rgba(56, 189, 248, 0.18); border-color: var(--accent); }
+
+/* ===== Grille de cartes (reprise de la page d'accueil du site) ===== */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0 3rem;
+}
+.feature-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 1.75rem;
+    border-radius: 12px;
+    transition: transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.feature-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+.feature-card h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+.feature-card h3 a { color: var(--text-main); text-decoration: none; }
+.feature-card h3 a:hover { color: var(--accent); }
+.feature-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.25rem; }
+.card-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.card-link:hover { text-decoration: underline; }
+
+/* ===== Tableau de compatibilité (composants testés) ===== */
+.compat-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.88rem;
+}
+.compat-table th, .compat-table td {
+    border: 1px solid var(--border);
+    padding: 0.55rem 0.9rem;
+    text-align: left;
+}
+.compat-table th {
+    background: var(--card-bg);
+    color: var(--accent);
+    font-family: 'Fira Code', monospace;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+.compat-table td { font-family: 'Fira Code', monospace; }
+.compat-table tbody tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
+.compat-note { color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0 1.5rem; }
+
+/* ===== Retour ===== */
+.back-row { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.back-row a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+.back-row a:hover { color: var(--accent); }
+
+/* ===== Footer ===== */
+footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+footer a { color: var(--accent); text-decoration: none; }
+
+@media (max-width: 700px) {
+    header { flex-direction: column; align-items: flex-start; }
+}
+
+/* ===== Liste des actualités ===== */
+.news-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.news-item {
+    display: flex;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+.news-item:last-child { border-bottom: none; }
+.news-date {
+    font-family: 'Fira Code', monospace;
+    color: var(--accent);
+    font-size: 0.85rem;
+    white-space: nowrap;
+    min-width: 6.5rem;
+}
+.news-item h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+.news-item h3 a { color: var(--text-main); text-decoration: none; }
+.news-item h3 a:hover { color: var(--accent); }
+.news-item.disabled .news-date { color: var(--text-muted); }
+.news-item.disabled h3 { color: var(--text-muted); font-weight: 400; }
+
+/* En-tête d'article de news */
+.news-article-title {
+    font-family: 'Fira Code', monospace;
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}

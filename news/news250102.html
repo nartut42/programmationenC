@@ -1,0 +1,117 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="LES NEWS DE L'ELECTRONIQUE">
+<META NAME="DESCRIPTION" CONTENT="ELEKTOR N 283 -COURS MICROCONTROLEURS SUR 89S8252">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,reconnaissance vocale,voice extreme toolkit,sensory,servo,programmateur,electronique,robot,polyswitch,MAX667,maxim,regulateur de tension,fusible,raychem,p16pro,picall,MAX232">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="3 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>LES NEWS DE L'ELECTRONIQUE-25/01/2002</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" bgcolor="white" text="black" link="blue" alink="red" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote>
+  <blockquote> 
+    <p><font color="black"><u><b>25/01/2002: Nouveaux Microcontr&ocirc;leurs s&eacute;rie 
+      rfPIC de Microchip</b></u></font></p>
+    <p align="left"><img src="images/pic.gif" width="150" height="155"></p>
+    <table width="619" border="0">
+      <tr>
+        <td> 
+          <p>Microchip Technology (<a href="http://www.microchip.com/" target="_blank">http://www.microchip.com</a>) 
+            vient de produire une nouvelle famille de microcontrôleurs conçue 
+            pour réduire le nombre de composants lors de réalisations de montages 
+            Radio. Les <b>rfPICI2C509AG</b> (<b>ASK</b>) et <b>rfPICI2C509AF</b> 
+            (<b>ASK</b> et <b>FSK</b>).</p>
+          <p> Les <b>rfPICI2C509AG</b> sont des microcontrôleurs 18-pins fonctionnant 
+            en mode <b>ASK</b>. Les<b> rfPICI2C509AF</b> sont des microcontrôleurs 
+            20-pins fonctionnant en mode <b>ASK et FSK</b>. Ces RF µC qui intégrent 
+            un émetteur <b>310-480 MHz</b> en mesure donc de fonctionner à <b>433.92 
+            MHz</b> conformément aux normes Européennes et Francaises. Ces circuit 
+            sont particulièrement destinés aux systèmes de contrôle à distance, 
+            télécommandes, jouets, sécurité et contrôle de d'accès. Beaucoup de 
+            similitudes avec le PIC12C509 puisque ce &micro;C intègre <b>1024 
+            mots de mémoire de programme</b> (EPROM) avec <b>41 octets de RAM</b>. 
+            Ainsi que six lignes I/O, un timer 8 bits, un watchdog et différents 
+            oscillateurs dont un oscillateur interne à <b>4MHz</b>. J'attire votre 
+            attention sur le fait que ce mode exige de calibrer l'oscillateur 
+            si une fréquence précise de 4MHz est requise (voir article sur DCL639) 
+            Comme la plupart des µC PIC il se programme à l'aide de 33 instructions 
+            d'un seul mot, soit 1µs par cycle et par instruction à 4 MHz. L'émetteur 
+            intègre <b>VCO</b> à vérouillage de phase. L'oscillateur intégré et 
+            le VCO exigent un minimum de composants externes. La fréquence d'émission 
+            est bien entendu fonction de la fréquence de raisonnance de ce quartz 
+            soit: <font color="#000099"><b>Fémission = 32xFosc_q</b></font>. Ainsi, 
+            pour obtenir une fréquence de <font color="#0000CC">433.92MHz</font>, 
+            il faudra connecter un quartz de <font color="#0000CC">13.56MHz</font>.En 
+            outre, le µC est prévu pour une programmation série in-situe (<b>ICSP</b>) 
+            c'est à dire qui permet aux appareils d'être programmés sur le montage, 
+            tout en gardant à l'esprit qu'il s'agit d'EPROM et que donc, cette 
+            programmation n'aura lieu qu'une seule fois. Reste &agrave; savoir 
+            si nos programmateurs sauront &eacute;galement les programmer ! Tous 
+            les espoirs sont permis, vous remarquerez que les pins 1-4 et 15-18 
+            sont celles du PIC12C509, un simple adaptateur devrait suffire... 
+            A suivre.</p>
+          <p>En <b>ASK</b> le débit théorique est de:0–40Kbps. En <b>FSK</b>: 
+            0–20Kbps. La puissance de sortie est paramétrable entre <b>+2dBm</b> 
+            et <b>-12dBm</b> en six pas. Espéront maintenant que nos fournisseurs 
+            habituels seront en mesure de nous vendre ces composants. <u>J'invite 
+            donc les revendeurs et les acheteurs à me communiquer les adresses 
+            de ces fournisseurs</u>. Bien entendu, ces adresses seront ensuite 
+            communiquées aux lecteurs.</p>
+          <p>T&eacute;l&eacute;charger le Datasheet du &micro;C pour en savoir 
+            + :<a href="fichiers/12C509AG_AF.pdf" target="_blank"><b> PIC12C509AF_AG.pdf 
+            </b></a>(1.3Mo)</p>
+          <p>&nbsp;</p>
+          <p><img src="images/rfpic12C509AG.gif" width="557" height="712"></p>
+          <p>Pour finir un peu de th&eacute;orie et beaucoup de pratique sur un 
+            sujet tr&egrave;s int&eacute;ressant concernant le calcul d'antennes 
+            sur circuit imprim&eacute;. Vous en conviendrez, un parfait compl&eacute;ment 
+            au &micro;C <b>PIC12C509Ax. </b>Cette note d'application est &eacute;dit&eacute;e 
+            par Microchip. A lire absolument. <b><a href="fichiers/antenne_appli.pdf">Antenne_appli.pdf</a></b> 
+            (105Ko)</p>
+          </td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <p align="left"><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Accueil','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Accueil" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a> 
+    </p>
+  </blockquote>
+</blockquote>
+<blockquote>
+  <blockquote>
+<p>&nbsp; 
+  </blockquote>
+</blockquote>
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","news_250102","")</script>
+<noscript><img c="http://cool.clubdisco.com/counter.php3?code=microwan&pn=news_250102" width="1" height="1" border="0">
+</noscript><!-- End Balise -->
+</html>

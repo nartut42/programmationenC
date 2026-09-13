@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Réaliser une interface pour liaison série RS232 à l'aide du MAX232 nouvelle version">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+	
+	
+	<title>Convertisseurs RS232 : MAX232, MAX232A, MAX232E | Claude Dreschel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    
+    <style>
+        .img-container {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .img-container img { max-width: 100%; height: auto; border-radius: 6px; }
+        .download-link { 
+            display: inline-block; 
+            margin: 0.5rem 0; 
+            color: var(--accent); 
+            font-weight: 600; 
+            text-decoration: none; 
+        }
+        .download-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Retour aux Composants</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Composant</span>
+            <h1>Convertisseurs RS232 <span>MAX232</span></h1>
+            <p class="subtitle">Présentation des interfaces MAX232, MAX232A et MAX232E de MAXIM.[cite: 51]</p>
+        </div>
+
+        <div class="content-section">
+            <div class="tech-doc">
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <img src="images/maxim.gif" alt="Logo MAXIM" style="margin-bottom: 1rem;"><br>
+                    <img src="images/max232.gif" alt="Aperçu du composant MAX232" style="border-radius: 6px;">
+                </div>
+
+                <h2>I.1 Introduction</h2>
+                <p>Le MAX232 est un composant créé par MAXIM que l'on trouve sous d'autres références chez d'autres fabricants. Il sert d'interface entre une liaison série TTL (0-5V) et une liaison série RS232 (+12 -12V) et ce avec une simple alimentation 5V.[cite: 51]</p>
+                <p>Rien d'original ? Pourtant le célèbre MAX232 a beaucoup évolué depuis sa création. Si le brochage est identique aux premières versions, d'autres caractéristiques ont évolué. Sa consommation est plus faible, son débit admissible a augmenté, il est mieux protégé, plus fiable et il est fabriqué avec des boîtiers de tous types.[cite: 51]</p>
+                <p>Mais surtout, les condensateurs externes ont aujourd'hui des valeurs de capacité plus faible jusqu'à 0.1µF au lieu des 10 ou 47µF d'autrefois (certaines versions se passent même de condensateur !). Je ne vous présenterai ici que la série des <strong>MAX232, MAX232A et MAX232E</strong>.[cite: 51]</p>
+
+                <h2>I.2 Description des MAX232 et MAX232A</h2>
+                <div class="img-container">
+                    <img src="images/max232A.gif" alt="Schéma de câblage du MAX232A">
+                </div>
+                <p>Sans trop rentrer dans les détails, le MAX232 et MAX232A sont assez proches en terme de caractéristiques électriques et se distinguent surtout par la <strong>valeur des condensateurs externes différentes</strong> et un <strong>débit plus faible pour le MAX232</strong>.[cite: 51]</p>
+                <p>Le câblage est assez simple et vous disposez de 2 drivers dans un sens et 2 dans l'autre, de quoi connecter RxD, TxD et RTS et CTS de la liaison RS232. Ce circuit convient donc dans la majorité des cas.[cite: 51]</p>
+
+                <h2>I.3 Description du MAX232E</h2>
+                <div class="img-container">
+                    <img src="images/Max232E.gif" alt="Schéma de câblage du MAX232E">
+                </div>
+                <p>Le MAX232E est compatible broche à broche avec les deux autres. Ses caractéristiques électriques sont sensiblement identiques avec le MAX232 mais il est extrêmement bien protégé des "electrostatic discharge (<strong>ESD</strong>) shocks" (décharges électrostatiques) et ce pour <strong>±15kV</strong>.[cite: 51] Fonctionnement garanti et protection maximum.[cite: 51]</p>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-left: 4px solid var(--accent); border-radius: 4px;">
+                    <h3>Documentation technique (Datasheets)</h3>
+                    <p><a href="fichiers/MAX232A.zip" class="download-link">?? Télécharger le datasheet des MAX232-232A (330Ko)</a></p>
+                    <p><a href="fichiers/MAX232E.zip" class="download-link">?? Télécharger le datasheet des MAX232E (220Ko)</a></p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Claude Dreschel | <a href="index.html">Retour aux Composants</a></p>
+    </footer>
+
+</body>
+</html>

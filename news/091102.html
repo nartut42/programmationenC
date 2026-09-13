@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Les nouveaux rfPIC12F675 de Microchip">
+<title>09/11/2002 — Les news de l'électronique</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <a href="../index.html" class="logo">&lt;/µC &amp; C&gt;</a>
+    <nav>
+        <a href="index.html">News</a>
+        <a href="../commentfaire/index.html">Comment faire ?</a>
+        <a href="../composants/index.html">Composants</a>
+        <a href="../liens/index.html">Liens</a>
+        <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+    </nav>
+</header>
+
+<main>
+    <section class="content-section">
+        <span class="news-article-title">09/11/2002</span>
+        <h1>Du nouveau chez Microchip avec les rfPIC12F675</h1>
+
+        <figure class="screenshot">
+            <img src="images/logo_micro.gif" alt="Logo Microchip">
+        </figure>
+
+        <p>Après les <strong>rfPIC12C509xx</strong>, Microchip annonce les <strong>rfPIC12F675x</strong>. Le datasheet n'est pas encore disponible, mais on peut imaginer les caractéristiques de ces nouveaux µC à l'aide du tableau suivant :</p>
+
+        <table class="compat-table">
+            <thead>
+                <tr><th></th><th>I/O Pins</th><th>Device Type</th><th>Frequency Range (MHz)</th><th>Modulation</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>rfPIC12C509AF</td><td>6</td><td>Transmitter</td><td>310 - 480</td><td>ASK, FSK</td></tr>
+                <tr><td>rfPIC12C509AG</td><td>6</td><td>Transmitter</td><td>310 - 480</td><td>ASK</td></tr>
+                <tr><td><strong>rfPIC12F675F</strong></td><td>6</td><td>Transmitter</td><td>390 - 450</td><td>ASK, FSK</td></tr>
+                <tr><td><strong>rfPIC12F675H</strong></td><td>6</td><td>Transmitter</td><td>850 - 930</td><td>ASK, FSK</td></tr>
+                <tr><td><strong>rfPIC12F675K</strong></td><td>6</td><td>Transmitter</td><td>260 - 350</td><td>ASK, FSK</td></tr>
+            </tbody>
+        </table>
+
+        <p>Si les <strong>rfPIC12C509</strong> avaient une similitude avec les <strong>PIC12C509</strong>, il est probable que les <strong>rfPIC12F675x</strong> auront des registres communs au <strong>PIC12F675</strong>. Les versions F, H et K se distinguent par des fréquences d'émission différentes, qui étendent la gamme de 260 MHz à 930 MHz.</p>
+
+        <p><strong>Caractéristiques attendues :</strong></p>
+        <ul>
+            <li>1024 x 14 bits de mots de mémoire programme en <strong>Flash</strong></li>
+            <li>64 octets en RAM</li>
+            <li>128 octets en EEPROM</li>
+            <li>1 comparateur analogique</li>
+            <li>1 CAN 10 bits</li>
+            <li>1 timer 8 bits</li>
+            <li>1 timer 16 bits</li>
+            <li>Oscillateurs sélectables : RC, INTRC, EC, XT, HS, LP</li>
+            <li>Plusieurs sources d'interruptions (dont interrupt on change pin)</li>
+            <li>Fonction In-Circuit Serial Programming (ICSP) via deux pins</li>
+        </ul>
+    </section>
+
+    <div class="back-row">
+        <a href="index.html">&larr; Retour aux news</a>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; Claude Dreschel - Site sur les microcontrôleurs programmés en C | <a href="../liens/index.html">Mes liens</a></p>
+</footer>
+
+</body>
+</html>

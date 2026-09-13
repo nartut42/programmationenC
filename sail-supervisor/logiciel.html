@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Code source en langage C, routines EEPROM, convertisseur A/N et téléchargement du firmware Bat-Supervisor (V1.12).">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <title>Logiciel et Fichiers - Bat-Supervisor | Claude Dreschel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Accueil Projet</a>
+            <a href="fonctions.html">Fonctions</a>
+            <a href="le montage.html">Montage</a>
+            <a href="logiciel.html" class="active">Logiciel</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Projet — Sail-Supervisor</span>
+            <h1>Logiciel & Fichiers à <span>Télécharger</span></h1>
+            <p class="subtitle">Programme complet pour PIC16F873, gestion EEPROM, Timer 1, convertisseur A/N et documentations techniques.</p>
+        </div>
+
+        <div class="project-nav">
+            <a href="index.html">Accueil Projet</a>
+            <a href="fonctions.html">Fonctions</a>
+            <a href="le montage.html">Montage</a>
+            <a href="logiciel.html" class="active">Logiciel</a>
+        </div>
+
+        <div class="content-section">
+            <h2>Fichiers et Archives disponibles</h2>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+                <a href="fichiers/BAT_873_V112.zip" class="download-link">Télécharger BAT_873_V112.zip (Dernier firmware C V1.12)</a>
+                <a href="fichiers/bat_873.zip" class="download-link">Télécharger bat_873.zip (Schéma et typon)</a>
+                <a href="fichiers/circuits.zip" class="download-link">Télécharger circuits.zip (Circuits imprimés)</a>
+                <a href="fichiers/listecomp_bat_873.zip" class="download-link">Télécharger listecomp_bat_873.zip (Liste des composants)</a>
+                <a href="fichiers/TYPON_8SO.zip" class="download-link">Télécharger TYPON_8SO.zip (Typon boîtier 8SO pour MAX4376)</a>
+                <a href="fichiers/PIC16F87X.pdf" target="_blank" class="download-link">Consulter la datasheet PIC16F87X.pdf</a>
+                <a href="fichiers/MAX4376FAU.pdf" target="_blank" class="download-link">Consulter la datasheet MAX4376FAU.pdf</a>
+                <a href="fichiers/MAX667CPA.pdf" target="_blank" class="download-link">Consulter la datasheet MAX667CPA.pdf</a>
+                <a href="fichiers/MAX872CPA.pdf" target="_blank" class="download-link">Consulter la datasheet MAX872CPA.pdf</a>
+                <a href="fichiers/MAX478EPA.pdf" target="_blank" class="download-link">Consulter la datasheet MAX478EPA.pdf</a>
+            </div>
+
+            <h2>Aperçu du code (Gestion EEPROM et ADC)</h2>
+            <div class="tech-doc">
+                <p>Écrit en langage C, le logiciel occupe un peu plus des 3/4 de la mémoire Flash du PIC16F873. Voici les fonctions clés de gestion de l'EEPROM et de conversion analogique-numérique :</p>
+            </div>
+
+            <div class="code-block">
+<pre>
+#define EEPROM_WRITE(addr, value) while(WR)continue;EEADR=(addr);EEDATA=(value);EEPGD=0;GIE=0;WREN=1;\
+EECON2=0x55;EECON2=0xAA;WR=1;WREN=0
+#define EEPROM_READ(addr) ((EEADR=(addr)),(EEPGD=0),(RD=1),EEDATA)
+
+//**************************************************************
+void ecriture_eeprom(unsigned char adr, unsigned int valeur)
+{
+    eeprom_write(adr, (unsigned char)valeur);
+    valeur >>= 8;
+    eeprom_write(adr+1, (unsigned char)valeur);
+}
+
+unsigned int lecture_eeprom(unsigned char adr)
+{
+    unsigned int temp;
+    temp = (unsigned char)eeprom_read(adr+1);
+    temp <<= 8;
+    temp |= (unsigned char)eeprom_read(adr);
+    return(temp);
+}
+//**************************************************************
+</pre>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Claude Dreschel - <a href="../index-2.html">Retour au site principal</a></p>
+    </footer>
+
+</body>
+</html>

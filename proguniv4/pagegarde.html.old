@@ -1,0 +1,66 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="Proguniv4, programmateur de 8051, EPROM... Autour d'un 87C51 ">
+<META NAME="DESCRIPTION" CONTENT="Réalisation d'un programmateur de µC de la famille 8051 et d'EPROM 2764-27512 construit autour d'un 87C51FA. Le programme est en langage C.">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,pic12c671,8051,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="6 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>Programmateur de µC 8051 et d'EPROM par Claude Dreschel</title>
+</head>
+<body background="images/border7.gif">
+<blockquote>
+  <blockquote> 
+    <table width="436" border="0">
+      <tr>
+        <td width="240"><img src="images/circuit_anim.gif" width="240"
+        height="210" x-sas-useimagewidth x-sas-useimageheight></td>
+        <td width="186"><a href="index.html" target="_parent"><img
+        src="images/composf.gif" width="215" height="100"
+        x-sas-useimagewidth x-sas-useimageheight align="absmiddle" alt="Ouvrir Index.html" border="0"></a></td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <table width="558" border="0">
+      <tr>
+        <td>
+          <p><font size="2"><b>CE PROGRAMMATEUR, CONNECTE A UNE RS232, EST REALISE 
+            AVEC UN 87C51FA. </b></font></p>
+          <p><font size="2"><b>IL PERMET DE PROGRAMMER LES MICRO-CONTRÔLEURS DE 
+            LA FAMILLE 8051 ET </b></font><font size="2"><b>LES EPROM 2764 A 27512. 
+            POUR EN SAVOIR PLUS, OUVREZ LA PAGE DES </b></font><font size="2"><b>FONCTIONS.</b></font></p>
+          </td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+        
+    <p><a href="mailto:claudedel@microcontroleur.fr.st"></a></p>
+        
+    <p>&nbsp;</p>
+    <p><b><font size="3"><a href="index.html" target="_parent">Re</a></font></b><a href="index.html" target="_parent"><font size="3"><b>tour 
+      &agrave; l'accueil</b></font></a></p>
+    <p>&nbsp;</p>
+    <p><a href="mailto:claudedel@microcontroleur.fr.st"> </a></p>
+</blockquote>
+</blockquote>
+<noframes>
+<p><a href="http://perso.wanadoo.fr/claude.dreschel/proguniv4/pagegarde.html"></a> 
+  <br>
+  <a href="http://perso.wanadoo.fr/claude.dreschel/proguniv4/caracteristiques.html"></a> 
+  <br>
+  <a href="http://perso.wanadoo.fr/claude.dreschel/proguniv4/montage.htm"></a> 
+</p>
+<p> </noframes></p>
+<img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=proguniv4_pagegarde" width="1" height="1" border="0"> 
+<!-- End Balise --> 
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","proguniv4_pagegarde","")</script>
+<noscript> </noscript>
+</html>

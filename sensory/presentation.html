@@ -1,0 +1,153 @@
+<html>
+<head>
+<META NAME="TITLE" CONTENT="Presentation du module Voice Extreme de SENSORY">
+<META NAME="DESCRIPTION" CONTENT="Donner une capacité de reconnaissance vocale à vos réalisations">
+<META NAME="KEYWORDS" CONTENT="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,reconnaissance vocale,voice extreme toolkit,sensory,servo,programmateur,electronique,robot,p16pro,picall">
+<META NAME="OWNER" CONTENT="Claudedel@wanadoo.fr">
+<META NAME="AUTHOR" CONTENT="Claude Dreschel">
+<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="French">
+<META HTTP-EQUIV="VW96.OBJECT TYPE" CONTENT="Homepage">
+<META NAME="ROBOTS" CONTENT="index,follow">
+<META NAME="REVISIT-AFTER" CONTENT="3 month">
+<META NAME="ROBOTS" CONTENT="ALL">
+<title>presentation du Voice Extreme Toolkit de SENSORY</title>
+<script language="JavaScript">
+<!--
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+</head>
+<body background="images/border7.gif" bgcolor="white" text="black" link="blue" alink="red" onLoad="MM_preloadImages('images/accueil_r2_c1_f2.gif')">
+<blockquote>
+  <blockquote> <font color="black"><u><strong><img src="images/pr%25E9sentation.gif" width="300" height="60"> 
+    </strong></u></font></blockquote>
+</blockquote>
+<blockquote>
+  <blockquote> 
+    <p><img src="images/Kit.jpg" width="360" height="229"> </p>
+				
+    <table width="75%" border="0">
+      <tr> 
+        <td> 
+          <p>En fait, le module de reconnaissance vocale <b>VoiceDirect</b>, fabriqu&eacute; 
+            par <b>SENSORY</b> <a href="http://www.sensoryinc.com/" target="_blank">(http://www.sensoryinc.com</a>), 
+            n'est pas une nouveaut&eacute;. Ce qui l'est, c'est ce kit de d&eacute;veloppement 
+            qui constitue un outil destin&eacute; &agrave; int&eacute;grer une 
+            r&eacute;elle capacit&eacute; de reconnaissance vocale &agrave; vos 
+            propres r&eacute;alisations. Son originalit&eacute;, la possibilit&eacute; 
+            de le programmer en langage C (<i>Voice Extreme -C</i>).</p>
+          <p><b>Composition du kit:</b></p>
+          Plaquette d'exp&eacute;rimentations avec microphone et haut-parleur 
+          inclus. 
+          <p>Module de reconnaissance vocale Voice Extreme</p>
+          <p>Alimentation secteur.</p>
+          <p>C&acirc;ble de liaison s&eacute;rie RS232</p>
+          <p>Manuel</p>
+          <p>CD-ROM (soft: <b>Voice Extreme IDE</b> - <b>Quick Synth&eacute;sis</b> 
+            - Exemples - Documentation )</p>
+          <p>Un PC tournant sous <b><font color="#000000">Windows 95/98/ME/NT/2000</font></b> 
+            , 16Mo de RAM, 15Mo sur Disque dur et une liaison RS232 sont n&eacute;cessaires 
+            et suffisants pour lancer l'environnement logiciel. </p>
+          <p>Heureusement une version de <b>Voice Extreme IDE</b> et <b>Quick 
+            Synth&eacute;sis</b> fonctionnant sous <b>Windows XP</b> est d&eacute;sormais 
+            disponible sur <b><font color="#FF0000"> <a href="http://www.sensoryinc.com/" target="_blank">http://www.sensoryinc.com</a> 
+            </font></b><font color="#FF0000"> <font color="#000000">rubrique Download.</font></font></p>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p></p>
+          <p><b><u><img src="images/carte.gif" width="300" height="60"></u></b></p>
+          <p><img src="images/Toolkit.jpg" width="456" height="300"></p>
+          <p>Le coeur du kit est bien entendu le <b>module</b> <i>Voice Extreme</i> 
+            (photo ci-dessous) qui comporte un processeur, une <b>ROM</b> contenant 
+            le progiciel et une m&eacute;moire<b> FLASH de 2Mo</b> dans laquelle 
+            prendront place vos programmes. Ainsi le module pourra &ecirc;tre 
+            retir&eacute; et implant&eacute; sur votre application &agrave; l'aide 
+            du connecteur 34 points. La plaquette d'exp&eacute;rimentation comporte 
+            une <b>zone pastill&eacute;e</b> destin&eacute;e &agrave; recevoir 
+            l'&eacute;lectronique de l'utilisateur. Si cette solution ne vous 
+            convient pas, <b>un connecteur</b> sur lequel est disponible l'ensemble 
+            des <b>lignes dE/S</b> et les <b>lignes d'alimentation</b>. Vous disposez 
+            d'une liaison s&eacute;rie <b>RS232</b> (connexion au PC), d'entr&eacute;es<b> 
+            micro</b> et <b>haut-parleur </b>externes, de trois <b>LED</b> et 
+            de cinq <b>boutons poussoirs</b>. </p>
+          <p><img src="images/Voiceextreme.jpg" width="551" height="300"></p>
+          <p>Le module <i>Voice Extreme</i> met &agrave; la disposition de l'utilisateur 
+            une unit&eacute; centrale, un convertisseur analogique/num&eacute;rique 
+            (<b>processeur de traitement du signal</b>), un g&eacute;n&eacute;rateur 
+            de tonalit&eacute; <b>DTMF, un synth&eacute;tiseur vocal, un convertisseur 
+            num&eacute;rique/analogique et un amplificateur de puissance MLI </b>(Modulation 
+            en Largeur d'Impulsion ou PWM), des<b> lignes d'E/S num&eacute;riques</b> 
+            programmables en entr&eacute;e ou en sortie. La consommation est relativement 
+            faible, de l'ordre de 10 mA. Compte tenu de ses caract&eacute;ristiques, 
+            ce module &agrave; toute sa place sur ce site consacr&eacute; au micro-contr&ocirc;leurs, 
+            d'autant qu'il pourra commander sans difficult&eacute; des composants 
+            externes et qu'il poss&egrave;de une r&eacute;elle capacit&eacute; 
+            de communiquer avec son environnement comme le font les micro-contr&ocirc;leurs.</p>
+          <p><b>Lignes E/S</b></p>
+          <p><b><img src="images/E-S.gif" width="571" height="160"></b></p>
+          <p>&nbsp;</p>
+          <p><b><u><img src="images/logiciel.gif" width="300" height="60"> </u></b></p>
+          <p><img src="images/VE_IDE.jpg" width="512" height="384"></p>
+          <p>Vous disposez pour programmer le module en <b>langage C</b> (<i>Voice 
+            Extreme C</i>) d'un Environnement de D&eacute;veloppement Int&eacute;gr&eacute; 
+            (<b>IDE</b>). Cette environnement facilite la programmation structur&eacute; 
+            et claire &agrave; l'aide du surlignage et de la couleur mettant en 
+            &eacute;vidence les primitives et les variables. Le Kit logiciel comprend 
+            l'<b>IDE</b>, un <b>compilateur C </b>(proche de l'ANSI-C), un <b>&eacute;diteur 
+            de liens</b> (<i>le linker</i>),un programme de transfert, des exemples 
+            et des fichiers d'aide ainsi qu'un programme <i><b>Quick Synth&eacute;sis</b> 
+            </i>qui permet de convertir des fichiers de type .WAV dans le format 
+            reconnu par le module.</p>
+          <p><img src="images/synthesis.gif" width="563" height="467"></p>
+          <p>&nbsp;</p>
+          <p><b><u><img src="images/pre_prog.gif" width="300" height="60"> </u></b></p>
+          <p>Vous pouvez pour vous familiariser rapidement avec le module, essayer 
+            et d&eacute;cortiquer les nombreux programmes fournis.</p>
+          <p>- &Eacute;crire et compiler votre programme &agrave; l'aide de l'<b>IDE</b></p>
+          <p>- T&eacute;l&eacute;charger le programme dans la m&eacute;moire FLASH 
+            du module via la RS232.</p>
+          <p>- Ex&eacute;cuter le programme et &eacute;ventuellement implanter 
+            le module dans votre application.</p>
+          <p>Les d&eacute;butants en langage C n'auront aucune difficult&eacute; 
+            pour &eacute;crire leur premier programme, il suffit de conna&icirc;tre 
+            les rudiments de langage C en vous aidant de l'abondante documentation 
+            traitant des fonctions C de reconnaissance vocale.</p>
+          <p>&nbsp;</p>
+          <p><b><u><img src="images/fournisseurs.gif" width="300" height="60"> 
+            </u></b></p>
+          <p>Plusieurs fournisseurs existent en France, dont <b>SELECTRONIC</b> 
+            ref: 22.7888 (<a href="http://www.selectronic.fr/" target="_blank">http://www.selectronic.fr</a>) 
+            ou <b>LEXTRONIC</b> Ref: KDVE364 <a href="http://www.lextronic.fr/" target="_blank">(http://www.lextronic.fr</a>) 
+            . </p>
+        </td>
+      </tr>
+    </table>
+    <p><a href="index.html" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Accueil','','images/accueil_r2_c1_f2.gif',1)" target="_parent"><img name="Accueil" border="0" src="images/accueil_r2_c1.gif" width="72" height="22"></a> 
+    <p>&nbsp; 
+  </blockquote>
+</blockquote>
+<img src="http://cool.clubdisco.com/counter.php3?code=microwan&amp;pn=sensory_presentation" width="1" height="1" border="0">
+<!-- End Balise -->
+</body>
+<!-- Start Balise (Generator v1.3) -->
+<script language="JavaScript1.1" src="../../cool.clubdisco.com/ccbalise.html"></script>
+<script language="JavaScript1.1">balise("microwan","dcl639_presentation","")</script>
+<noscript></noscript>
+</html>

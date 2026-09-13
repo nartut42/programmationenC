@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Réalisez des robots et programmez les en langage C avec le module RCX et le langage NQC">
+    
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    
+    <title>Présentation du Module RCX | Claude Dreschel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    
+    <style>
+        .img-container {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .img-container img { max-width: 100%; height: auto; border-radius: 6px; }
+        .download-link { 
+            display: inline-block; 
+            margin: 0.5rem 0; 
+            color: var(--accent); 
+            font-weight: 600; 
+            text-decoration: none; 
+        }
+        .download-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="index.html">Retour à l'accueil RCX</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="project-hero">
+            <span class="hero-badge">Tutoriel & Documentation</span>
+            <h1>Développer pour le <span>Lego RCX</span></h1>
+            <p class="subtitle">Des blocs graphiques à la programmation en NQC (Not Quite C).</p>
+        </div>
+
+        <div class="content-section">
+            <div class="tech-doc">
+                <h2>Introduction à la robotique</h2>
+                <div class="img-container">
+                    <img src="images/rcxmotor.gif" alt="Vue éclatée du moteur RCX" style="max-height: 250px;">
+                </div>
+                <p>Le LEGO Mindstorms et son module <strong>RCX</strong> n'est pas seulement un jouet. C'est également un excellent outil pour s'initier à la robotique[cite: 54]. Certes, il est assez cher, mais en comparaison de certains robots vendus en kit et compte tenu de ses possibilités quasi illimitées, il est finalement assez bon marché ![cite: 54]</p>
+                
+                <p>Avec la boite de base, le module <strong>RCX</strong> (microprocesseur) est livré avec deux <strong>moteurs</strong>, deux <strong>capteurs</strong> de contact et un <strong>capteur Infrarouge</strong>[cite: 54]. Le module communique avec le PC par son port de communication Infrarouge. De quoi faire des robots qui roulent, marchent, rampent et suivent une ligne...[cite: 54]</p>
+
+                <h2>Programmation de base vs. NQC</h2>
+                <div class="img-container">
+                    <img src="images/RCXCode.jpg" alt="Interface logicielle de base RCX Code" style="margin-right: 1rem;">
+                    <img src="images/RCXCC.gif" alt="Interface RCX Command Center pour NQC">
+                </div>
+                <p>Pour donner de "l'intelligence" à votre robot, vous utiliserez dans un premier temps le logiciel du CDROM. Ce logiciel de programmation par blocs graphiques est simple à utiliser. Les programmes sont transférés du PC au RCX par liaison Infrarouge[cite: 54].</p>
+                
+                <p>Vous aurez sans doute envie par la suite de faire des programmes plus élaborés. Le module est programmable en langage C ou plus exactement en <strong>NQC</strong> (Not Quite C). Je vous recommande d'utiliser l'environnement <strong>RCX Command Center</strong>[cite: 54].</p>
+                <p><strong>RCX Command Center</strong> intègre le compilateur <strong>NQC</strong> et permet d'éditer, de compiler, de transférer le programme et de connaître l'état du module RCX[cite: 54].</p>
+
+                <h2>Exemples de code et fonctions</h2>
+                <p>Le langage NQC est évidemment très orienté et adapté pour le RCX. Voici la structure d'un morceau de programme en NQC et quelques fonctions dédiées à la commande des moteurs et à la configuration des capteurs[cite: 54] :</p>
+                <div class="img-container">
+                    <img src="images/nqc_ex.gif" alt="Exemple de code NQC" style="margin-bottom: 1rem;">
+                    <img src="images/fonctions.gif" alt="Aperçu des fonctions NQC">
+                </div>
+                
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-left: 4px solid var(--accent); border-radius: 4px;">
+                    <h3>Fichiers à télécharger</h3>
+                    <a href="fichiers/tutorial.zip" class="download-link">?? Documentation du RCX Command Center (Tutorial.zip - 474Ko)[cite: 54]</a><br>
+                    <a href="fichiers/NQC_Guide.zip" class="download-link">?? Documentation de NQC (NQC_Guide.zip - 201Ko)[cite: 54]</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Claude Dreschel | <a href="index.html">Retour à l'accueil RCX</a></p>
+    </footer>
+
+</body>
+</html>

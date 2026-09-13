@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-5288172791580511">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5288172791580511" crossorigin="anonymous"></script>
+    <link rel="icon" type="images/png" href="images/favicon.png">
+	
+	<title>Présentation de la GameBoy en périphérique programmable en C</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+        .content-card h2 {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin: 2rem 0 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .content-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+        .content-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem auto;
+            display: block;
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav>
+            <a href="../index-2.html">Accueil</a>
+            <a href="index.html">Accueil GameBoy</a>
+            <a href="presentation.html" class="active">Présentation</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Présentation du Projet <span>GameBoy</span></h1>
+            <p class="subtitle">Transformer une console portable en un périphérique intelligent et économique.</p>
+        </div>
+
+        <div class="content-card">
+            <h2>fig1: GBDSO</h2>
+            <p>La Game Boy est un formidable périphérique. Si vous en doutez encore, il suffit pour vous en convaincre de lire la description du <b>GBDSO</b> (<i>GameBoy Digital Sampling Oscilloscope</i>) qui transforme la GameBoy en oscilloscope numérique et en analyseur de spectre[cite: 27]. Il s'agit du plus extraordinaire projet que je connaisse, décrit dans la revue ELEKTOR n°268 (octobre/novembre 2000) [<a href="http://www.elektor.presse.fr/" target="_blank">http://www.elektor.presse.fr</a>] et vendu par PUBLITRONIC[cite: 27].</p>
+            <img src="Images/Gameboy.jpg" alt="Carte électronique du GBDSO">
+
+            <h2>fig 2: La GameBoy couleur</h2>
+            <p>La GameBoy couleur est aujourd'hui suffisamment bon marché pour envisager de l'utiliser comme périphérique de nos réalisations à micro-contrôleur[cite: 27]. Elle est compacte, dispose d'un afficheur LCD graphique couleur, d'une liaison série, d'un émetteur-récepteur infrarouge, d'un clavier de 8 touches et peut produire du son[cite: 27].</p>
+            <img src="images/game_boy_color.jpg" alt="GameBoy Color">
+
+            <p>De plus, la GB possède un microprocesseur similaire au Z80 qui peut prendre à sa charge une part des fonctionnalités de votre montage (gestion de l'affichage, du clavier, mémoire, ports de communication)[cite: 27]. Outre son clavier, port IR et série, il est possible d'y inclure une carte électronique d'extension via son connecteur 32 points[cite: 27].</p>
+            <img src="Images/GB_con.gif" alt="Connecteur 32 points de la GB">
+
+            <h2>Développement Hard & Soft</h2>
+            <p>Pour le développement hardware, j'utilise une <b>carte d'extension</b> (décrite dans ELEKTOR N°271 - 01/2001) qui s'enfiche dans le connecteur 32 points[cite: 27]. Cette carte supporte une EPROM 32Ko ainsi qu'un 74HC138 pour le décodage d'adresse[cite: 27]. Un <b>émulateur d'EPROM</b> m'évite de "griller" des EPROM pendant le développement[cite: 27].</p>
+            
+            <p><a href="Fichiers/GBprototype.zip" class="download-link">&darr; Télécharger les fichiers de la carte de prototypage (GBprototype.zip)</a></p>
+            <img src="Images/carte_proto.gif" alt="Carte de prototypage Elektor">
+
+            <h2>Environnement Logiciel (C / GBDK / CGBide)</h2>
+            <p>Pour programmer la GameBoy en langage C, j'utilise l'IDE <b>CGBide</b> en symbiose parfaite avec le compilateur <b>GBDK</b> (GameBoy Development Kit)[cite: 27]. Pour les graphismes, les éditeurs <b>GBTD</b> (GameBoy Tile Designer) et <b>GBMB</b> (GameBoy Map Builder) permettent de générer directement le code source en C[cite: 27].</p>
+            <img src="Images/CGBIDE.gif" alt="Interface CGBide">
+            <img src="Images/gbdt.gif" alt="Éditeur de Tiles GBDT">
+            <img src="Images/gbmb.gif" alt="Éditeur de map GBMB">
+            <img src="Images/No%24gmb.gif" alt="Émulateur NO$GMB">
+
+            <p style="margin-top: 2rem;"><a href="index.html" class="card-link">&larr; Retour à l'accueil GameBoy</a></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy;  - <a href="../index-2.html">Retour au site principal</a></p>
+    </footer>
+
+</body>
+</html>

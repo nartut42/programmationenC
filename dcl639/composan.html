@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le composant — DCL639, PIC12C671 | Claude Dreschel</title>
+    <meta name="description" content="Le PIC12C671 : brochage, câblage à la liaison série RS232, alimentation et programmation avec un P16PRO.">
+    <meta name="keywords" content="Dreschel,PIC,8051,i2C,microcontroleur,micro-controleur,ft639,servo,programmateur,electronique,robot,p16pro,picall">
+    <meta name="author" content="Claude Dreschel">
+    <meta name="robots" content="index,follow">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --border: #334155;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            border-bottom: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        nav.mainnav { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        nav.mainnav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        nav.mainnav a:hover { color: var(--accent); }
+
+        .subheader {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 5%;
+        }
+        .breadcrumb { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.85rem; }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+        .breadcrumb a:hover { color: var(--accent); }
+        .subnav { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .subnav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.4rem 0.95rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .subnav a:hover { color: var(--accent); border-color: var(--accent); }
+        .subnav a.active { background: rgba(56,189,248,0.1); color: var(--accent); border-color: var(--accent); }
+
+        main { flex: 1; padding: 3.5rem 5%; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero-badge {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            display: inline-block;
+        }
+        h1 {
+            font-size: clamp(1.8rem, 3.6vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        h1 span { color: var(--accent); }
+        p.subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+        .cover-figure {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0 3rem;
+        }
+        .cover-figure img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+        .cover-figure a img { transition: transform 0.2s, border-color 0.2s; }
+        .cover-figure a img:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+        .cta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .cta-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .cta-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .cta-card .n { font-family: 'Fira Code', monospace; color: var(--accent); font-size: 0.8rem; }
+        .cta-card h3 { color: var(--text-main); margin: 0.4rem 0 0.4rem; font-size: 1.05rem; }
+        .cta-card p { color: var(--text-muted); font-size: 0.85rem; margin: 0; }
+
+        .article-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .article-card h2 {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+            font-size: 1.25rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .article-card h2:first-child { margin-top: 0; }
+        .article-card p { margin-bottom: 1rem; color: #cbd5e1; }
+        .article-card strong { color: var(--text-main); }
+        .article-card a { color: var(--accent); text-decoration: none; }
+        .article-card a:hover { text-decoration: underline; }
+        .article-card ul, .article-card ol { margin: 0 0 1rem 1.4rem; color: #cbd5e1; }
+        .article-card li { margin-bottom: 0.3rem; }
+
+        .figure {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+        }
+        .figure img { max-width: 100%; border-radius: 6px; }
+        .figure-caption { flex: 1; min-width: 220px; }
+        .figure-caption .fig-label {
+            color: var(--accent);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .figure-caption p { margin-bottom: 0.5rem; font-size: 0.92rem; }
+        .figure.center { justify-content: center; text-align: center; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.85rem; }
+        caption { caption-side: top; text-align: left; color: var(--accent); font-family: 'Fira Code', monospace; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; }
+        th, td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; text-align: center; }
+        th { background: rgba(56, 189, 248, 0.08); color: var(--accent); font-family: 'Fira Code', monospace; font-weight: 600; }
+        td { color: #cbd5e1; }
+        tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+        .mono { font-family: 'Fira Code', monospace; }
+        .table-scroll { overflow-x: auto; }
+
+        .callout {
+            background: rgba(248, 113, 113, 0.08);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-size: 0.92rem;
+        }
+        .callout strong { color: #f87171; }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 2rem;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        .back-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="../index-2.html" class="logo">&lt;/µC &amp; C&gt;</a>
+        <nav class="mainnav">
+            <a href="../news/index.html">News</a>
+            <a href="../commentfaire/index.html">Comment faire ?</a>
+            <a href="../composants/index.html">Composants</a>
+            <a href="../liens/index.html">Liens</a>
+            <a href="mailto:claudedel@wanadoo.fr">Contact</a>
+        </nav>
+    </header>
+
+    <div class="subheader">
+        <div class="breadcrumb"><a href="../index-2.html">Accueil</a> / <a href="pagegarde.html">Montages</a> / <span>DCL639 — PIC12C671 compatible FT639</span></div>
+        <nav class="subnav">
+            <a href="pagegarde.html" class="">Accueil du projet</a>
+            <a href="presentation.html" class="">Présentation</a>
+            <a href="composan.html" class="active">Le composant</a>
+            <a href="logicel.html" class="">Le logiciel</a>
+            <a href="commande.html" class="">Les commandes</a>
+        </nav>
+    </div>
+
+
+    <main>
+        <div class="article-card">
+            <h2>Le composant</h2>
+            <p>Le circuit utilisé pour simuler le FT639 est un microcontrôleur de Microchip, le <a href="12c671.html">PIC12C671</a>. Ce microcontrôleur à faible prix est doté de 8 pins utilisées de la façon suivante :</p>
+
+            <div class="figure">
+                <img src="images/dcl639.gif" alt="Brochage du DCL639" width="94" height="157">
+                <div class="figure-caption">
+                    <span class="fig-label">Fig. 1</span>
+                    <p><strong>pin 1 V+</strong> : +5V</p>
+                    <p><strong>pin 8 V-</strong> : 0V</p>
+                    <p><strong>pin 4 IN</strong> : Entrée liaison série</p>
+                    <p><strong>pins 2, 3, 5, 6, 7</strong> : Vers ligne de commande des servos 1, 2, 3, 4, 5.</p>
+                </div>
+            </div>
+
+            <p>Le PIC12C671 est un microcontrôleur RISC, c'est-à-dire qu'il n'utilise qu'un nombre réduit d'instructions (35). La majorité de ces instructions s'exécutent en 400 nS à 4 MHz. Il possède 1028 mots de 14 bits de mémoire de programme et 128 octets de RAM (ce qui suffit largement pour cette application) ainsi qu'un timer 8 bits, un convertisseur A/N 8 bits (non utilisé) mais pas d'UART (Universal Asynchronous Receiver Transmitter). Le PIC12C508 aurait pu convenir s'il avait eu des possibilités d'interruptions, notamment pour le Timer0.</p>
+            <p>Le microcontrôleur s'accommode d'une alimentation comprise entre 2.5V et 5.5V ; cependant, les servos fonctionnant sous 4.8V, il est nécessaire d'alimenter le tout avec une tension de 5V régulée. La consommation en courant du PIC est de l'ordre de 2 mA @5V 4 MHz. Aucun composant externe n'est nécessaire pour l'horloge du PIC12C671 grâce à l'horloge interne (IntRC) à 4 MHz du composant. Il importe cependant que le logiciel calibre cette horloge pour obtenir une précision optimum.</p>
+            <p>La figure 2 décrit comment brancher la liaison RS232 et un servo, c'est très simple !</p>
+
+            <div class="figure">
+                <img src="images/circuit.gif" alt="Schéma de branchement RS232" width="321" height="215">
+                <div class="figure-caption">
+                    <span class="fig-label">Fig. 2</span>
+                    <p>Branchement du DCL639 à une RS232 (+10V/-10V). Le diviseur de tension permet d'obtenir sur l'entrée IN des niveaux de tension admissibles pour le PIC. Vérifiez que l'alimentation des servos, qui peut être commune avec le DCL639, est en mesure de fournir l'intensité requise par le moteur des servos.</p>
+                </div>
+            </div>
+
+            <p>Si vous connectez le DCL639 à un BASIC Stamp, les résistances et la diode sont inutiles. Les commandes envoyées sur la liaison série doivent alors être inversées (au sens logique du terme). C'est-à-dire que le BASIC Stamp est programmé : <span class="mono">SEROUT x,N2400,...</span> Le bit START est un '1' logique et le STOP un '0', les autres bits sont également inversés (voir la Fig. 3, paragraphe « Le logiciel »).</p>
+            <p>Format de la liaison série : <strong>2400 bauds, 8 bits, pas de parité</strong> (2400,N,8,1).</p>
+
+            <p>Pour programmer le PIC12C671, une multitude de programmateurs existent. J'utilise celui créé par <em>Bojan Dobaj</em>, le <strong>P16PRO</strong>. La partie électronique (<a href="fichiers/P16pro40_hard.pdf">P16pro40_hard.PDF</a> ou <a href="fichiers/P16pro40_hard.zip">P16pro40_hard.zip</a>), connectée au port parallèle d'un PC, est très simple à réaliser et ne nécessite que quelques composants.</p>
+            <p>Si vous souhaitez programmer d'autres types de PIC, je vous suggère, si vous ne pouvez pas placer un support à force d'insertion nulle universel, de câbler des supports « tulipe » de bonne qualité à 40, 28 (étroit), 18 et 8 pts. Les supports 18 et 8 pts sont câblés entre les contacts du support 40 pts, et le support 28 pts étroit est monté sur un support 28 pts standard à l'aide d'un petit morceau d'époxy.</p>
+            <p>Le logiciel, mis à jour régulièrement, est disponible sur le site : <a href="http://www.geocities.com/SiliconValley/Peaks/9620/" target="_blank" rel="noopener">geocities.com/SiliconValley/Peaks/9620</a> (licence 20$). Une nouvelle version plus complète (sous Windows), le « PICALL ver. 0.10c » (11/2001), est également téléchargeable sur ce site. Cette version commande les programmateurs P16PRO et PICALL.</p>
+
+            <div class="callout">
+                <strong>Attention</strong> : pour programmer le PIC12C671, il convient de <u>valider</u> l'option (config) <strong>IntRC</strong> et de <u>dévalider</u> <strong>Watchdog</strong>, <strong>MCLR pin enabled</strong> et <strong>CLKOUT</strong>.
+            </div>
+
+            <div class="figure center">
+                <img src="images/fuse.jpg" alt="Options de configuration (fuses) du PIC12C671" width="427" height="231">
+            </div>
+
+            <p>Si vous voulez plus d'informations sur le PIC12C671, consultez son datasheet chez Microchip : <a href="http://www.microchip.com/" target="_blank" rel="noopener">microchip.com</a>.</p>
+
+            <a class="back-btn" href="../index-2.html">&larr; Retour à l'accueil</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Claude Dreschel &mdash; DCL639, PIC12C671 compatible FT639 | <a href="../index-2.html">Retour à l'accueil</a></p>
+    </footer>
+
+</body>
+</html>
